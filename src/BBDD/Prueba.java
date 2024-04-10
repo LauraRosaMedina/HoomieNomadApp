@@ -7,5 +7,9 @@ public class Prueba {
 	private int edad;
 	private boolean visible;
 	
+	private String dni;
+
+	
+	
 	
 }
