@@ -1,6 +1,6 @@
-package BBDD;
+package Clases;
 import java.util.*;
-public class Prueba {
+public class Usuario {
 	
 
 	private String nombre;
