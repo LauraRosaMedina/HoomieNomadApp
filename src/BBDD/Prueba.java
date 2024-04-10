@@ -8,5 +8,7 @@ public class Prueba {
 	private boolean visible;
 	private int numero;
 	
+	private String hola;
+	
 	
 }
