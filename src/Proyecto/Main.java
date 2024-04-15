@@ -7,10 +7,8 @@ public class Main {
 		
          Login login = new Login ();
          
-         login.borrarUsuario("Antonino");
-         
-         login.borrarUsuario("sarita06");
 
+         login.borrarUsuario("Pepita");
 	}
 
 }
