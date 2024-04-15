@@ -31,6 +31,7 @@ public class Registrarse extends JFrame {
 	 * Create the frame.
 	 */
 	public Registrarse() {
+		setTitle("Hoomie Nomad - Sign up");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 584, 737);
 		contentPane = new JPanel();

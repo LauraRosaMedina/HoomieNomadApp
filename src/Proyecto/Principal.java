@@ -1,13 +1,17 @@
 package Proyecto;
+import ConexionBaseDatos.ConexionMySQL;
 
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
@@ -91,6 +95,38 @@ public class Principal extends JFrame {
                 // Aquí abrimos la ventana de registro
                 Registrarse registro = new Registrarse();
                 registro.setVisible(true);
+            }
+        });
+        
+     // ActionListener para el botón "Iniciar sesión"
+        loginButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                String usuario = usernameField.getText();
+                String contraseña = new String(passwordField.getPassword());
+                ConexionMySQL conexion = new ConexionMySQL("root", "test", "HoomieNomad");
+                
+                
+                try {
+                    // Conectarse a la base de datos
+                    conexion.conectar();
+
+                    // Consultar si el usuario existe en la base de datos
+                    ResultSet resultado = conexion.ejecutarSelect("SELECT * FROM Usuario WHERE nombreUsuario='" + usuario + "' AND contrasena='" + contraseña + "'");
+
+                    if (resultado.next()) {
+                        // El usuario existe en la base de datos
+                        JOptionPane.showMessageDialog(null, "¡Inicio de sesión exitoso!");
+                    } else {
+                        // El usuario no existe en la base de datos
+                        JOptionPane.showMessageDialog(null, "¡Nombre de usuario o contraseña incorrectos!");
+                    }
+
+                    // Desconectar de la base de datos
+                    conexion.desconectar();
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                    JOptionPane.showMessageDialog(null, "Error al conectarse a la base de datos: " + ex.getMessage());
+                }
             }
         });
 	}
