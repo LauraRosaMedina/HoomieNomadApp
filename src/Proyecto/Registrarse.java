@@ -78,6 +78,9 @@ public class Registrarse extends JFrame {
         JButton signUpButton = new JButton("Registrarse");
         signUpButton.setBounds(130, 150, 150, 30);
         contentPane.add(signUpButton);
+        
+        
+        
 
         // ActionListener para el botón "Registrarse"
         signUpButton.addActionListener(new ActionListener() {
@@ -121,6 +124,22 @@ public class Registrarse extends JFrame {
                 }
             }
         });
+     // Botón para volver atrás
+        JButton backButton = new JButton("Volver atrás");
+        backButton.setBounds(130, 200, 150, 30);
+        contentPane.add(backButton);
+
+        // ActionListener para el botón "Volver atrás"
+        backButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                // Cerrar la ventana actual y abrir la ventana de inicio de sesión
+                dispose();
+                Login loginFrame = new Login();
+                loginFrame.setVisible(true);
+            }
+        });
+        
+        
 	}
 
 }
