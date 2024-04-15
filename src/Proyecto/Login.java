@@ -17,7 +17,7 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
-public class Principal extends JFrame {
+public class Login extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
@@ -29,7 +29,7 @@ public class Principal extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					Principal frame = new Principal();
+					Login frame = new Login();
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -41,7 +41,7 @@ public class Principal extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public Principal() {
+	public Login() {
 		setTitle("Hoomie Nomad - Login");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 584, 737);
@@ -129,8 +129,40 @@ public class Principal extends JFrame {
                 }
             }
         });
+        
+        //Borrar usuario//
+        
+        
 	}
 	
+	//creamos este método fuera del constructor Principal//
+	public static void borrarUsuario(String nombreUsuario) {
+    	ConexionMySQL conexion = new ConexionMySQL("root", "test", "HoomieNomad");
+        try {
+            // Conectar a la base de datos
+            conexion.conectar();
+
+            // Crear la sentencia SQL DELETE
+            String consulta = "DELETE FROM Usuario WHERE nombreUsuario = '" + nombreUsuario + "'";
+
+            // Ejecutar la sentencia DELETE
+            int filasAfectadas = conexion.ejecutarInsertDeleteUpdate(consulta);
+
+            // Comprobar si se borró la fila correctamente
+            if (filasAfectadas > 0) {
+                JOptionPane.showMessageDialog(null, "Usuario borrado correctamente.");
+            } else {
+                JOptionPane.showMessageDialog(null, "No se pudo borrar el usuario.");
+            }
+
+            // Desconectar de la base de datos
+            conexion.desconectar();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Error al conectar con la base de datos: " + ex.getMessage());
+        }
+    
+    }
 	
 
 }
