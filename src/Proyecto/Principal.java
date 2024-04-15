@@ -2,6 +2,8 @@ package Proyecto;
 
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -38,7 +40,7 @@ public class Principal extends JFrame {
 	public Principal() {
 		setTitle("Hoomie Nomad - Login");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 522, 737);
+		setBounds(100, 100, 584, 737);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 
@@ -49,7 +51,10 @@ public class Principal extends JFrame {
         JLabel usernameLabel = new JLabel("Nombre de usuario:");
         usernameLabel.setBounds(50, 50, 150, 30);
         contentPane.add(usernameLabel);
-
+        
+        //Campo de texto para introducir nombre de usuario//
+        
+        
         // Campo de texto para el nombre de usuario
         JTextField usernameField = new JTextField();
         usernameField.setBounds(200, 50, 250, 30);
@@ -79,6 +84,15 @@ public class Principal extends JFrame {
         JButton acceptButton = new JButton("Aceptar");
         acceptButton.setBounds(370, 150, 150, 30);
         contentPane.add(acceptButton);
+        
+        //ActionListener: al pulsar el botón de Registrarse, me lleva a esa página//
+        signUpButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                // Aquí abrimos la ventana de registro
+                Registrarse registro = new Registrarse();
+                registro.setVisible(true);
+            }
+        });
 	}
 	
 	
