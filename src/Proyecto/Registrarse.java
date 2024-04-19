@@ -217,6 +217,11 @@ public class Registrarse extends JFrame {
                             JOptionPane.showMessageDialog(null, "¡Registro exitoso!");
                             // Cerrar la ventana de registro después del registro exitoso
                             dispose();
+                            
+                            // Abrir la ventana de "Completar Perfil"
+                            Perfil perfilFrame = new Perfil();
+                            perfilFrame.setVisible(true);
+                            
                         } else {
                             JOptionPane.showMessageDialog(null, "Error al registrar el usuario.");
                         }
