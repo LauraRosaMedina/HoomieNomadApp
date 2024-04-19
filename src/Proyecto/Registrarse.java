@@ -55,68 +55,76 @@ public class Registrarse extends JFrame {
         contentPane.setLayout(null); // Usamos un layout nulo para posicionar los componentes manualmente
         
         // Etiqueta para el nombre
-        JLabel nameLabel = new JLabel("Nombre:");
-        nameLabel.setBounds(50, 100, 150, 30);
+        JLabel nameLabel = new JLabel("Nombre y apellidos:");
+        nameLabel.setBounds(62, 94, 150, 30);
         contentPane.add(nameLabel);
 
         // Campo de texto para insertar el nombre
         JTextField nameField = new JTextField();
-        nameField.setBounds(278, 101, 150, 30);
+        nameField.setBounds(278, 95, 150, 30);
         contentPane.add(nameField);
         
      // Etiqueta para el nombre de usuario
         JLabel usernameLabel = new JLabel("Nombre de usuario:");
-        usernameLabel.setBounds(50, 140, 150, 30);
+        usernameLabel.setBounds(62, 164, 150, 30);
         contentPane.add(usernameLabel);
 
         // Campo de texto para el nombre de usuario
         JTextField usernameField = new JTextField();
-        usernameField.setBounds(278, 141, 150, 30);
+        usernameField.setBounds(278, 165, 150, 30);
         contentPane.add(usernameField);
         
      // Etiqueta para el email
         JLabel emailLabel = new JLabel("Email:");
-        emailLabel.setBounds(50, 201, 150, 30);
+        emailLabel.setBounds(93, 232, 150, 30);
         contentPane.add(emailLabel);
 
         // Campo de texto para insertar el email
         JTextField emailField = new JTextField();
-        emailField.setBounds(278, 202, 150, 30);
+        emailField.setBounds(278, 233, 150, 30);
         contentPane.add(emailField);
 
         // Etiqueta para la dirección
-        JLabel addressLabel = new JLabel("Dirección:");
-        addressLabel.setBounds(50, 266, 150, 30);
+        JLabel addressLabel = new JLabel("Dirección postal:");
+        addressLabel.setBounds(72, 296, 150, 30);
         contentPane.add(addressLabel);
 
         // Campo de texto para insertar la dirección
         JTextField addressField = new JTextField();
-        addressField.setBounds(278, 266, 150, 30);
+        addressField.setBounds(278, 297, 150, 30);
         contentPane.add(addressField);
 
         // Etiqueta para el teléfono
         JLabel phoneLabel = new JLabel("Teléfono:");
-        phoneLabel.setBounds(50, 335, 150, 30);
+        phoneLabel.setBounds(83, 372, 150, 30);
         contentPane.add(phoneLabel);
 
         // Campo de texto para insertar el teléfono
         JTextField phoneField = new JTextField();
-        phoneField.setBounds(278, 336, 150, 30);
+        phoneField.setBounds(278, 372, 150, 30);
         contentPane.add(phoneField);
 
         // Etiqueta para la contraseña
         JLabel passwordLabel = new JLabel("Contraseña:");
-        passwordLabel.setBounds(50, 440, 150, 30);
+        passwordLabel.setBounds(83, 440, 150, 30);
         contentPane.add(passwordLabel);
 
         // Campo de texto para la contraseña
         JPasswordField passwordField = new JPasswordField();
         passwordField.setBounds(278, 441, 150, 30);
         contentPane.add(passwordField);
+        
+        JLabel repeatPasswordLabel = new JLabel("Repita la contraseña:");
+        repeatPasswordLabel.setBounds(72, 503, 200, 30);
+        contentPane.add(repeatPasswordLabel);
 
+        JPasswordField repeatPasswordField = new JPasswordField();
+        repeatPasswordField.setBounds(278, 504, 150, 30);
+        contentPane.add(repeatPasswordField);
+        
         // Botón para registrarse
         JButton signUpButton = new JButton("Registrarse");
-        signUpButton.setBounds(278, 505, 150, 30);
+        signUpButton.setBounds(278, 572, 150, 30);
         contentPane.add(signUpButton);
         
         
@@ -170,6 +178,7 @@ public class Registrarse extends JFrame {
                 // Obtener los valores de todos los campos
                 String nombreUsuario = usernameField.getText();
                 String contraseña = new String(passwordField.getPassword());
+                String repetirContraseña = new String(repeatPasswordField.getPassword());
                 String nombre = nameField.getText();
                 String email = emailField.getText();
                 String direccion = addressField.getText();
@@ -180,7 +189,10 @@ public class Registrarse extends JFrame {
                     JOptionPane.showMessageDialog(null, "Por favor, complete todos los campos.");
                     return;
                 }
-
+                if (!contraseña.equals(repetirContraseña)) {
+                    JOptionPane.showMessageDialog(null, "Las contraseñas no coinciden. Por favor, inténtelo de nuevo.");
+                    return;
+                }
                 try {
                     // Conectar a la base de datos
                     conexion.conectar();
@@ -217,12 +229,13 @@ public class Registrarse extends JFrame {
                     JOptionPane.showMessageDialog(null, "Error al conectar con la base de datos: " + ex.getMessage());
                 }
             }
-        });
-
+            
+            });
+        
         
      // Botón para volver atrás
         JButton backButton = new JButton("Volver atrás");
-        backButton.setBounds(50, 505, 150, 30);
+        backButton.setBounds(51, 572, 150, 30);
         contentPane.add(backButton);
 
         // ActionListener para el botón "Volver atrás"
