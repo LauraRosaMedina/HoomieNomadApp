@@ -48,6 +48,8 @@ public class Registrarse extends JFrame {
 		setTitle("Hoomie Nomad - Sign up");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 584, 737);
+		setLocationRelativeTo(null);
+
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 

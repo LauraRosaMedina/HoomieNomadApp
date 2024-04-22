@@ -45,6 +45,8 @@ public class Login extends JFrame {
 		setTitle("Hoomie Nomad - Login");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 584, 737);
+		//para centrar las cositas//
+		setLocationRelativeTo(null);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 
