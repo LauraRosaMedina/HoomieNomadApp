@@ -9,6 +9,6 @@ public class Main {
          
 
         
-       login.borrarUsuario("Mario");	}
+       login.borrarUsuario("Davi");	}
 
 }

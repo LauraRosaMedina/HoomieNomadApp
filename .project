@@ -18,12 +18,12 @@
 		<link>
 			<name>src/mysql-connector-java-8.0.20.jar</name>
 			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/Programacion-tema17-recursos/mysql-connector-java-8.0.20.jar</locationURI>
+			<locationURI>PARENT-2-PROJECT_LOC/OneDrive/Escritorio/Librer%C3%ADa%20para%20Java%20del%20Sistema%20de%20SQL/mysql-connector-java-8.0.20.jar</locationURI>
 		</link>
 		<link>
 			<name>src/ConexionBaseDatos/ConexionMySQL.java</name>
 			<type>1</type>
-			<location>C:/LauraRM/Documentos/Grado superior DAM/Programación (P)/HoomieNomadApp/src/ConexionBaseDatos/ConexionMySQL.java</location>
+			<location>C:/Users/SOLÍS ROMERO/eclipse-workspace/HoomieNomadApp/src/ConexionBaseDatos/ConexionMySQL.java</location>
 		</link>
 	</linkedResources>
 </projectDescription>

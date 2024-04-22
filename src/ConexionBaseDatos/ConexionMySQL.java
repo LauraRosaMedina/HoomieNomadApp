@@ -1,6 +1,4 @@
 package ConexionBaseDatos;
-
-
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -113,9 +111,8 @@ public class ConexionMySQL {
 
         return fila;
     }
-
-	public PreparedStatement prepareStatement(String consulta) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    
+    public PreparedStatement prepareStatement(String consulta) throws SQLException {
+        return connection.prepareStatement(consulta);
+    }
 }

@@ -22,7 +22,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-public class Perfil extends JFrame {
+public class Completar_perfil extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
@@ -34,7 +34,7 @@ public class Perfil extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					Perfil frame = new Perfil();
+					Completar_perfil frame = new Completar_perfil();
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -46,7 +46,7 @@ public class Perfil extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public Perfil() {
+	public Completar_perfil() {
 		setTitle("Completar perfil de usuario");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 515, 702);
