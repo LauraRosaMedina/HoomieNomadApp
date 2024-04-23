@@ -5,11 +5,16 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.PlainDocument;
+
+import ConexionBaseDatos.ConexionMySQL;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 
 public class AnadirPropiedades extends JFrame {
 
@@ -175,34 +180,41 @@ public class AnadirPropiedades extends JFrame {
                 String garaje = (String) garajeComboBox.getSelectedItem();
                 String piscina = (String) piscinaComboBox.getSelectedItem();
                 String ocupantes = ocupantesField.getText();
+                try {
+                    // Conectar a la base de datos
+                    ConexionMySQL conexion = new ConexionMySQL("root", "test", "HoomieNomad");
+                    conexion.conectar();
 
-                // Aquí puedes hacer algo con los datos ingresados, como guardarlos en una lista o en la base de datos
-                // Por ahora, simplemente mostraremos la información ingresada en un cuadro de diálogo
-                StringBuilder message = new StringBuilder();
-                message.append("Tipo de casa: ").append(tipoDeCasa).append("\n");
-                message.append("Número de baños: ").append(banos).append("\n");
-                message.append("Número de habitaciones: ").append(habitaciones).append("\n");
-                message.append("Terraza/Patio: ").append(terraza).append("\n");
-                message.append("Ubicación: ").append(ubicacion).append("\n");
-                message.append("Garaje: ").append(garaje).append("\n");
-                message.append("Piscina: ").append(piscina).append("\n");
-                message.append("Número de ocupantes: ").append(ocupantes);
-                JOptionPane.showMessageDialog(null, message.toString());
-                
-                // Crear una instancia de la clase FeedPrincipal
-                FeedPrincipal feedPrincipal = new FeedPrincipal();
-                // Hacer visible la ventana del feed principal
-                feedPrincipal.setVisible(true);
-                // Cerrar la ventana actual
-                dispose();
+                    // Insertar la nueva propiedad en la base de datos
+                    String consulta = "INSERT INTO Propiedades (id_usuario, tipo_de_casa, num_banos, num_habitaciones, terraza_patio, ubicacion, garaje, piscina, num_ocupantes) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                    PreparedStatement statement = conexion.prepareStatement(consulta);
+                    // Aquí necesitas obtener el id del usuario actualmente conectado
+                    // Puedes obtenerlo de la ventana de login o pasarlo como parámetro al constructor de esta ventana
+                    int idUsuario = obtenerIdUsuario(); // Debes implementar este método
+                    statement.setInt(1, idUsuario);
+                    statement.setString(2, tipoDeCasa);
+                    statement.setInt(3, Integer.parseInt(banos));
+                    statement.setInt(4, Integer.parseInt(habitaciones));
+                    statement.setString(5, terraza);
+                    statement.setString(6, ubicacion);
+                    statement.setString(7, garaje);
+                    statement.setString(8, piscina);
+                    statement.setInt(9, Integer.parseInt(ocupantes));
+                    int filasAfectadas = statement.executeUpdate();
 
-                // Limpiar los campos después de agregar la propiedad
-                banosField.setText("");
-                habitacionesField.setText("");
-                ubicacionField.setText("");
-                ocupantesField.setText("");
+                    if (filasAfectadas > 0) {
+                        JOptionPane.showMessageDialog(null, "Propiedad agregada exitosamente.");
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Error al agregar la propiedad.");
+                    }
+
+                    // Desconectar de la base de datos
+                    conexion.desconectar();
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                    JOptionPane.showMessageDialog(null, "Error al conectar con la base de datos: " + ex.getMessage());
+                }
             }
-
         });
 
         contentPane.add(addButton, BorderLayout.SOUTH);
@@ -225,15 +237,23 @@ public class AnadirPropiedades extends JFrame {
                 }
             }
         });
+        
+        contentPane.add(saveButton, BorderLayout.SOUTH);
     }
 
-    // Clase interna para permitir solo la entrada de números en JTextField
+    protected int obtenerIdUsuario() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	// Clase interna para permitir solo la entrada de números en JTextField
     class NumberOnlyDocument extends PlainDocument {
         private String fieldName;
 
         public NumberOnlyDocument(String fieldName) {
             this.fieldName = fieldName;
-        } 
+        }
+
         @Override
         public void insertString(int offs, String str, AttributeSet a) throws BadLocationException {
             if (str == null) {
@@ -265,5 +285,4 @@ public class AnadirPropiedades extends JFrame {
             }
         });
     }
-
 }
