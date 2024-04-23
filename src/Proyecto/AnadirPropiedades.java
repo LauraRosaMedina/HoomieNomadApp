@@ -185,7 +185,6 @@ public class AnadirPropiedades extends JFrame {
                     ConexionMySQL conexion = new ConexionMySQL("root", "test", "HoomieNomad");
                     conexion.conectar();
 
-<<<<<<< HEAD
                     // Insertar la nueva propiedad en la base de datos
                     String consulta = "INSERT INTO Propiedades (id_usuario, tipo_de_casa, num_banos, num_habitaciones, terraza_patio, ubicacion, garaje, piscina, num_ocupantes) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
                     PreparedStatement statement = conexion.prepareStatement(consulta);
@@ -202,27 +201,6 @@ public class AnadirPropiedades extends JFrame {
                     statement.setString(8, piscina);
                     statement.setInt(9, Integer.parseInt(ocupantes));
                     int filasAfectadas = statement.executeUpdate();
-=======
-                // Aquí puedes hacer algo con los datos ingresados, como guardarlos en una lista o en la base de datos
-                // Por ahora, simplemente mostraremos la información ingresada en un cuadro de diálogo
-                StringBuilder message = new StringBuilder();
-                message.append("Tipo de casa: ").append(tipoDeCasa).append("\n");
-                message.append("Número de baños: ").append(banos).append("\n");
-                message.append("Número de habitaciones: ").append(habitaciones).append("\n");
-                message.append("Terraza/Patio: ").append(terraza).append("\n");
-                message.append("Ubicación: ").append(ubicacion).append("\n");
-                message.append("Garaje: ").append(garaje).append("\n");
-                message.append("Piscina: ").append(piscina).append("\n");
-                message.append("Número de ocupantes: ").append(ocupantes);
-                JOptionPane.showMessageDialog(null, message.toString());
-
-                // Crear una instancia de la clase FeedPrincipal
-                FeedPrincipal feedPrincipal = new FeedPrincipal();
-                // Hacer visible la ventana del feed principal
-                feedPrincipal.setVisible(true);
-                // Cerrar la ventana actual
-                dispose();
->>>>>>> 3d37703d9425ba089fd61e79b544b49870b5a907
 
                     if (filasAfectadas > 0) {
                         JOptionPane.showMessageDialog(null, "Propiedad agregada exitosamente.");
@@ -240,7 +218,6 @@ public class AnadirPropiedades extends JFrame {
         });
 
         contentPane.add(addButton, BorderLayout.SOUTH);
-<<<<<<< HEAD
 
         // Botón de guardar
         gbc.gridx = 0;
@@ -262,9 +239,6 @@ public class AnadirPropiedades extends JFrame {
         });
         
         contentPane.add(saveButton, BorderLayout.SOUTH);
-=======
-        
->>>>>>> 3d37703d9425ba089fd61e79b544b49870b5a907
     }
 
     protected int obtenerIdUsuario() {
