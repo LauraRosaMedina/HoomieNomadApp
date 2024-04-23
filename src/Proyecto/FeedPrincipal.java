@@ -2,8 +2,11 @@ package Proyecto;
 
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.BorderFactory;
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
@@ -38,6 +41,21 @@ public class FeedPrincipal extends JFrame {
         contentPane.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         setContentPane(contentPane);
         contentPane.setLayout(new BorderLayout(0, 0));
+        
+     // Panel para el botón de "Añadir Propiedades"
+        JPanel topPanel = new JPanel(new BorderLayout());
+        contentPane.add(topPanel, BorderLayout.NORTH);
+
+		// Botón de "Añadir Propiedades"
+        JButton addPropertiesButton = new JButton("Añadir Propiedades");
+        addPropertiesButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                // Abrir la ventana de añadir propiedades
+                AnadirPropiedades anadirPropiedades = new AnadirPropiedades();
+                anadirPropiedades.setVisible(true);
+            }
+        });
+        topPanel.add(addPropertiesButton, BorderLayout.SOUTH);
 	}
 
 

@@ -188,7 +188,7 @@ public class AnadirPropiedades extends JFrame {
                 message.append("Piscina: ").append(piscina).append("\n");
                 message.append("Número de ocupantes: ").append(ocupantes);
                 JOptionPane.showMessageDialog(null, message.toString());
-                
+
                 // Crear una instancia de la clase FeedPrincipal
                 FeedPrincipal feedPrincipal = new FeedPrincipal();
                 // Hacer visible la ventana del feed principal
@@ -206,25 +206,7 @@ public class AnadirPropiedades extends JFrame {
         });
 
         contentPane.add(addButton, BorderLayout.SOUTH);
-
-        // Botón de guardar
-        gbc.gridx = 0;
-        gbc.gridy = 9;
-        JButton saveButton = new JButton("Guardar");
-        saveButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                // Verificar si todos los campos están completos
-                if (banosField.getText().isEmpty() ||
-                    habitacionesField.getText().isEmpty() ||
-                    ocupantesField.getText().isEmpty()) {
-                    JOptionPane.showMessageDialog(null, "Por favor, complete todos los campos.", "Error", JOptionPane.ERROR_MESSAGE);
-                } else {
-                    // Aquí guardaríamos los datos
-                    JOptionPane.showMessageDialog(null, "Perfil guardado exitosamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
-
-                }
-            }
-        });
+        
     }
 
     // Clase interna para permitir solo la entrada de números en JTextField
