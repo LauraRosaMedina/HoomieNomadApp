@@ -111,7 +111,7 @@ public class ConexionMySQL {
 
         return fila;
     }
-    
+   
     public PreparedStatement prepareStatement(String consulta) throws SQLException {
         return connection.prepareStatement(consulta);
     }

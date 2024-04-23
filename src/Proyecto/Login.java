@@ -122,8 +122,7 @@ public class Login extends JFrame {
                 String usuario = usernameField.getText();
                 String contraseña = new String(passwordField.getPassword());
                 ConexionMySQL conexion = new ConexionMySQL("root", "test", "HoomieNomad");
-                
-                
+
                 try {
                     // Conectarse a la base de datos
                     conexion.conectar();
@@ -134,6 +133,14 @@ public class Login extends JFrame {
                     if (resultado.next()) {
                         // El usuario existe en la base de datos
                         JOptionPane.showMessageDialog(null, "¡Inicio de sesión exitoso!");
+
+                        // Crear una instancia del FeedPrincipal
+                        FeedPrincipal feedPrincipal = new FeedPrincipal();
+                        // Hacer visible el FeedPrincipal
+                        feedPrincipal.setVisible(true);
+
+                        // Cerrar la ventana de inicio de sesión actual
+                        dispose();
                     } else {
                         // El usuario no existe en la base de datos
                         JOptionPane.showMessageDialog(null, "¡Nombre de usuario o contraseña incorrectos!");
@@ -147,6 +154,7 @@ public class Login extends JFrame {
                 }
             }
         });
+
         
         //Borrar usuario//
         
