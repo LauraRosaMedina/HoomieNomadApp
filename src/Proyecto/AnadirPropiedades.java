@@ -215,6 +215,11 @@ public class AnadirPropiedades extends JFrame {
                     JOptionPane.showMessageDialog(null, "Error al conectar con la base de datos: " + ex.getMessage());
                 }
             }
+
+			private int obtenerIdUsuario() {
+				// TODO Auto-generated method stub
+				return 0;
+			}
         });
 
         contentPane.add(addButton, BorderLayout.SOUTH);
@@ -241,10 +246,7 @@ public class AnadirPropiedades extends JFrame {
         contentPane.add(saveButton, BorderLayout.SOUTH);
     }
 
-    protected int obtenerIdUsuario() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
+
 
 	// Clase interna para permitir solo la entrada de números en JTextField
     class NumberOnlyDocument extends PlainDocument {
