@@ -221,7 +221,7 @@ public class Registrarse extends JFrame {
                             dispose();
                             
                             // Abrir la ventana de "Completar Perfil"
-                            Completar_perfil perfilFrame = new Completar_perfil();
+                            AnadirPropiedades perfilFrame = new AnadirPropiedades();
                             perfilFrame.setVisible(true);
                             
                         } else {
