@@ -214,6 +214,14 @@ public class AnadirPropiedades extends JFrame {
                     ex.printStackTrace();
                     JOptionPane.showMessageDialog(null, "Error al conectar con la base de datos: " + ex.getMessage());
                 }
+                
+             // Crear una instancia de la clase FeedPrincipal
+                FeedPrincipal feedPrincipal = new FeedPrincipal();
+                // Hacer visible la ventana del feed principal
+                feedPrincipal.setVisible(true);
+                // Cerrar la ventana actual
+                dispose();
+
             }
         });
 
