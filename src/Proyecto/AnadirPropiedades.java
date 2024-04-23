@@ -188,6 +188,13 @@ public class AnadirPropiedades extends JFrame {
                 message.append("Piscina: ").append(piscina).append("\n");
                 message.append("Número de ocupantes: ").append(ocupantes);
                 JOptionPane.showMessageDialog(null, message.toString());
+                
+                // Crear una instancia de la clase FeedPrincipal
+                FeedPrincipal feedPrincipal = new FeedPrincipal();
+                // Hacer visible la ventana del feed principal
+                feedPrincipal.setVisible(true);
+                // Cerrar la ventana actual
+                dispose();
 
                 // Limpiar los campos después de agregar la propiedad
                 banosField.setText("");
@@ -214,14 +221,7 @@ public class AnadirPropiedades extends JFrame {
                 } else {
                     // Aquí guardaríamos los datos
                     JOptionPane.showMessageDialog(null, "Perfil guardado exitosamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
-                    // Lógica para guardar los datos
 
-                    // Cerrar esta ventana
-                    dispose();
-
-                    // Abrir el feed principal (aquí deberías instanciar la clase del feed principal)
-                    FeedPrincipal feedPrincipal = new FeedPrincipal();
-                    feedPrincipal.setVisible(true);
                 }
             }
         });
