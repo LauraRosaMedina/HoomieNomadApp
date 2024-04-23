@@ -7,6 +7,8 @@ import java.awt.event.*;
 public class GestionarPerfil extends JFrame {
     private static final long serialVersionUID = 1L;
     private JPanel contentPane;
+    private String nombreUsuario;
+    private String contrasena;
 
     public GestionarPerfil() {
         setTitle("Gestionar Perfil");
@@ -28,7 +30,7 @@ public class GestionarPerfil extends JFrame {
         backButton.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                 	// Crear una instancia de la clase FeedPrincipal
-                    FeedPrincipal feedPrincipal = new FeedPrincipal();
+                    FeedPrincipal feedPrincipal = new FeedPrincipal("idUsuario");
                     // Hacer visible la ventana del feed principal
                     feedPrincipal.setVisible(true);
                     // Cerrar la ventana actual
@@ -134,4 +136,20 @@ public class GestionarPerfil extends JFrame {
             }
         });
     }
+
+	public String getNombreUsuario() {
+		return nombreUsuario;
+	}
+
+	public void setNombreUsuario(String nombreUsuario) {
+		this.nombreUsuario = nombreUsuario;
+	}
+
+	public String getContrasena() {
+		return contrasena;
+	}
+
+	public void setContrasena(String contrasena) {
+		this.contrasena = contrasena;
+	}
 }

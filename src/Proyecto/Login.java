@@ -20,8 +20,10 @@ import javax.swing.border.EmptyBorder;
 public class Login extends JFrame {
 
 	private static final long serialVersionUID = 1L;
-	private JPanel contentPane;
-
+    private JPanel contentPane;
+    private JTextField usernameField;
+    private JPasswordField passwordField;
+	
 	/**
 	 * Launch the application.
 	 */
@@ -56,10 +58,7 @@ public class Login extends JFrame {
 		// Etiqueta para el nombre de usuario
         JLabel usernameLabel = new JLabel("Nombre de usuario:");
         usernameLabel.setBounds(50, 50, 150, 30);
-        contentPane.add(usernameLabel);
-        
-        //Campo de texto para introducir nombre de usuario//
-        
+        contentPane.add(usernameLabel);        
         
         // Campo de texto para el nombre de usuario
         JTextField usernameField = new JTextField();
@@ -118,42 +117,26 @@ public class Login extends JFrame {
         
      // ActionListener para el botón "Iniciar sesión"
         loginButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                String usuario = usernameField.getText();
+        	public void actionPerformed(ActionEvent e) {
+                String nombreUsuario = usernameField.getText();
                 String contraseña = new String(passwordField.getPassword());
-                ConexionMySQL conexion = new ConexionMySQL("root", "test", "HoomieNomad");
 
                 try {
-                    // Conectarse a la base de datos
-                    conexion.conectar();
-
-                    // Consultar si el usuario existe en la base de datos
-                    ResultSet resultado = conexion.ejecutarSelect("SELECT * FROM Usuario WHERE nombreUsuario='" + usuario + "' AND contrasena='" + contraseña + "'");
-
-                    if (resultado.next()) {
-                        // El usuario existe en la base de datos
-                        JOptionPane.showMessageDialog(null, "¡Inicio de sesión exitoso!");
-
-                        // Crear una instancia del FeedPrincipal
-                        FeedPrincipal feedPrincipal = new FeedPrincipal();
-                        // Hacer visible el FeedPrincipal
+                    Sesion sesion = new Sesion(); // Crea una nueva sesión
+                    if (sesion.iniciarSesion(nombreUsuario, contraseña)) {
+                        FeedPrincipal feedPrincipal = new FeedPrincipal(sesion.getUsuario());
                         feedPrincipal.setVisible(true);
-
-                        // Cerrar la ventana de inicio de sesión actual
                         dispose();
                     } else {
-                        // El usuario no existe en la base de datos
-                        JOptionPane.showMessageDialog(null, "¡Nombre de usuario o contraseña incorrectos!");
+                        JOptionPane.showMessageDialog(null, "Nombre de usuario o contraseña incorrectos.");
                     }
-
-                    // Desconectar de la base de datos
-                    conexion.desconectar();
                 } catch (SQLException ex) {
                     ex.printStackTrace();
                     JOptionPane.showMessageDialog(null, "Error al conectarse a la base de datos: " + ex.getMessage());
                 }
             }
         });
+
 
         
         //Borrar usuario//
