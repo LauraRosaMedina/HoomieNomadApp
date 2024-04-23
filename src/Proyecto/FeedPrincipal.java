@@ -1,10 +1,13 @@
 package Proyecto;
 
+import java.awt.BorderLayout;
 import java.awt.EventQueue;
 
+import javax.swing.BorderFactory;
+import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-public class FeedPrincipal {
+public class FeedPrincipal extends JFrame {
 
 	private static final long serialVersionUID = 1L;
     private JPanel contentPane;
@@ -24,10 +27,17 @@ public class FeedPrincipal {
             }
         });
     }
+	
+	public FeedPrincipal() {
+		setTitle("Feed Principal");
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setBounds(100, 100, 515, 702);
+        setLocationRelativeTo(null);
 
-	public void setVisible(boolean b) {
-		// TODO Auto-generated method stub
-		
+        contentPane = new JPanel();
+        contentPane.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        setContentPane(contentPane);
+        contentPane.setLayout(new BorderLayout(0, 0));
 	}
 
 

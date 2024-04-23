@@ -25,9 +25,15 @@ public class GestionarPerfil extends JFrame {
 
         // Botón de "Atrás"
         JButton backButton = new JButton("← Atrás");
-        backButton.addActionListener(e -> {
-            // Cerrar la ventana actual
-            dispose();
+        backButton.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                	// Crear una instancia de la clase FeedPrincipal
+                    FeedPrincipal feedPrincipal = new FeedPrincipal();
+                    // Hacer visible la ventana del feed principal
+                    feedPrincipal.setVisible(true);
+                    // Cerrar la ventana actual
+                    dispose();
+                }
         });
         topPanel.add(backButton, BorderLayout.WEST);
 
