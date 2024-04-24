@@ -11,7 +11,7 @@ public class Main {
          
 
         
-       login.borrarUsuario("Davi");	}
+       Ajustes.borrarUsuario("Davi");	}
 
 
 }

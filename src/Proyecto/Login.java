@@ -186,38 +186,5 @@ public class Login extends JFrame {
         }
     
     }*/
-	
-	public static void borrarUsuario(String nombreUsuario) {
-	    ConexionMySQL conexion = new ConexionMySQL("root", "test", "HoomieNomad");
-	    try {
-	        // Conectar a la base de datos
-	        conexion.conectar();
-
-	        // Verificar si el usuario existe antes de eliminarlo
-	        ResultSet resultado = conexion.ejecutarSelect("SELECT * FROM Usuario WHERE nombreUsuario = '" + Usuario.getNombreUsuario() + "'");
-	        if (resultado.next()) {
-	            // El usuario existe, proceder a eliminarlo
-	            String consulta = "DELETE FROM Usuario WHERE nombreUsuario = '" + Usuario.getNombreUsuario() + "'";
-	            int filasAfectadas = conexion.ejecutarInsertDeleteUpdate(consulta);
-
-	            // Comprobar si se borró la fila correctamente
-	            if (filasAfectadas > 0) {
-	                JOptionPane.showMessageDialog(null, "Usuario borrado correctamente.");
-	            } else {
-	                JOptionPane.showMessageDialog(null, "No se pudo borrar el usuario.");
-	            }
-	        } /*else {
-	            JOptionPane.showMessageDialog(null, "El usuario no existe.");
-	        }*/
-
-	        // Desconectar de la base de datos
-	        conexion.desconectar();
-	    } catch (SQLException ex) {
-	        ex.printStackTrace();
-	        JOptionPane.showMessageDialog(null, "Error al conectar con la base de datos: " + ex.getMessage());
-	    }
-	}
-
-	
 
 }

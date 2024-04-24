@@ -29,7 +29,7 @@ public class AnadirIntereses extends JFrame {
 	                    JOptionPane.showMessageDialog(null, "Error al conectarse a la base de datos: " + e.getMessage());
 					}
 
-                    AnadirPropiedades frame = new AnadirPropiedades(); // Pasa la sesión como argumento al constructor
+                    AnadirIntereses frame = new AnadirIntereses(); // Pasa la sesión como argumento al constructor
                     frame.setVisible(true);
             }
         });

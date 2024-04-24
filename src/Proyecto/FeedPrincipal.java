@@ -1,9 +1,14 @@
 package Proyecto;
 
 import javax.swing.*;
+
+import ConexionBaseDatos.ConexionMySQL;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
+
 
 public class FeedPrincipal extends JFrame {
 
@@ -55,6 +60,7 @@ public class FeedPrincipal extends JFrame {
         gestionarPerfilMenuItem.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 // Abrir la ventana de gestionar perfil
+            	dispose();
                 GestionarPerfil gestionarPerfil = new GestionarPerfil();
                 gestionarPerfil.setVisible(true);
             }
@@ -65,6 +71,7 @@ public class FeedPrincipal extends JFrame {
         JMenuItem ajustesMenuItem = new JMenuItem("Ajustes");
         ajustesMenuItem.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+            	dispose();
             	 Ajustes ajustes = new Ajustes();
                  ajustes.setVisible(true);
             }
@@ -74,14 +81,30 @@ public class FeedPrincipal extends JFrame {
         // Separador
         menuUsuario.addSeparator();
 
-        // Opción "Cerrar Sesión"
+     // Opción "Cerrar Sesión"
         JMenuItem cerrarSesionMenuItem = new JMenuItem("Cerrar Sesión");
         cerrarSesionMenuItem.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                // Aquí va el código para cerrar la sesión del usuario y volver a la página de inicio de sesión
+                try {
+                	ConexionMySQL conexion = ConexionMySQL.obtenerInstancia();
+                    // Desconectar de la base de datos
+                    conexion.desconectar();
+
+                    // Cerrar la ventana actual
+                    dispose();
+
+                    // Abrir la ventana de inicio de sesión (login)
+                    Login login = new Login();
+                    login.setVisible(true);
+                } catch (SQLException ex) {
+                    // Manejar cualquier excepción que pueda ocurrir al cerrar la conexión
+                    ex.printStackTrace();
+                    JOptionPane.showMessageDialog(null, "Error al cerrar sesión. Por favor, inténtelo de nuevo.");
+                }
             }
         });
         menuUsuario.add(cerrarSesionMenuItem);
 
     }
+
 }

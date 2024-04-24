@@ -6,6 +6,7 @@ import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import javax.swing.JButton;
@@ -63,16 +64,7 @@ public class Ajustes extends JFrame {
         // Botón de "Atrás"
         JButton backButton = new JButton("← Atrás");
         backButton.addActionListener(e -> {
-            String nombreUsuario = usernameField.getText();
-            String contraseña = new String(passwordField.getPassword());
 
-            // Crear una instancia de ConexionMySQL y conectar a la base de datos
-            ConexionMySQL conexion = new ConexionMySQL("root", "test", "HoomieNomad");
-            try {
-				conexion.conectar();
-			} catch (SQLException e1) {
-				e1.printStackTrace();
-			}
       
 				    FeedPrincipal feedPrincipal = new FeedPrincipal();
 				    feedPrincipal.setVisible(true);
@@ -124,36 +116,36 @@ public class Ajustes extends JFrame {
         gbc1.gridx = 0;
         gbc1.gridy++;
 
-        // Botón para cambiar contraseña
+     // Botón para cambiar contraseña
         JButton changePasswordButton = new JButton("Cambiar Contraseña");
         changePasswordButton.addActionListener(e -> {
-        	ConexionMySQL conexion = new ConexionMySQL("root", "test", "HoomieNomad");
-        	try {
-        	    conexion.conectar();
-        	    // Verificación de la contraseña actual y cambio de contraseña en la base de datos
-        	    String nombreUsuario = Usuario.getNombreUsuario();
-        	    String contrasenaActual = new String(currentPasswordField.getPassword());
-        	    String nuevaContrasena = new String(newPasswordField.getPassword());
+            ConexionMySQL conexion = new ConexionMySQL("root", "test", "HoomieNomad");
+            try {
+                conexion.conectar();
+                // Verificación de la contraseña actual y cambio de contraseña en la base de datos
+                String nombreUsuario = Usuario.getNombreUsuario();
+                String contrasenaActual = new String(currentPasswordField.getPassword());
+                String nuevaContrasena = new String(newPasswordField.getPassword());
 
-        	    // Verifica si la contraseña actual es correcta antes de actualizarla
-        	    if (contrasenaActual == Usuario.getContrasena()) {
-        	        // Si la contraseña actual es correcta, actualiza la contraseña en la base de datos
-        	        conexion.actualizarContrasena(nombreUsuario, nuevaContrasena);
-        	        JOptionPane.showMessageDialog(this, "Contraseña cambiada con éxito.");
-        	    } else {
-        	        // Si la contraseña actual es incorrecta, muestra un mensaje de error
-        	        JOptionPane.showMessageDialog(this, "La contraseña actual es incorrecta.", "Error", JOptionPane.ERROR_MESSAGE);
-        	    }
-        	} catch (SQLException ex) {
-        	    ex.printStackTrace();
-        	    JOptionPane.showMessageDialog(this, "Error al cambiar la contraseña: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-        	} finally {
-        	    try {
-        	        conexion.desconectar(); // Cierra la conexión a la base de datos
-        	    } catch (SQLException ex) {
-        	        ex.printStackTrace();
-        	    }
-        	}
+                // Verifica si la contraseña actual es correcta antes de actualizarla
+                if (contrasenaActual.equals(Usuario.getContrasena())) {
+                    // Si la contraseña actual es correcta, actualiza la contraseña en la base de datos
+                    conexion.actualizarContrasena(nombreUsuario, nuevaContrasena);
+                    JOptionPane.showMessageDialog(this, "Contraseña cambiada con éxito.");
+                } else {
+                    // Si la contraseña actual es incorrecta, muestra un mensaje de error
+                    JOptionPane.showMessageDialog(this, "La contraseña actual es incorrecta.", "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+                JOptionPane.showMessageDialog(this, "Error al cambiar la contraseña: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            } finally {
+                try {
+                    conexion.desconectar(); // Cierra la conexión a la base de datos
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                }
+            }
         });
         settingsPanel1.add(changePasswordButton, gbc1);
 
@@ -177,21 +169,58 @@ public class Ajustes extends JFrame {
         // Botón para borrar cuenta
         JButton deleteAccountButton = new JButton("Cerrar Cuenta");
         deleteAccountButton.addActionListener(e -> {
-            // Lógica para cerrar la cuenta
             // Debes mostrar una confirmación al usuario antes de cerrar la cuenta
             int choice = JOptionPane.showConfirmDialog(this, "¿Está seguro de que desea cerrar su cuenta?", "Confirmación", JOptionPane.YES_NO_OPTION);
             if (choice == JOptionPane.YES_OPTION) {
-                // Debes llamar al método para borrar el usuario en tu sistema de autenticación
-                // Ejemplo: Login.borrarUsuario(nombreUsuario);
+                borrarUsuario(Usuario.getNombreUsuario());
                 JOptionPane.showMessageDialog(this, "Cuenta cerrada con éxito.");
-                // Aquí puedes realizar acciones adicionales, como cerrar la sesión y redirigir al usuario a la pantalla de inicio de sesión
-                // Cerrar la ventana actual
-                dispose();
+                ConexionMySQL conexion = ConexionMySQL.obtenerInstancia();
+                // Desconectar de la base de datos
+                try {
+					conexion.desconectar();
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+
                 // Abrir la ventana de inicio de sesión (login)
                 Login login = new Login();
                 login.setVisible(true);
+                // Cerrar la ventana actual
+                dispose();
             }
         });
         deleteAccountPanel.add(deleteAccountButton, gbc2);
     }
+    
+    public static void borrarUsuario(String nombreUsuario) {
+	    ConexionMySQL conexion = new ConexionMySQL("root", "test", "HoomieNomad");
+	    try {
+	        // Conectar a la base de datos
+	        conexion.conectar();
+
+	        // Verificar si el usuario existe antes de eliminarlo
+	        ResultSet resultado = conexion.ejecutarSelect("SELECT * FROM Usuario WHERE nombreUsuario = '" + Usuario.getNombreUsuario() + "'");
+	        if (resultado.next()) {
+	            // El usuario existe, proceder a eliminarlo
+	            String consulta = "DELETE FROM Usuario WHERE nombreUsuario = '" + Usuario.getNombreUsuario() + "'";
+	            int filasAfectadas = conexion.ejecutarInsertDeleteUpdate(consulta);
+
+	            // Comprobar si se borró la fila correctamente
+	            if (filasAfectadas > 0) {
+	                JOptionPane.showMessageDialog(null, "Usuario borrado correctamente.");
+	            } else {
+	                JOptionPane.showMessageDialog(null, "No se pudo borrar el usuario.");
+	            }
+	        } else {
+	            JOptionPane.showMessageDialog(null, "El usuario no existe.");
+	        }
+
+	        // Desconectar de la base de datos
+	        conexion.desconectar();
+	    } catch (SQLException ex) {
+	        ex.printStackTrace();
+	        JOptionPane.showMessageDialog(null, "Error al conectar con la base de datos: " + ex.getMessage());
+	    }
+	}
 }
