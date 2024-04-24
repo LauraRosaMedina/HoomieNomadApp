@@ -1,10 +1,13 @@
 package Proyecto;
 import ConexionBaseDatos.ConexionMySQL;
 
+import Proyecto.Sesion;
+
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -122,7 +125,15 @@ public class Login extends JFrame {
                 String contraseña = new String(passwordField.getPassword());
 
                 try {
-                    Sesion sesion = new Sesion(); // Crea una nueva sesión
+                	// Crear una instancia de ConexionMySQL y conectar a la base de datos
+                    ConexionMySQL conexion = new ConexionMySQL("usuario", "contraseña", "nombreBaseDeDatos");
+                    conexion.conectar();
+
+                    // Obtener la conexión a la base de datos
+                    Connection connection = conexion.getConnection();
+
+                    // Crear una nueva instancia de Sesion con la conexión obtenida
+                    Sesion sesion = new Sesion(connection); // Crea una nueva sesión
                     if (sesion.iniciarSesion(nombreUsuario, contraseña)) {
                         FeedPrincipal feedPrincipal = new FeedPrincipal(sesion.getUsuario());
                         feedPrincipal.setVisible(true);
@@ -131,7 +142,7 @@ public class Login extends JFrame {
                         JOptionPane.showMessageDialog(null, "Nombre de usuario o contraseña incorrectos.");
                     }
                 } catch (SQLException ex) {
-                    ex.printStackTrace();
+                	ex.printStackTrace();
                     JOptionPane.showMessageDialog(null, "Error al conectarse a la base de datos: " + ex.getMessage());
                 }
             }

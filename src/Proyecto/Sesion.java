@@ -7,11 +7,6 @@ public class Sesion {
 	
 	private Usuario usuario;
     private Connection connection;
-
-    // Constructor sin argumentos
-    public Sesion() {
-        
-    }
     
     // Constructor con argumentos
     public Sesion(Connection connection) {

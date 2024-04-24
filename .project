@@ -16,6 +16,11 @@
 	</natures>
 	<linkedResources>
 		<link>
+			<name>src/mysql-connector-java-8.0.20.jar</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/mysql-connector-java-8.0.20.jar</locationURI>
+		</link>
+		<link>
 			<name>src/ConexionBaseDatos/ConexionMySQL.java</name>
 			<type>1</type>
 			<locationURI>PARENT-1-PROJECT_LOC/ConexionMySQL.java</locationURI>
