@@ -21,7 +21,6 @@ public class AnadirPropiedades extends JFrame {
 
     private static final long serialVersionUID = 1L;
     private JPanel contentPane;
-    private Sesion sesion;
     
     /**
      * Launch the application.
@@ -29,29 +28,23 @@ public class AnadirPropiedades extends JFrame {
     public static void main(String[] args) {
         EventQueue.invokeLater(new Runnable() {
             public void run() {
-                try {
                     // Crear una instancia de ConexionMySQL y conectar a la base de datos
                     ConexionMySQL conexion = new ConexionMySQL("root", "test", "HoomieNomad");
-                    conexion.conectar();
+                    try {
+						conexion.conectar();
+					} catch (SQLException e) {
+						e.printStackTrace();
+	                    JOptionPane.showMessageDialog(null, "Error al conectarse a la base de datos: " + e.getMessage());
+					}
 
-                    // Obtener la conexión a la base de datos
-                    Connection connection = conexion.getConnection();
-
-                    // Crear una nueva instancia de Sesion con la conexión obtenida
-                    Sesion sesion = new Sesion(connection); // Crea una nueva sesión
-
-                    AnadirPropiedades frame = new AnadirPropiedades(sesion); // Pasa la sesión como argumento al constructor
+                    AnadirPropiedades frame = new AnadirPropiedades(); // Pasa la sesión como argumento al constructor
                     frame.setVisible(true);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
             }
         });
     }
 
     // Constructor
-    public AnadirPropiedades(Sesion sesion) {
-        this.sesion = sesion;
+    public AnadirPropiedades() {
         setTitle("Añadir propiedades");
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setBounds(100, 100, 515, 702);
@@ -218,52 +211,38 @@ public class AnadirPropiedades extends JFrame {
                 String ocupantes = ocupantesField.getText();
                 try {
                     // Obtener el id del usuario actualmente conectado
-                    int idUsuario = sesion.getUsuario().getIdUsuario();
+                   Usuario.getIdUsuario();
 
                     // Conectar a la base de datos
                     ConexionMySQL conexion = new ConexionMySQL("root", "test", "HoomieNomad");
                     conexion.conectar();
-                   
-                    // Aquí necesitas obtener nombreUsuario y contraseña de algún lugar
-                    String nombreUsuario = obtenerNombreUsuario();
-                    String contraseña = obtenerContraseña();
 
-                    // Crear una nueva instancia de ConexionMySQL y conectar a la base de datos
-                    ConexionMySQL conexionSesion = new ConexionMySQL("root", "test", "HoomieNomad");
-                    conexionSesion.conectar();
+                    if (Usuario.getIdUsuario() != 0) {
+                    	// Insertar la nueva propiedad en la base de datos
+                        String consulta = "INSERT INTO Propiedades (id_usuario, tipo_de_casa, num_banos, num_habitaciones, terraza_patio, ubicacion, garaje, piscina, num_ocupantes) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                        PreparedStatement statement = conexion.prepareStatement(consulta);
+                        statement.setInt(1, Usuario.getIdUsuario());
+                        statement.setString(2, tipoDeCasa);
+                        statement.setInt(3, Integer.parseInt(banos));
+                        statement.setInt(4, Integer.parseInt(habitaciones));
+                        statement.setString(5, terraza);
+                        statement.setString(6, ubicacion);
+                        statement.setString(7, garaje);
+                        statement.setString(8, piscina);
+                        statement.setInt(9, Integer.parseInt(ocupantes));
+                        int filasAfectadas = statement.executeUpdate();
 
-                    // Obtener la conexión a la base de datos
-                    Connection connection = conexionSesion.getConnection();
-
-                    // Crear una nueva instancia de Sesion con la conexión obtenida
-                    Sesion sesion = new Sesion(connection); // Crea una nueva sesión
-                    if (sesion != null && sesion.getUsuario() != null) {
-                        sesion.getUsuario().getIdUsuario();
-                        // Resto del código aquí
+                        if (filasAfectadas > 0) {
+                            JOptionPane.showMessageDialog(null, "Propiedad agregada exitosamente.");
+                        } else {
+                            JOptionPane.showMessageDialog(null, "Error al agregar la propiedad.");
+                        }
+                        
                     } else {
                         // Manejo del caso en el que la sesión o el usuario sean nulos
                         JOptionPane.showMessageDialog(null, "Error al obtener la sesión o el usuario.", "Error", JOptionPane.ERROR_MESSAGE);
                     }
                     
-                 // Insertar la nueva propiedad en la base de datos
-                    String consulta = "INSERT INTO Propiedades (id_usuario, tipo_de_casa, num_banos, num_habitaciones, terraza_patio, ubicacion, garaje, piscina, num_ocupantes) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
-                    PreparedStatement statement = conexion.prepareStatement(consulta);
-                    statement.setInt(1, idUsuario);
-                    statement.setString(2, tipoDeCasa);
-                    statement.setInt(3, Integer.parseInt(banos));
-                    statement.setInt(4, Integer.parseInt(habitaciones));
-                    statement.setString(5, terraza);
-                    statement.setString(6, ubicacion);
-                    statement.setString(7, garaje);
-                    statement.setString(8, piscina);
-                    statement.setInt(9, Integer.parseInt(ocupantes));
-                    int filasAfectadas = statement.executeUpdate();
-
-                    if (filasAfectadas > 0) {
-                        JOptionPane.showMessageDialog(null, "Propiedad agregada exitosamente.");
-                    } else {
-                        JOptionPane.showMessageDialog(null, "Error al agregar la propiedad.");
-                    }
                     
                     /*if (sesion.iniciarSesion(nombreUsuario, contraseña)) {
                         FeedPrincipal feedPrincipal = new FeedPrincipal(sesion.getUsuario());
@@ -281,15 +260,6 @@ public class AnadirPropiedades extends JFrame {
         
         contentPane.add(saveButton, BorderLayout.SOUTH);
     }
-
-    private String obtenerNombreUsuario() {
-        return sesion.getUsuario().getNombreUsuario();
-    }
-
-    private String obtenerContraseña() {
-        return sesion.getUsuario().getContrasena();
-    }
-
 
 	// Clase interna para permitir solo la entrada de números en JTextField
     class NumberOnlyDocument extends PlainDocument {

@@ -1,47 +1,34 @@
 package Proyecto;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-
 public class Usuario {
-    private static String nombreUsuario;
+    
+	private static String nombreUsuario;
     private static String contrasena;
     private static int idUsuario;
 
-    // Constructor
-    public Usuario(String nombreUsuario, String contrasena) {
-        this.nombreUsuario = nombreUsuario;
-        this.contrasena = contrasena;
-    }
-
-    // Método para iniciar sesión
-    public boolean iniciarSesion(Connection connection) throws SQLException {
-        String query = "SELECT id_usuario FROM Usuario WHERE nombreUsuario = ? AND contrasena = ?";
-        try (PreparedStatement statement = connection.prepareStatement(query)) {
-            statement.setString(1, nombreUsuario);
-            statement.setString(2, contrasena);
-            try (ResultSet resultSet = statement.executeQuery()) {
-                if (resultSet.next()) {
-                    idUsuario = resultSet.getInt("id_usuario");
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-
     // Métodos getter para obtener información del usuario
-    public String getNombreUsuario() {
+    public static String getNombreUsuario() {
         return nombreUsuario;
     }
 
-    public String getContrasena() {
+    public static String getContrasena() {
         return contrasena;
     }
     
-    public int getIdUsuario() {
+    public static int getIdUsuario() {
         return idUsuario;
+    }
+    
+    // Métodos setter para obtener información del usuario
+    public static void setNombreUsuario(String nombreUsuario) {
+        Usuario.nombreUsuario = nombreUsuario;
+    }
+
+    public static void setContrasena(String contrasena) {
+        Usuario.contrasena = contrasena;
+    }
+    
+    public static void setIdUsuario(int idUsuario) {
+        Usuario.idUsuario = idUsuario;
     }
 }

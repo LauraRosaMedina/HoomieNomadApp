@@ -30,7 +30,7 @@ public class GestionarPerfil extends JFrame {
         backButton.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                 	// Crear una instancia de la clase FeedPrincipal
-                    FeedPrincipal feedPrincipal = new FeedPrincipal("idUsuario");
+                    FeedPrincipal feedPrincipal = new FeedPrincipal();
                     // Hacer visible la ventana del feed principal
                     feedPrincipal.setVisible(true);
                     // Cerrar la ventana actual

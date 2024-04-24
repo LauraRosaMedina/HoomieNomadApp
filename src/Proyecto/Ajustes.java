@@ -66,7 +66,7 @@ public class Ajustes extends JFrame {
         backButton.addActionListener(e -> {
             String nombreUsuario = usernameField.getText();
             String contraseña = new String(passwordField.getPassword());
-            // Crear una nueva instancia de Sesion con la conexión obtenida
+
             // Crear una instancia de ConexionMySQL y conectar a la base de datos
             ConexionMySQL conexion = new ConexionMySQL("root", "test", "HoomieNomad");
             try {
@@ -74,21 +74,11 @@ public class Ajustes extends JFrame {
 			} catch (SQLException e1) {
 				e1.printStackTrace();
 			}
-
-            // Obtener la conexión a la base de datos
-            Connection connection = conexion.getConnection();
-
-            // Crear una nueva instancia de Sesion con la conexión obtenida
-            Sesion sesion = new Sesion(connection); // Crea una nueva sesión
-            try {
-				if (sesion.iniciarSesion(nombreUsuario, contraseña)) {
-				    FeedPrincipal feedPrincipal = new FeedPrincipal(sesion.getUsuario());
+      
+				    FeedPrincipal feedPrincipal = new FeedPrincipal();
 				    feedPrincipal.setVisible(true);
 				    dispose();
-				}
-			} catch (SQLException e1) {
-				e1.printStackTrace();
-			}
+
         });
         topPanel.add(backButton, BorderLayout.WEST);
 

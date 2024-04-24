@@ -19,7 +19,6 @@ public class FeedPrincipal extends JFrame {
 
     private static final long serialVersionUID = 1L;
     private JPanel contentPane;
-    private Usuario usuario = new Usuario ("nombreUsuario", "contrasena"); // Nuevo campo para almacenar la instancia de Usuario
 
     /**
      * Launch the application.
@@ -32,20 +31,8 @@ public class FeedPrincipal extends JFrame {
                     ConexionMySQL conexion = new ConexionMySQL("root", "test", "HoomieNomad");
                     conexion.conectar();
 
-                    // Obtener la conexión a la base de datos
-                    Connection connection = conexion.getConnection();
-
-                    // Crear una nueva instancia de Sesion con la conexión obtenida
-                    Sesion sesion = new Sesion(connection); // Crea una nueva sesión
-
-                    // Verificar si hay una sesión activa
-                    if (sesion.sesionActiva()) {
                         FeedPrincipal frame = new FeedPrincipal();
                         frame.setVisible(true);
-                    } else {
-                        // Manejar el caso en el que no haya una sesión activa
-                        JOptionPane.showMessageDialog(null, "No hay una sesión activa.", "Error", JOptionPane.ERROR_MESSAGE);
-                    }
                 } catch (SQLException e) {
                     e.printStackTrace();
                     JOptionPane.showMessageDialog(null, "Error al conectar con la base de datos: " + e.getMessage());
@@ -74,37 +61,18 @@ public class FeedPrincipal extends JFrame {
         JButton addPropertiesButton = new JButton("Añadir Propiedades");
         addPropertiesButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                try {
-                    // Crear una instancia de ConexionMySQL y conectar a la base de datos
+                    /* Crear una instancia de ConexionMySQL y conectar a la base de datos
                     ConexionMySQL conexion = new ConexionMySQL("root", "test", "HoomieNomad");
-                    conexion.conectar();
-
-                    // Obtener la conexión a la base de datos
-                    Connection connection = conexion.getConnection();
-
-                    // Crear una nueva instancia de Sesion con la conexión obtenida
-                    Sesion sesion = new Sesion(connection); // Crea una nueva sesión
+                    conexion.conectar();*/
 
                     // Abrir la ventana de añadir propiedades y pasar la sesión
-                    AnadirPropiedades anadirPropiedades = new AnadirPropiedades(sesion);
+                    AnadirPropiedades anadirPropiedades = new AnadirPropiedades();
                     anadirPropiedades.setVisible(true);
-                } catch (SQLException ex) {
-                    ex.printStackTrace();
-                    JOptionPane.showMessageDialog(null, "Error al conectar con la base de datos: " + ex.getMessage());
-                }
             }
         });
         topPanel.add(addPropertiesButton, BorderLayout.SOUTH);
     }
 
 
-	// Setter para establecer la instancia de Usuario
-    public void setUsuario(Usuario usuario) {
-        this.usuario = usuario;
-    }
 
-    // Getter para obtener la instancia de Usuario
-    public Usuario getUsuario() {
-        return usuario;
-    }
 }
