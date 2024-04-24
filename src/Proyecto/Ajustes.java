@@ -6,6 +6,7 @@ import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.sql.Connection;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -14,6 +15,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.border.EmptyBorder;
+
+import ConexionBaseDatos.ConexionMySQL;
 
 public class Ajustes extends JFrame {
 
@@ -57,13 +60,28 @@ public class Ajustes extends JFrame {
         // Botón de "Atrás"
         JButton backButton = new JButton("← Atrás");
         backButton.addActionListener(e -> {
-        	// Crear una instancia de la clase FeedPrincipal
-            FeedPrincipal feedPrincipal = new FeedPrincipal();
-            // Hacer visible la ventana del feed principal
-            feedPrincipal.setVisible(true);
-            // Cerrar la ventana actual
-            dispose();
+        	// Crear una instancia de ConexionMySQL y conectar a la base de datos
+            ConexionMySQL conexion = new ConexionMySQL("usuario", "contraseña", "nombreBaseDeDatos");
+            conexion.conectar();
 
+            // Obtener la conexión a la base de datos
+            Connection connection = conexion.getConnection();
+
+            // Crear una nueva instancia de Sesion con la conexión obtenida
+         // Crear una instancia de ConexionMySQL y conectar a la base de datos
+            ConexionMySQL conexion = new ConexionMySQL("usuario", "contraseña", "nombreBaseDeDatos");
+            conexion.conectar();
+
+            // Obtener la conexión a la base de datos
+            Connection connection = conexion.getConnection();
+
+            // Crear una nueva instancia de Sesion con la conexión obtenida
+            Sesion sesion = new Sesion(connection); // Crea una nueva sesión
+            if (sesion.iniciarSesion(nombreUsuario, contraseña)) {
+                FeedPrincipal feedPrincipal = new FeedPrincipal(sesion.getUsuario());
+                feedPrincipal.setVisible(true);
+                dispose();
+            }
         });
         topPanel.add(backButton, BorderLayout.WEST);
 
