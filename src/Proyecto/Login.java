@@ -126,7 +126,7 @@ public class Login extends JFrame {
 
                 try {
                 	// Crear una instancia de ConexionMySQL y conectar a la base de datos
-                    ConexionMySQL conexion = new ConexionMySQL("usuario", "contraseña", "nombreBaseDeDatos");
+                    ConexionMySQL conexion = new ConexionMySQL("root", "test", "HoomieNomad");
                     conexion.conectar();
 
                     // Obtener la conexión a la base de datos

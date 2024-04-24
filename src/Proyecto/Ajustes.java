@@ -60,16 +60,11 @@ public class Ajustes extends JFrame {
         // Botón de "Atrás"
         JButton backButton = new JButton("← Atrás");
         backButton.addActionListener(e -> {
-        	// Crear una instancia de ConexionMySQL y conectar a la base de datos
-            ConexionMySQL conexion = new ConexionMySQL("usuario", "contraseña", "nombreBaseDeDatos");
-            conexion.conectar();
-
-            // Obtener la conexión a la base de datos
-            Connection connection = conexion.getConnection();
-
+        	String nombreUsuario = usernameField.getText();
+            String contraseña = new String(passwordField.getPassword());
             // Crear una nueva instancia de Sesion con la conexión obtenida
          // Crear una instancia de ConexionMySQL y conectar a la base de datos
-            ConexionMySQL conexion = new ConexionMySQL("usuario", "contraseña", "nombreBaseDeDatos");
+            ConexionMySQL conexion = new ConexionMySQL("root", "test", "HoomieNomad");
             conexion.conectar();
 
             // Obtener la conexión a la base de datos
