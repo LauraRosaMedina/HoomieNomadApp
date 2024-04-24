@@ -20,6 +20,7 @@ public class AnadirPropiedades extends JFrame {
 
     private static final long serialVersionUID = 1L;
     private JPanel contentPane;
+    private boolean disponible = true; // Por defecto, siempre se inicia como disponible
     
     /**
      * Launch the application.
@@ -131,7 +132,7 @@ public class AnadirPropiedades extends JFrame {
         ubicacionField.addFocusListener(new FocusAdapter() {
             @Override
             public void focusGained(FocusEvent e) {
-                if (ubicacionField.getText().equals("Nombre del barrio")) {
+                if (ubicacionField.getText().equals("(Nombre del barrio, Ciudad)")) {
                     ubicacionField.setText("");
                 }
             }
@@ -139,12 +140,11 @@ public class AnadirPropiedades extends JFrame {
             @Override
             public void focusLost(FocusEvent e) {
                 if (ubicacionField.getText().isEmpty()) {
-                    ubicacionField.setText("Nombre del barrio");
+                    ubicacionField.setText("(Nombre del barrio, Ciudad)");
                 }
             }
         });
         propertyPanel.add(ubicacionField, gbc);
-
 
         // Etiqueta y menú desplegable para garaje
         gbc.gridx = 0;
@@ -188,7 +188,7 @@ public class AnadirPropiedades extends JFrame {
 
      
 
-        // Botón de guardar
+     // Botón de guardar
         gbc.gridx = 0;
         gbc.gridy = 9;
         JButton addButton = new JButton("Añadir");
@@ -200,61 +200,56 @@ public class AnadirPropiedades extends JFrame {
                     ocupantesField.getText().isEmpty()) {
                     JOptionPane.showMessageDialog(null, "Por favor, complete todos los campos.", "Error", JOptionPane.ERROR_MESSAGE);
                 } else {                      
-                String tipoDeCasa = (String) tipoDeCasaComboBox.getSelectedItem();
-                String banos = banosField.getText();
-                String habitaciones = habitacionesField.getText();
-                String terraza = (String) terrazaComboBox.getSelectedItem();
-                String ubicacion = ubicacionField.getText();
-                String garaje = (String) garajeComboBox.getSelectedItem();
-                String piscina = (String) piscinaComboBox.getSelectedItem();
-                String ocupantes = ocupantesField.getText();
-                try {
-                    // Obtener el id del usuario actualmente conectado
-                   Usuario.getIdUsuario();
+                    String tipoDeCasa = (String) tipoDeCasaComboBox.getSelectedItem();
+                    String banos = banosField.getText();
+                    String habitaciones = habitacionesField.getText();
+                    String terraza = (String) terrazaComboBox.getSelectedItem();
+                    String ubicacion = ubicacionField.getText();
+                    String garaje = (String) garajeComboBox.getSelectedItem();
+                    String piscina = (String) piscinaComboBox.getSelectedItem();
+                    String ocupantes = ocupantesField.getText();
+                    try {
+                        // Obtener el id del usuario actualmente conectado
+                       Usuario.getIdUsuario();
 
-                    // Conectar a la base de datos
-                    ConexionMySQL conexion = new ConexionMySQL("root", "test", "HoomieNomad");
-                    conexion.conectar();
+                        // Conectar a la base de datos
+                        ConexionMySQL conexion = new ConexionMySQL("root", "test", "HoomieNomad");
+                        conexion.conectar();
 
-                    if (Usuario.getIdUsuario() != 0) {
-                    	// Insertar la nueva propiedad en la base de datos
-                        String consulta = "INSERT INTO Propiedades (id_usuario, tipo_de_casa, num_banos, num_habitaciones, terraza_patio, ubicacion, garaje, piscina, num_ocupantes) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
-                        PreparedStatement statement = conexion.prepareStatement(consulta);
-                        statement.setInt(1, Usuario.getIdUsuario());
-                        statement.setString(2, tipoDeCasa);
-                        statement.setInt(3, Integer.parseInt(banos));
-                        statement.setInt(4, Integer.parseInt(habitaciones));
-                        statement.setString(5, terraza);
-                        statement.setString(6, ubicacion);
-                        statement.setString(7, garaje);
-                        statement.setString(8, piscina);
-                        statement.setInt(9, Integer.parseInt(ocupantes));
-                        int filasAfectadas = statement.executeUpdate();
+                        if (Usuario.getIdUsuario() != 0) {
+                        	// Insertar la nueva propiedad en la base de datos
+                            String consulta = "INSERT INTO Propiedades (id_usuario, tipo_de_casa, num_banos, num_habitaciones, terraza_patio, ubicacion, garaje, piscina, num_ocupantes, disponible) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                            PreparedStatement statement = conexion.prepareStatement(consulta);
+                            statement.setInt(1, Usuario.getIdUsuario());
+                            statement.setString(2, tipoDeCasa);
+                            statement.setInt(3, Integer.parseInt(banos));
+                            statement.setInt(4, Integer.parseInt(habitaciones));
+                            statement.setString(5, terraza);
+                            statement.setString(6, ubicacion);
+                            statement.setString(7, garaje);
+                            statement.setString(8, piscina);
+                            statement.setInt(9, Integer.parseInt(ocupantes));
+                            statement.setBoolean(10, disponible); // Establece la disponibilidad como true por defecto
+                            int filasAfectadas = statement.executeUpdate();
 
-                        if (filasAfectadas > 0) {
-                            JOptionPane.showMessageDialog(null, "Propiedad agregada exitosamente.");
-                            dispose();
+                            if (filasAfectadas > 0) {
+                                JOptionPane.showMessageDialog(null, "Propiedad agregada exitosamente.");
+                                dispose();
+                            } else {
+                                JOptionPane.showMessageDialog(null, "Error al agregar la propiedad.");
+                            }
+                            
                         } else {
-                            JOptionPane.showMessageDialog(null, "Error al agregar la propiedad.");
+                            // Manejo del caso en el que la sesión o el usuario sean nulos
+                            JOptionPane.showMessageDialog(null, "Error al obtener la sesión o el usuario.", "Error", JOptionPane.ERROR_MESSAGE);
                         }
                         
-                    } else {
-                        // Manejo del caso en el que la sesión o el usuario sean nulos
-                        JOptionPane.showMessageDialog(null, "Error al obtener la sesión o el usuario.", "Error", JOptionPane.ERROR_MESSAGE);
+                    } catch (SQLException ex) {
+                        ex.printStackTrace();
+                        JOptionPane.showMessageDialog(null, "Error al conectar con la base de datos: " + ex.getMessage());
                     }
-                    
-                    
-                    /*if (sesion.iniciarSesion(nombreUsuario, contraseña)) {
-                        FeedPrincipal feedPrincipal = new FeedPrincipal(sesion.getUsuario());
-                        feedPrincipal.setVisible(true);
-                        dispose();
-                    }*/
-                } catch (SQLException ex) {
-                    ex.printStackTrace();
-                    JOptionPane.showMessageDialog(null, "Error al conectar con la base de datos: " + ex.getMessage());
+                
                 }
-            
-            }
             }
         });
         

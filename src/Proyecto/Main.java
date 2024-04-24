@@ -1,4 +1,6 @@
 package Proyecto;
+import java.sql.ResultSet;
+
 import ConexionBaseDatos.ConexionMySQL;
 public class Main {
 
@@ -10,5 +12,6 @@ public class Main {
 
         
        login.borrarUsuario("Davi");	}
+
 
 }

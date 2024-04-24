@@ -127,14 +127,33 @@ public class Ajustes extends JFrame {
         // Botón para cambiar contraseña
         JButton changePasswordButton = new JButton("Cambiar Contraseña");
         changePasswordButton.addActionListener(e -> {
-            // Lógica para cambiar la contraseña
-            // Debes verificar que la contraseña actual sea correcta y que la nueva contraseña cumpla con tus requisitos
-            // Si el cambio es exitoso, debes actualizar la contraseña en tu base de datos o sistema de autenticación
-            // Muestra un mensaje de éxito o error según corresponda
-            JOptionPane.showMessageDialog(this, "Contraseña cambiada con éxito.");
-            // Limpia los campos de contraseña
-            currentPasswordField.setText("");
-            newPasswordField.setText("");
+        	ConexionMySQL conexion = new ConexionMySQL("root", "test", "HoomieNomad");
+        	try {
+        	    conexion.conectar();
+        	    // Verificación de la contraseña actual y cambio de contraseña en la base de datos
+        	    String nombreUsuario = Usuario.getNombreUsuario();
+        	    String contrasenaActual = new String(currentPasswordField.getPassword());
+        	    String nuevaContrasena = new String(newPasswordField.getPassword());
+
+        	    // Verifica si la contraseña actual es correcta antes de actualizarla
+        	    if (contrasenaActual == Usuario.getContrasena()) {
+        	        // Si la contraseña actual es correcta, actualiza la contraseña en la base de datos
+        	        conexion.actualizarContrasena(nombreUsuario, nuevaContrasena);
+        	        JOptionPane.showMessageDialog(this, "Contraseña cambiada con éxito.");
+        	    } else {
+        	        // Si la contraseña actual es incorrecta, muestra un mensaje de error
+        	        JOptionPane.showMessageDialog(this, "La contraseña actual es incorrecta.", "Error", JOptionPane.ERROR_MESSAGE);
+        	    }
+        	} catch (SQLException ex) {
+        	    ex.printStackTrace();
+        	    JOptionPane.showMessageDialog(this, "Error al cambiar la contraseña: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        	} finally {
+        	    try {
+        	        conexion.desconectar(); // Cierra la conexión a la base de datos
+        	    } catch (SQLException ex) {
+        	        ex.printStackTrace();
+        	    }
+        	}
         });
         settingsPanel1.add(changePasswordButton, gbc1);
 

@@ -1,40 +1,23 @@
 package Proyecto;
 
-import javax.swing.BorderFactory;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-
-import ConexionBaseDatos.ConexionMySQL;
-
-import java.awt.BorderLayout;
-import java.awt.EventQueue;
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.SQLException;
 
 public class FeedPrincipal extends JFrame {
 
     private static final long serialVersionUID = 1L;
     private JPanel contentPane;
 
-    /**
-     * Launch the application.
-     */
     public static void main(String[] args) {
         EventQueue.invokeLater(new Runnable() {
             public void run() {
                 try {
-                    // Crear una instancia de ConexionMySQL y conectar a la base de datos
-                    ConexionMySQL conexion = new ConexionMySQL("root", "test", "HoomieNomad");
-                    conexion.conectar();
-
-                        FeedPrincipal frame = new FeedPrincipal();
-                        frame.setVisible(true);
-                } catch (SQLException e) {
+                    FeedPrincipal frame = new FeedPrincipal();
+                    frame.setVisible(true);
+                } catch (Exception e) {
                     e.printStackTrace();
-                    JOptionPane.showMessageDialog(null, "Error al conectar con la base de datos: " + e.getMessage());
                 }
             }
         });
@@ -42,7 +25,7 @@ public class FeedPrincipal extends JFrame {
 
 
     public FeedPrincipal() {
-    	setTitle("Feed Principal");
+        setTitle("Feed Principal");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setBounds(100, 100, 515, 702);
         setLocationRelativeTo(null);
@@ -52,26 +35,53 @@ public class FeedPrincipal extends JFrame {
         setContentPane(contentPane);
         contentPane.setLayout(new BorderLayout(0, 0));
 
-        // Panel para el botón de "Añadir Propiedades"
+        // Panel para los botones
         JPanel topPanel = new JPanel(new BorderLayout());
         contentPane.add(topPanel, BorderLayout.NORTH);
 
-        // Botón de "Añadir Propiedades"
-        JButton addPropertiesButton = new JButton("Añadir Propiedades");
-        addPropertiesButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                    /* Crear una instancia de ConexionMySQL y conectar a la base de datos
-                    ConexionMySQL conexion = new ConexionMySQL("root", "test", "HoomieNomad");
-                    conexion.conectar();*/
+        // Crear la barra de menú
+        JMenuBar menuBar = new JMenuBar();
+        setJMenuBar(menuBar);
 
-                    // Abrir la ventana de añadir propiedades y pasar la sesión
-                    AnadirPropiedades anadirPropiedades = new AnadirPropiedades();
-                    anadirPropiedades.setVisible(true);
+        // Obtener el nombre de usuario con sesión iniciada
+        String nombreUsuario = Usuario.getNombreUsuario();
+
+        // Crear el menú desplegable con el nombre de usuario
+        JMenu menuUsuario = new JMenu(nombreUsuario);
+        menuBar.add(menuUsuario);
+
+        // Opción "Gestionar Perfil"
+        JMenuItem gestionarPerfilMenuItem = new JMenuItem("Gestionar Perfil");
+        gestionarPerfilMenuItem.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                // Abrir la ventana de gestionar perfil
+                GestionarPerfil gestionarPerfil = new GestionarPerfil();
+                gestionarPerfil.setVisible(true);
             }
         });
-        topPanel.add(addPropertiesButton, BorderLayout.SOUTH);
+        menuUsuario.add(gestionarPerfilMenuItem);
+
+        // Opción "Ajustes"
+        JMenuItem ajustesMenuItem = new JMenuItem("Ajustes");
+        ajustesMenuItem.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+            	 Ajustes ajustes = new Ajustes();
+                 ajustes.setVisible(true);
+            }
+        });
+        menuUsuario.add(ajustesMenuItem);
+
+        // Separador
+        menuUsuario.addSeparator();
+
+        // Opción "Cerrar Sesión"
+        JMenuItem cerrarSesionMenuItem = new JMenuItem("Cerrar Sesión");
+        cerrarSesionMenuItem.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                // Aquí va el código para cerrar la sesión del usuario y volver a la página de inicio de sesión
+            }
+        });
+        menuUsuario.add(cerrarSesionMenuItem);
+
     }
-
-
-
 }

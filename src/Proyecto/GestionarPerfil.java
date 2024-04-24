@@ -1,129 +1,18 @@
 package Proyecto;
 
 import javax.swing.*;
+
+import ConexionBaseDatos.ConexionMySQL;
+
 import java.awt.*;
 import java.awt.event.*;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 public class GestionarPerfil extends JFrame {
     private static final long serialVersionUID = 1L;
     private JPanel contentPane;
-    private String nombreUsuario;
-    private String contrasena;
 
-    public GestionarPerfil() {
-        setTitle("Gestionar Perfil");
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setBounds(100, 100, 515, 702);
-        setLocationRelativeTo(null);
-
-        contentPane = new JPanel();
-        contentPane.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-        setContentPane(contentPane);
-        contentPane.setLayout(new BorderLayout(0, 0));
-
-     // Panel para el botón de "Atrás" y "Añadir Propiedades"
-        JPanel topPanel = new JPanel(new BorderLayout());
-        contentPane.add(topPanel, BorderLayout.NORTH);
-
-        // Botón de "Atrás"
-        JButton backButton = new JButton("← Atrás");
-        backButton.addActionListener(new ActionListener() {
-                public void actionPerformed(ActionEvent e) {
-                	// Crear una instancia de la clase FeedPrincipal
-                    FeedPrincipal feedPrincipal = new FeedPrincipal();
-                    // Hacer visible la ventana del feed principal
-                    feedPrincipal.setVisible(true);
-                    // Cerrar la ventana actual
-                    dispose();
-                }
-        });
-        topPanel.add(backButton, BorderLayout.WEST);
-
-        Object gbc;
-		// Botón de "Añadir Propiedades"
-        JButton addPropertiesButton = new JButton("Añadir Propiedades");
-        addPropertiesButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                // Abrir la ventana de añadir propiedades
-                AnadirPropiedades anadirPropiedades = new AnadirPropiedades();
-                anadirPropiedades.setVisible(true);
-            }
-        });
-        topPanel.add(addPropertiesButton, BorderLayout.SOUTH);
-
-        // Panel para mostrar las propiedades
-        JPanel propertiesPanel = new JPanel(new GridLayout(0, 3, 10, 10));
-        contentPane.add(propertiesPanel, BorderLayout.CENTER);
-
-        // Ejemplo de propiedades (se pueden cargar desde una base de datos)
-        String[] propertyImages = {"C:\\LauraRM\\Documentos\\Grado superior DAM\\Programación (P)\\HoomieNomadApp\\src\\Imagenes\\casaCostaBrava.JPG", "C:\\LauraRM\\Documentos\\Grado superior DAM\\Programación (P)\\HoomieNomadApp\\src\\Imagenes\\pisoMarbella.jpg"}; // Rutas de las imágenes
-        for (String imagePath : propertyImages) {
-            ImageIcon imageIcon = new ImageIcon(imagePath);
-            Image image = imageIcon.getImage();
-            Image scaledImage = image.getScaledInstance(150, 150, Image.SCALE_SMOOTH);
-            ImageIcon scaledIcon = new ImageIcon(scaledImage);
-            JLabel propertyLabel = new JLabel(scaledIcon);
-            propertyLabel.addMouseListener(new MouseAdapter() {
-                @Override
-                public void mouseClicked(MouseEvent e) {
-                    // Mostrar ventana emergente con los atributos de la propiedad
-                    mostrarAtributosPropiedad1();
-                }
-            });
-            propertiesPanel.add(propertyLabel);
-        }
-        }
-        
-     // Método para mostrar la ventana emergente con los atributos de la propiedad
-    	private void mostrarAtributosPropiedad1() {
-    	    // Crea y configura la ventana emergente
-    	    JFrame ventanaEmergente = new JFrame();
-    	    ventanaEmergente.setTitle("Características de la Propiedad");
-    	    ventanaEmergente.setSize(300, 200);
-    	    ventanaEmergente.setLocationRelativeTo(null); // Centrar la ventana en la pantalla
-    	    ventanaEmergente.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-
-    	    // Agrega un panel para mostrar los atributos
-    	    JPanel panelAtributos = new JPanel(new GridLayout(0, 1));
-    	    // Agrega etiquetas con los atributos de ejemplo (reemplaza con tus atributos)
-    	    panelAtributos.add(new JLabel("Tipo de Casa: Casa"));
-    	    panelAtributos.add(new JLabel("Número de Baños: 2"));
-    	    panelAtributos.add(new JLabel("Número de Habitaciones: 3"));
-    	    panelAtributos.add(new JLabel("Terraza/Patio: Terraza"));
-    	    panelAtributos.add(new JLabel("Ubicación: Barrio X"));
-    	    panelAtributos.add(new JLabel("Garaje: Sí"));
-    	    panelAtributos.add(new JLabel("Piscina: No"));
-    	    panelAtributos.add(new JLabel("Número de Ocupantes: 4"));
-
-    	    ventanaEmergente.getContentPane().add(panelAtributos);
-
-    	    // Hacer visible la ventana emergente
-    	    ventanaEmergente.setVisible(true);
-    }
-
-    // Método para mostrar la ventana emergente con los atributos de la propiedad
-    private void mostrarAtributosPropiedad() {
-    	// Crear y configurar la ventana emergente
-        JFrame ventanaEmergente = new JFrame();
-        ventanaEmergente.setTitle("Características de la Propiedad");
-        ventanaEmergente.setSize(400, 300);
-        ventanaEmergente.setLocationRelativeTo(null); // Centrar la ventana en la pantalla
-        ventanaEmergente.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE); // Cambiar a HIDE_ON_CLOSE
-
-        // Panel para mostrar los atributos
-        JPanel atributosPanel = new JPanel(new GridLayout(0, 2, 10, 10));
-
-        // Aquí puedes agregar los componentes para mostrar los atributos de la propiedad
-
-        ventanaEmergente.add(atributosPanel);
-        ventanaEmergente.setVisible(true);
-    }
-    
-    
-
-    /**
-     * Launch the application.
-     */
     public static void main(String[] args) {
         EventQueue.invokeLater(new Runnable() {
             public void run() {
@@ -137,19 +26,110 @@ public class GestionarPerfil extends JFrame {
         });
     }
 
-	public String getNombreUsuario() {
-		return nombreUsuario;
-	}
+    public GestionarPerfil() {
+        setTitle("Gestionar Perfil");
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setBounds(100, 100, 515, 702);
+        setLocationRelativeTo(null);
 
-	public void setNombreUsuario(String nombreUsuario) {
-		this.nombreUsuario = nombreUsuario;
-	}
+        contentPane = new JPanel();
+        contentPane.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        setContentPane(contentPane);
+        contentPane.setLayout(new BorderLayout(0, 0));
 
-	public String getContrasena() {
-		return contrasena;
-	}
+     // Panel para el botón de "Atrás" y "Añadir Propiedades"
+        JPanel topPanel = new JPanel();
+        topPanel.setLayout(new BoxLayout(topPanel, BoxLayout.Y_AXIS));
+        contentPane.add(topPanel, BorderLayout.NORTH);
 
-	public void setContrasena(String contrasena) {
-		this.contrasena = contrasena;
-	}
+        // Botón de "Atrás"
+        JButton backButton = new JButton("← Atrás");
+        backButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                FeedPrincipal feedPrincipal = new FeedPrincipal();
+                feedPrincipal.setVisible(true);
+                dispose();
+            }
+        });
+        topPanel.add(backButton);
+
+        // Botón de "Añadir Propiedades"
+        JButton addPropertiesButton = new JButton("Añadir Propiedades");
+        addPropertiesButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                AnadirPropiedades anadirPropiedades = new AnadirPropiedades();
+                anadirPropiedades.setVisible(true);
+            }
+        });
+        topPanel.add(addPropertiesButton);
+
+        // Botón de "Añadir Intereses"
+        JButton addInterestsButton = new JButton("Añadir Intereses");
+        addInterestsButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                AnadirIntereses anadirIntereses = new AnadirIntereses();
+                anadirIntereses.setVisible(true);
+            }
+        });
+        topPanel.add(addInterestsButton);
+
+
+        JPanel propertyPanel = new JPanel();
+        contentPane.add(propertyPanel, BorderLayout.CENTER);
+        propertyPanel.setLayout(new GridBagLayout());
+
+        GridBagConstraints gbc1 = new GridBagConstraints();
+        gbc1.gridx = 0;
+        gbc1.gridy = 0;
+        gbc1.insets = new Insets(10, 10, 10, 10); // Aumenta el espaciado entre propiedades
+        gbc1.anchor = GridBagConstraints.WEST;
+
+        ConexionMySQL conexion = new ConexionMySQL("root", "test", "HoomieNomad");
+
+        try {
+            conexion.conectar();
+            ResultSet resultSet = conexion.ejecutarSelect("SELECT * FROM Propiedades WHERE id_usuario = " + Usuario.getIdUsuario());
+            int contadorPropiedades = 1;
+
+            while (resultSet.next()) {
+                JPanel propiedadPanel = new JPanel(new BorderLayout());
+                propiedadPanel.setBorder(BorderFactory.createCompoundBorder(
+                        BorderFactory.createEmptyBorder(10, 10, 10, 10),
+                        BorderFactory.createLineBorder(Color.GRAY)
+                ));
+
+                JLabel titleLabel = new JLabel("<html><b>Propiedad " + contadorPropiedades + "</b></html>");
+                titleLabel.setFont(titleLabel.getFont().deriveFont(Font.BOLD, 16)); // Cambia el tamaño y el estilo de la fuente
+                propiedadPanel.add(titleLabel, BorderLayout.NORTH);
+
+                JButton verCaracteristicasButton = new JButton("Ver características");
+                StringBuilder mensaje = new StringBuilder();
+                mensaje.append("<html>");
+                mensaje.append("Tipo de casa: ").append(resultSet.getString("tipo_de_casa")).append("<br>");
+                mensaje.append("Número de baños: ").append(resultSet.getInt("num_banos")).append("<br>");
+                mensaje.append("Número de habitaciones: ").append(resultSet.getInt("num_habitaciones")).append("<br>");
+                mensaje.append("Terraza/Patio: ").append(resultSet.getString("terraza_patio")).append("<br>");
+                mensaje.append("Ubicación: ").append(resultSet.getString("ubicacion")).append("<br>");
+                mensaje.append("Garaje: ").append(resultSet.getString("garaje")).append("<br>");
+                mensaje.append("Piscina: ").append(resultSet.getString("piscina")).append("<br>");
+                mensaje.append("Número de ocupantes: ").append(resultSet.getInt("num_ocupantes")).append("<br>");
+                mensaje.append("Disponible: ").append(resultSet.getBoolean("disponible") ? "Sí" : "No").append("</html>");
+                verCaracteristicasButton.addActionListener(e -> {
+                    JOptionPane.showMessageDialog(null, mensaje.toString(), "Características de la propiedad", JOptionPane.INFORMATION_MESSAGE);
+                });
+                propiedadPanel.add(verCaracteristicasButton, BorderLayout.CENTER);
+
+                propertyPanel.add(propiedadPanel, gbc1);
+                contadorPropiedades++;
+                gbc1.gridy++;
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Error al obtener las propiedades del usuario: " + ex.getMessage());
+        }
+        propertyPanel.revalidate();
+        propertyPanel.repaint();
+    }
+
+
 }

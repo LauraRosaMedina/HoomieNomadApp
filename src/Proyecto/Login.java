@@ -194,10 +194,10 @@ public class Login extends JFrame {
 	        conexion.conectar();
 
 	        // Verificar si el usuario existe antes de eliminarlo
-	        ResultSet resultado = conexion.ejecutarSelect("SELECT * FROM Usuario WHERE nombreUsuario = '" + nombreUsuario + "'");
+	        ResultSet resultado = conexion.ejecutarSelect("SELECT * FROM Usuario WHERE nombreUsuario = '" + Usuario.getNombreUsuario() + "'");
 	        if (resultado.next()) {
 	            // El usuario existe, proceder a eliminarlo
-	            String consulta = "DELETE FROM Usuario WHERE nombreUsuario = '" + nombreUsuario + "'";
+	            String consulta = "DELETE FROM Usuario WHERE nombreUsuario = '" + Usuario.getNombreUsuario() + "'";
 	            int filasAfectadas = conexion.ejecutarInsertDeleteUpdate(consulta);
 
 	            // Comprobar si se borró la fila correctamente
