@@ -7,6 +7,7 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.sql.Connection;
+import java.sql.SQLException;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -14,6 +15,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
+import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
 import ConexionBaseDatos.ConexionMySQL;
@@ -22,6 +24,8 @@ public class Ajustes extends JFrame {
 
     private static final long serialVersionUID = 1L;
     private JPanel contentPane;
+    private JPasswordField passwordField;
+    private JTextField usernameField;
 
     /**
      * Launch the application.
@@ -60,23 +64,31 @@ public class Ajustes extends JFrame {
         // Botón de "Atrás"
         JButton backButton = new JButton("← Atrás");
         backButton.addActionListener(e -> {
-        	String nombreUsuario = usernameField.getText();
+            String nombreUsuario = usernameField.getText();
             String contraseña = new String(passwordField.getPassword());
             // Crear una nueva instancia de Sesion con la conexión obtenida
-         // Crear una instancia de ConexionMySQL y conectar a la base de datos
+            // Crear una instancia de ConexionMySQL y conectar a la base de datos
             ConexionMySQL conexion = new ConexionMySQL("root", "test", "HoomieNomad");
-            conexion.conectar();
+            try {
+				conexion.conectar();
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+			}
 
             // Obtener la conexión a la base de datos
             Connection connection = conexion.getConnection();
 
             // Crear una nueva instancia de Sesion con la conexión obtenida
             Sesion sesion = new Sesion(connection); // Crea una nueva sesión
-            if (sesion.iniciarSesion(nombreUsuario, contraseña)) {
-                FeedPrincipal feedPrincipal = new FeedPrincipal(sesion.getUsuario());
-                feedPrincipal.setVisible(true);
-                dispose();
-            }
+            try {
+				if (sesion.iniciarSesion(nombreUsuario, contraseña)) {
+				    FeedPrincipal feedPrincipal = new FeedPrincipal(sesion.getUsuario());
+				    feedPrincipal.setVisible(true);
+				    dispose();
+				}
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+			}
         });
         topPanel.add(backButton, BorderLayout.WEST);
 

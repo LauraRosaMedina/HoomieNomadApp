@@ -6,9 +6,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class Usuario {
-    private String nombreUsuario;
-    private String contrasena;
-    private int idUsuario;
+    private static String nombreUsuario;
+    private static String contrasena;
+    private static int idUsuario;
 
     // Constructor
     public Usuario(String nombreUsuario, String contrasena) {
@@ -37,6 +37,10 @@ public class Usuario {
         return nombreUsuario;
     }
 
+    public String getContrasena() {
+        return contrasena;
+    }
+    
     public int getIdUsuario() {
         return idUsuario;
     }

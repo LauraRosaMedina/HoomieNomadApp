@@ -13,6 +13,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
@@ -21,6 +22,32 @@ public class AnadirPropiedades extends JFrame {
     private static final long serialVersionUID = 1L;
     private JPanel contentPane;
     private Sesion sesion;
+    
+    /**
+     * Launch the application.
+     */
+    public static void main(String[] args) {
+        EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                try {
+                    // Crear una instancia de ConexionMySQL y conectar a la base de datos
+                    ConexionMySQL conexion = new ConexionMySQL("root", "test", "HoomieNomad");
+                    conexion.conectar();
+
+                    // Obtener la conexión a la base de datos
+                    Connection connection = conexion.getConnection();
+
+                    // Crear una nueva instancia de Sesion con la conexión obtenida
+                    Sesion sesion = new Sesion(connection); // Crea una nueva sesión
+
+                    AnadirPropiedades frame = new AnadirPropiedades(sesion); // Pasa la sesión como argumento al constructor
+                    frame.setVisible(true);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
 
     // Constructor
     public AnadirPropiedades(Sesion sesion) {
@@ -167,14 +194,21 @@ public class AnadirPropiedades extends JFrame {
         ocupantesField.setPreferredSize(new Dimension(200, ocupantesField.getPreferredSize().width));
         propertyPanel.add(ocupantesField, gbc);
 
-        // Botón para agregar la propiedad
+     
+
+        // Botón de guardar
         gbc.gridx = 0;
-        gbc.gridy = 8;
-        gbc.gridwidth = 2; // Ocupa dos columnas
-        JButton addButton = new JButton("Agregar propiedad");
-        addButton.addActionListener(new ActionListener() {
+        gbc.gridy = 9;
+        JButton saveButton = new JButton("Guardar");
+        saveButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-            	String tipoDeCasa = (String) tipoDeCasaComboBox.getSelectedItem();
+                // Verificar si todos los campos están completos
+                if (banosField.getText().isEmpty() ||
+                    habitacionesField.getText().isEmpty() ||
+                    ocupantesField.getText().isEmpty()) {
+                    JOptionPane.showMessageDialog(null, "Por favor, complete todos los campos.", "Error", JOptionPane.ERROR_MESSAGE);
+                } else {                      
+                String tipoDeCasa = (String) tipoDeCasaComboBox.getSelectedItem();
                 String banos = banosField.getText();
                 String habitaciones = habitacionesField.getText();
                 String terraza = (String) terrazaComboBox.getSelectedItem();
@@ -189,8 +223,29 @@ public class AnadirPropiedades extends JFrame {
                     // Conectar a la base de datos
                     ConexionMySQL conexion = new ConexionMySQL("root", "test", "HoomieNomad");
                     conexion.conectar();
+                   
+                    // Aquí necesitas obtener nombreUsuario y contraseña de algún lugar
+                    String nombreUsuario = obtenerNombreUsuario();
+                    String contraseña = obtenerContraseña();
 
-                    // Insertar la nueva propiedad en la base de datos
+                    // Crear una nueva instancia de ConexionMySQL y conectar a la base de datos
+                    ConexionMySQL conexionSesion = new ConexionMySQL("root", "test", "HoomieNomad");
+                    conexionSesion.conectar();
+
+                    // Obtener la conexión a la base de datos
+                    Connection connection = conexionSesion.getConnection();
+
+                    // Crear una nueva instancia de Sesion con la conexión obtenida
+                    Sesion sesion = new Sesion(connection); // Crea una nueva sesión
+                    if (sesion != null && sesion.getUsuario() != null) {
+                        sesion.getUsuario().getIdUsuario();
+                        // Resto del código aquí
+                    } else {
+                        // Manejo del caso en el que la sesión o el usuario sean nulos
+                        JOptionPane.showMessageDialog(null, "Error al obtener la sesión o el usuario.", "Error", JOptionPane.ERROR_MESSAGE);
+                    }
+                    
+                 // Insertar la nueva propiedad en la base de datos
                     String consulta = "INSERT INTO Propiedades (id_usuario, tipo_de_casa, num_banos, num_habitaciones, terraza_patio, ubicacion, garaje, piscina, num_ocupantes) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
                     PreparedStatement statement = conexion.prepareStatement(consulta);
                     statement.setInt(1, idUsuario);
@@ -209,48 +264,31 @@ public class AnadirPropiedades extends JFrame {
                     } else {
                         JOptionPane.showMessageDialog(null, "Error al agregar la propiedad.");
                     }
-
-                    // Desconectar de la base de datos
-                    conexion.desconectar();
+                    
+                    /*if (sesion.iniciarSesion(nombreUsuario, contraseña)) {
+                        FeedPrincipal feedPrincipal = new FeedPrincipal(sesion.getUsuario());
+                        feedPrincipal.setVisible(true);
+                        dispose();
+                    }*/
                 } catch (SQLException ex) {
                     ex.printStackTrace();
                     JOptionPane.showMessageDialog(null, "Error al conectar con la base de datos: " + ex.getMessage());
                 }
-                
-                // Crear una instancia de la clase FeedPrincipal y pasar el idUsuario
-                FeedPrincipal feedPrincipal = new FeedPrincipal(idUsuario);
-                // Hacer visible la ventana del feed principal
-                feedPrincipal.setVisible(true);
-                // Cerrar la ventana actual
-                dispose();
+            
             }
-
-        });
-
-        contentPane.add(addButton, BorderLayout.SOUTH);
-
-        // Botón de guardar
-        gbc.gridx = 0;
-        gbc.gridy = 9;
-        JButton saveButton = new JButton("Guardar");
-        saveButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                // Verificar si todos los campos están completos
-                if (banosField.getText().isEmpty() ||
-                    habitacionesField.getText().isEmpty() ||
-                    ocupantesField.getText().isEmpty()) {
-                    JOptionPane.showMessageDialog(null, "Por favor, complete todos los campos.", "Error", JOptionPane.ERROR_MESSAGE);
-                } else {
-                    // Aquí guardaríamos los datos
-                    JOptionPane.showMessageDialog(null, "Perfil guardado exitosamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
-
-                }
             }
         });
         
         contentPane.add(saveButton, BorderLayout.SOUTH);
     }
 
+    private String obtenerNombreUsuario() {
+        return sesion.getUsuario().getNombreUsuario();
+    }
+
+    private String obtenerContraseña() {
+        return sesion.getUsuario().getContrasena();
+    }
 
 
 	// Clase interna para permitir solo la entrada de números en JTextField
@@ -275,21 +313,5 @@ public class AnadirPropiedades extends JFrame {
             }
             super.insertString(offs, str, a);
         }
-    }
-
-    /**
-     * Launch the application.
-     */
-    public static void main(String[] args) {
-        EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                try {
-                    AnadirPropiedades frame = new AnadirPropiedades();
-                    frame.setVisible(true);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        });
     }
 }

@@ -135,7 +135,7 @@ public class Login extends JFrame {
                     // Crear una nueva instancia de Sesion con la conexión obtenida
                     Sesion sesion = new Sesion(connection); // Crea una nueva sesión
                     if (sesion.iniciarSesion(nombreUsuario, contraseña)) {
-                        FeedPrincipal feedPrincipal = new FeedPrincipal(sesion.getUsuario());
+                        FeedPrincipal feedPrincipal = new FeedPrincipal();
                         feedPrincipal.setVisible(true);
                         dispose();
                     } else {
