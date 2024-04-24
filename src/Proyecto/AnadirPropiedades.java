@@ -13,7 +13,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
@@ -192,8 +191,8 @@ public class AnadirPropiedades extends JFrame {
         // Botón de guardar
         gbc.gridx = 0;
         gbc.gridy = 9;
-        JButton saveButton = new JButton("Guardar");
-        saveButton.addActionListener(new ActionListener() {
+        JButton addButton = new JButton("Añadir");
+        addButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 // Verificar si todos los campos están completos
                 if (banosField.getText().isEmpty() ||
@@ -234,6 +233,7 @@ public class AnadirPropiedades extends JFrame {
 
                         if (filasAfectadas > 0) {
                             JOptionPane.showMessageDialog(null, "Propiedad agregada exitosamente.");
+                            dispose();
                         } else {
                             JOptionPane.showMessageDialog(null, "Error al agregar la propiedad.");
                         }
@@ -258,7 +258,7 @@ public class AnadirPropiedades extends JFrame {
             }
         });
         
-        contentPane.add(saveButton, BorderLayout.SOUTH);
+        contentPane.add(addButton, BorderLayout.SOUTH);
     }
 
 	// Clase interna para permitir solo la entrada de números en JTextField
