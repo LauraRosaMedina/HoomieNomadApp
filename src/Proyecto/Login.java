@@ -21,8 +21,6 @@ public class Login extends JFrame {
 
 	private static final long serialVersionUID = 1L;
     private JPanel contentPane;
-    private JTextField usernameField;
-    private JPasswordField passwordField;
 	
 	/**
 	 * Launch the application.
@@ -131,6 +129,8 @@ public class Login extends JFrame {
                         // Usuario autenticado correctamente
                        Usuario.setIdUsuario(resultSet.getInt("id_usuario"));
                        Usuario.setNombreUsuario(resultSet.getString("nombreUsuario"));
+                       Usuario.setNombre(resultSet.getString("nombre"));
+                       Usuario.setContrasena(resultSet.getString("contrasena"));
                         FeedPrincipal feedPrincipal = new FeedPrincipal();
                         feedPrincipal.setVisible(true);
                         dispose();
@@ -145,46 +145,6 @@ public class Login extends JFrame {
                     JOptionPane.showMessageDialog(null, "Error al conectarse a la base de datos: " + ex.getMessage());
                 }
             }
-        });
-
-
-        
-        //Borrar usuario//
-        
-        
+        });                    
 	}
-	
-	//creamos este método fuera del constructor Principal//
-	/*public static void borrarUsuario(String nombreUsuario) {
-    	ConexionMySQL conexion = new ConexionMySQL("root", "test", "HoomieNomad");
-        try {
-            // Conectar a la base de datos
-            conexion.conectar();
-
-            // Crear la sentencia SQL DELETE
-            String consulta = "DELETE FROM Usuario WHERE nombreUsuario = '" + nombreUsuario + "'";
-
-            // Ejecutar la sentencia DELETE
-            int filasAfectadas = conexion.ejecutarInsertDeleteUpdate(consulta);
-            
-        
-            // Comprobar si se borró la fila correctamente
-            if (filasAfectadas > 0) {
-                JOptionPane.showMessageDialog(null, "Usuario borrado correctamente.");
-            } else {
-                JOptionPane.showMessageDialog(null, "No se pudo borrar el usuario.");
-                
-            }
-            
-            
-
-            // Desconectar de la base de datos
-            conexion.desconectar();
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-            JOptionPane.showMessageDialog(null, "Error al conectar con la base de datos: " + ex.getMessage());
-        }
-    
-    }*/
-
 }

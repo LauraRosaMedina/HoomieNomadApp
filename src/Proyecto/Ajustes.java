@@ -15,7 +15,6 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
-import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
 import ConexionBaseDatos.ConexionMySQL;
@@ -24,8 +23,6 @@ public class Ajustes extends JFrame {
 
     private static final long serialVersionUID = 1L;
     private JPanel contentPane;
-    private JPasswordField passwordField;
-    private JTextField usernameField;
 
     /**
      * Launch the application.
@@ -131,6 +128,7 @@ public class Ajustes extends JFrame {
                 if (contrasenaActual.equals(Usuario.getContrasena())) {
                     // Si la contraseña actual es correcta, actualiza la contraseña en la base de datos
                     conexion.actualizarContrasena(nombreUsuario, nuevaContrasena);
+                    Usuario.setContrasena(nuevaContrasena); // Actualizar la contraseña en Usuario
                     JOptionPane.showMessageDialog(this, "Contraseña cambiada con éxito.");
                 } else {
                     // Si la contraseña actual es incorrecta, muestra un mensaje de error
