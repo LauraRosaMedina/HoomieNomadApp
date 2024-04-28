@@ -36,7 +36,6 @@ public class AnadirPropiedades extends JFrame {
 						e.printStackTrace();
 	                    JOptionPane.showMessageDialog(null, "Error al conectarse a la base de datos: " + e.getMessage());
 					}
-
                     AnadirPropiedades frame = new AnadirPropiedades(); // Pasa la sesión como argumento al constructor
                     frame.setVisible(true);
             }
@@ -45,6 +44,13 @@ public class AnadirPropiedades extends JFrame {
 
     // Constructor
     public AnadirPropiedades() {
+    	// Cambiar el color de los botones a 0x769976 y el texto de los botones a blanco
+        UIManager.put("Button.background", new Color(0x769976));
+        UIManager.put("Button.foreground", Color.WHITE);
+        
+     // Cambiar el color del texto de las etiquetas de los campos de texto a 0x769976
+        UIManager.put("Label.foreground", new Color(0x769976));
+    	
         setTitle("Añadir propiedades");
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setBounds(100, 100, 515, 702);
@@ -65,9 +71,11 @@ public class AnadirPropiedades extends JFrame {
         gbc.insets = new Insets(5, 5, 5, 5); // Espaciado entre componentes
         gbc.anchor = GridBagConstraints.WEST; // Alineación izquierda
 
-        // Etiqueta y menú desplegable para el tipo de casa
+     // Etiqueta y menú desplegable para el tipo de casa
         JLabel tipoDeCasaLabel = new JLabel("Tipo de casa:");
         tipoDeCasaLabel.setHorizontalAlignment(SwingConstants.LEFT);
+        tipoDeCasaLabel.setForeground(new Color(0x769976)); // Cambiar el color del texto
+        tipoDeCasaLabel.setFont(new Font("Arial", Font.BOLD, 14)); // Cambiar el tamaño de la fuente
         propertyPanel.add(tipoDeCasaLabel, gbc);
 
         gbc.gridx = 1;
@@ -82,6 +90,8 @@ public class AnadirPropiedades extends JFrame {
         gbc.gridy = 1;
         JLabel banosLabel = new JLabel("Número de baños:");
         banosLabel.setHorizontalAlignment(SwingConstants.LEFT);
+        banosLabel.setForeground(new Color(0x769976)); // Cambiar el color del texto
+        banosLabel.setFont(new Font("Arial", Font.BOLD, 14)); // Cambiar el tamaño de la fuente
         propertyPanel.add(banosLabel, gbc);
 
         gbc.gridx = 1;
@@ -96,6 +106,8 @@ public class AnadirPropiedades extends JFrame {
         gbc.gridy = 2;
         JLabel habitacionesLabel = new JLabel("Número de habitaciones:");
         habitacionesLabel.setHorizontalAlignment(SwingConstants.LEFT);
+        habitacionesLabel.setForeground(new Color(0x769976)); // Cambiar el color del texto
+        habitacionesLabel.setFont(new Font("Arial", Font.BOLD, 14)); // Cambiar el tamaño de la fuente
         propertyPanel.add(habitacionesLabel, gbc);
 
         gbc.gridx = 1;
@@ -110,6 +122,8 @@ public class AnadirPropiedades extends JFrame {
         gbc.gridy = 3;
         JLabel terrazaLabel = new JLabel("Terraza/Patio:");
         terrazaLabel.setHorizontalAlignment(SwingConstants.LEFT);
+        terrazaLabel.setForeground(new Color(0x769976)); // Cambiar el color del texto
+        terrazaLabel.setFont(new Font("Arial", Font.BOLD, 14)); // Cambiar el tamaño de la fuente
         propertyPanel.add(terrazaLabel, gbc);
 
         gbc.gridx = 1;
@@ -118,39 +132,47 @@ public class AnadirPropiedades extends JFrame {
         terrazaComboBox.setPreferredSize(new Dimension(200, terrazaComboBox.getPreferredSize().width));
         propertyPanel.add(terrazaComboBox, gbc);
 
-        // Etiqueta y campo de texto para la ubicación
+     // Etiqueta y campo de texto para la ubicación
         gbc.gridx = 0;
         gbc.gridy = 4;
         JLabel ubicacionLabel = new JLabel("Ubicación:");
         ubicacionLabel.setHorizontalAlignment(SwingConstants.LEFT);
+        ubicacionLabel.setForeground(new Color(0x769976)); // Cambiar el color del texto
+        ubicacionLabel.setFont(new Font("Arial", Font.BOLD, 14)); // Cambiar el tamaño de la fuente
         propertyPanel.add(ubicacionLabel, gbc);
 
         gbc.gridx = 1;
-        JTextField ubicacionField = new JTextField("Nombre del barrio");
+        JTextField ubicacionField = new JTextField("Ciudad");
         ubicacionField.setPreferredSize(new Dimension(35, ubicacionField.getPreferredSize().height));
         ubicacionField.setPreferredSize(new Dimension(200, ubicacionField.getPreferredSize().width));
+        ubicacionField.setForeground(Color.GRAY); // Color gris para el texto por defecto
         ubicacionField.addFocusListener(new FocusAdapter() {
             @Override
             public void focusGained(FocusEvent e) {
-                if (ubicacionField.getText().equals("(Nombre del barrio, Ciudad)")) {
+                if (ubicacionField.getText().equals("Ciudad")) {
                     ubicacionField.setText("");
+                    ubicacionField.setForeground(Color.BLACK); // Cambiar el color del texto a negro cuando se empiece a escribir
                 }
             }
 
             @Override
             public void focusLost(FocusEvent e) {
                 if (ubicacionField.getText().isEmpty()) {
-                    ubicacionField.setText("(Nombre del barrio, Ciudad)");
+                    ubicacionField.setText("Ciudad");
+                    ubicacionField.setForeground(Color.GRAY); // Restaurar el color gris del texto si no se ha escrito nada
                 }
             }
         });
         propertyPanel.add(ubicacionField, gbc);
+
 
         // Etiqueta y menú desplegable para garaje
         gbc.gridx = 0;
         gbc.gridy = 5;
         JLabel garajeLabel = new JLabel("Garaje:");
         garajeLabel.setHorizontalAlignment(SwingConstants.LEFT);
+        garajeLabel.setForeground(new Color(0x769976)); // Cambiar el color del texto
+        garajeLabel.setFont(new Font("Arial", Font.BOLD, 14)); // Cambiar el tamaño de la fuente
         propertyPanel.add(garajeLabel, gbc);
 
         gbc.gridx = 1;
@@ -164,6 +186,8 @@ public class AnadirPropiedades extends JFrame {
         gbc.gridy = 6;
         JLabel piscinaLabel = new JLabel("Piscina:");
         piscinaLabel.setHorizontalAlignment(SwingConstants.LEFT);
+        piscinaLabel.setForeground(new Color(0x769976)); // Cambiar el color del texto
+        piscinaLabel.setFont(new Font("Arial", Font.BOLD, 14)); // Cambiar el tamaño de la fuente
         propertyPanel.add(piscinaLabel, gbc);
 
         gbc.gridx = 1;
@@ -177,6 +201,8 @@ public class AnadirPropiedades extends JFrame {
         gbc.gridy = 7;
         JLabel ocupantesLabel = new JLabel("Número de ocupantes:");
         ocupantesLabel.setHorizontalAlignment(SwingConstants.LEFT);
+        ocupantesLabel.setForeground(new Color(0x769976)); // Cambiar el color del texto
+        ocupantesLabel.setFont(new Font("Arial", Font.BOLD, 14)); // Cambiar el tamaño de la fuente
         propertyPanel.add(ocupantesLabel, gbc);
 
         gbc.gridx = 1;
@@ -187,7 +213,6 @@ public class AnadirPropiedades extends JFrame {
         propertyPanel.add(ocupantesField, gbc);
 
      
-
      // Botón de guardar
         gbc.gridx = 0;
         gbc.gridy = 9;
@@ -250,6 +275,12 @@ public class AnadirPropiedades extends JFrame {
                     }
                 
                 }
+                
+                // Llamar al método actualizarPropiedades de la ventana de GestionarPerfil
+                GestionarPerfil gestionarPerfil = new GestionarPerfil();
+                gestionarPerfil.actualizarPropiedades(propertyPanel);                
+                // Cerrar la ventana de AnadirPropiedades
+                dispose();
             }
         });
         

@@ -1,26 +1,33 @@
 package Proyecto;
 
-import java.awt.BorderLayout;
-import java.awt.EventQueue;
-import java.awt.GridLayout;
-import java.awt.Image;
+import javax.swing.*;
+import javax.swing.border.EmptyBorder;
+import ConexionBaseDatos.ConexionMySQL;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-
-import javax.swing.BorderFactory;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 public class MisReservas extends JFrame {
 
-	
-	private static final long serialVersionUID = 1L;
     private JPanel contentPane;
+
+    public static void main(String[] args) {
+        EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                try {
+                    MisReservas frame = new MisReservas();
+                    frame.setVisible(true);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
 
     public MisReservas() {
         setTitle("Mis reservas");
@@ -29,48 +36,351 @@ public class MisReservas extends JFrame {
         setLocationRelativeTo(null);
 
         contentPane = new JPanel();
-        contentPane.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        contentPane.setBorder(new EmptyBorder(10, 10, 10, 10));
         setContentPane(contentPane);
         contentPane.setLayout(new BorderLayout(0, 0));
 
-     // Panel para el botón de "Atrás"
-        JPanel topPanel = new JPanel(new BorderLayout());
-        contentPane.add(topPanel, BorderLayout.NORTH);
+        JPanel panel = new JPanel();
+        contentPane.add(panel, BorderLayout.CENTER);
+        panel.setLayout(new GridLayout(0, 1, 0, 10));
+        
+     // Crear la barra de menú
+        JMenuBar menuBar = new JMenuBar();
+        setJMenuBar(menuBar);
+
+        // Obtener el nombre de usuario con sesión iniciada
+        String nombreUsuario = Usuario.getNombre();
+
+        // Crear el menú desplegable con el nombre de usuario
+        JMenu menuUsuario = new JMenu(nombreUsuario + " ∨");
+        menuUsuario.setOpaque(true); // Configurar el menú desplegable como opaco
+        menuUsuario.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                // Cambiar el color de fondo cuando el ratón entra en el menú desplegable
+                menuUsuario.setBackground(new Color(0x769976));
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                // Restaurar el color de fondo cuando el ratón sale del menú desplegable
+                menuUsuario.setBackground(null);
+            }
+        });
+        menuBar.add(menuUsuario);
+
+     // Opción "Gestionar Perfil"
+        JMenuItem gestionarPerfilMenuItem = new JMenuItem("Gestionar Perfil");
+        gestionarPerfilMenuItem.addActionListener(e -> {
+            // Abrir la ventana de gestionar perfil
+            dispose();
+            GestionarPerfil gestionarPerfil = new GestionarPerfil();
+            gestionarPerfil.setVisible(true);
+        });
+        menuUsuario.add(gestionarPerfilMenuItem);
+        
+     // Opción "Mis reservas"
+        JMenuItem misReservasMenuItem = new JMenuItem("Mis Reservas");
+        misReservasMenuItem.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                // Cambiar el color de fondo cuando el ratón entra en la opción del menú
+                misReservasMenuItem.setBackground(new Color(0x769976));
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                // Restaurar el color de fondo cuando el ratón sale de la opción del menú
+                misReservasMenuItem.setBackground(null);
+            }
+        });
+        misReservasMenuItem.addActionListener(e -> {
+            // Abrir la ventana de mis reservas
+            dispose();
+            MisReservas misReservas = new MisReservas();
+            misReservas.setVisible(true); // Aquí es donde se debe llamar al método setVisible(true)
+        });
+        menuUsuario.add(misReservasMenuItem);
+
+        // Opción "Ajustes"
+        JMenuItem ajustesMenuItem = new JMenuItem("Ajustes");
+        ajustesMenuItem.addActionListener(e -> {
+            dispose();
+            Ajustes ajustes = new Ajustes();
+            ajustes.setVisible(true);
+        });
+        menuUsuario.add(ajustesMenuItem);
+
+        // Separador
+        menuUsuario.addSeparator();
+
+        // Opción "Cerrar Sesión"
+        JMenuItem cerrarSesionMenuItem = new JMenuItem("Cerrar Sesión");
+        cerrarSesionMenuItem.addActionListener(e -> {
+            // Cerrar sesión
+        });
+        menuUsuario.add(cerrarSesionMenuItem);
+        // Agregar el menú en la esquina superior izquierda
+        add(menuBar, BorderLayout.NORTH);
 
         // Botón de "Atrás"
         JButton backButton = new JButton("← Atrás");
         backButton.addActionListener(new ActionListener() {
-                public void actionPerformed(ActionEvent e) {
-                	// Crear una instancia de la clase FeedPrincipal
-                    FeedPrincipal feedPrincipal = new FeedPrincipal();
-                    // Hacer visible la ventana del feed principal
-                    feedPrincipal.setVisible(true);
-                    // Cerrar la ventana actual
-                    dispose();
-                }
+            public void actionPerformed(ActionEvent e) {
+                // Crear una instancia de la clase FeedPrincipal
+                FeedPrincipal feedPrincipal = new FeedPrincipal();
+                // Hacer visible la ventana del feed principal
+                feedPrincipal.setVisible(true);
+                // Cerrar la ventana actual
+                dispose();
+            }
         });
-        topPanel.add(backButton, BorderLayout.WEST);
 
-        Object gbc;
-		
+        // Agregar el botón de "Atrás" en la esquina superior derecha
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        buttonPanel.add(backButton);
+        add(buttonPanel, BorderLayout.NORTH);
+
+        // Obtener las reservas del usuario actual desde la base de datos
+        try {
+            ConexionMySQL conexion = ConexionMySQL.obtenerInstancia();
+            conexion.conectar();
+            String query = "SELECT Reservas.*, Propiedades.* FROM Reservas " +
+                           "INNER JOIN Propiedades ON Reservas.id_propiedad = Propiedades.id_propiedad " +
+                           "WHERE Reservas.id_usuario = ?"; 
+            PreparedStatement statement = conexion.prepareStatement(query);
+            statement.setInt(1, Usuario.getIdUsuario()); // 
+            ResultSet resultSet = statement.executeQuery();
+
+         // Variable para llevar la cuenta del número de reserva
+            int numeroReserva = 1;
+
+            while (resultSet.next()) {
+                // Obtener los detalles de la propiedad reservada
+                int idReserva = resultSet.getInt("id_reserva");
+                // Obtener más detalles según sea necesario
+
+                // Crear un panel para mostrar la información de la propiedad reservada
+                JPanel propertyPanel = new JPanel(new FlowLayout(FlowLayout.LEFT)); 
+                propertyPanel.setBorder(BorderFactory.createLineBorder(Color.GRAY));
+
+                // Mostrar la información de la propiedad
+                JLabel lblNumeroReserva = new JLabel("Reserva " + numeroReserva + ":");
+                propertyPanel.add(lblNumeroReserva);
+
+             // Botón "Ver Detalles"
+                JButton detailsButton = new JButton("Ver Detalles");
+                detailsButton.addActionListener(new ActionListener() {
+                    public void actionPerformed(ActionEvent e) {
+                        // Obtener el ID de la propiedad asociada al botón
+                        int idPropiedad = obtenerIdReservaDelBoton((JButton) e.getSource());
+
+                        // Llamar al método para mostrar las características de la propiedad
+                        mostrarCaracteristicasPropiedad(idPropiedad);
+                    }
+                });
+                propertyPanel.add(detailsButton);
+
+             // Botón "Cancelar Reserva"
+                JButton cancelButton = new JButton("Cancelar Reserva");
+                cancelButton.addActionListener(new ActionListener() {
+                    public void actionPerformed(ActionEvent e) {
+                        // Obtener el ID de la reserva asociada al botón
+                        int idReserva = obtenerIdReservaDelBoton((JButton) e.getSource());
+
+                        // Cancelar la reserva
+                        cancelarReserva(idReserva);
+
+                        // Eliminar visualmente la reserva cancelada
+                        eliminarReservaVisualmente(idReserva, panel);
+                    }
+                });
+                propertyPanel.add(cancelButton);
+
+
+
+                // Agregar el panel de la propiedad al panel principal
+                panel.add(propertyPanel);
+                
+                // Incrementar el número de reserva para la siguiente iteración
+                numeroReserva++;
+            }
+
+            // Cerrar la conexión
+            resultSet.close();
+            statement.close();
+            conexion.desconectar();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Error al obtener las reservas: " + ex.getMessage());
+        }
     }
     
+    // Método para obtener el ID de la propiedad asociada al botón
+    private int obtenerIdReservaDelBoton(JButton button) {
+        // Recorrer los componentes principales del panel hasta encontrar el botón pasado como argumento
+        Container container = button.getParent();
+        while (container != null) {
+            if (container instanceof JPanel && ((JPanel) container).getName() != null && ((JPanel) container).getName().startsWith("propertyPanel")) {
+                // El nombre del panel contiene el ID de la reserva
+                String[] parts = ((JPanel) container).getName().split("_");
+                if (parts.length == 2) {
+                    return Integer.parseInt(parts[1]);
+                }
+            }
+            container = container.getParent();
+        }
+        return -1; // Retornar -1 si no se encontró el ID de la reserva
+    }
     
+    private void mostrarCaracteristicasPropiedad(int idPropiedad) {
+        try {
+            ConexionMySQL conexion = ConexionMySQL.obtenerInstancia();
+            conexion.conectar();
 
-    /**
-     * Launch the application.
-     */
-    public static void main(String[] args) {
-        EventQueue.invokeLater(new Runnable() {
-            public void run() {
+            // Consulta para obtener las características de la propiedad
+            String query = "SELECT Propiedades.*, Usuario.nombre AS nombre_propietario " +
+                           "FROM Propiedades " +
+                           "INNER JOIN Usuario ON Propiedades.id_usuario = Usuario.id_usuario " +
+                           "WHERE Propiedades.id_propiedad = ?";
+            PreparedStatement statement = conexion.prepareStatement(query);
+            statement.setInt(1, idPropiedad);
+            ResultSet resultSet = statement.executeQuery();
+
+            if (resultSet.next()) {
+                // Obtener las características de la propiedad junto con el nombre del propietario
+                String nombrePropietario = resultSet.getString("nombre_propietario");
+                String tipoCasa = resultSet.getString("tipo_de_casa");
+                int numBanos = resultSet.getInt("num_banos");
+                int numHabitaciones = resultSet.getInt("num_habitaciones");
+                String terrazaPatio = resultSet.getString("terraza_patio");
+                String ubicacionPropiedad = resultSet.getString("ubicacion");
+                String garaje = resultSet.getString("garaje");
+                String piscina = resultSet.getString("piscina");
+                int numOcupantes = resultSet.getInt("num_ocupantes");
+                boolean disponible = resultSet.getBoolean("disponible");
+
+                // Construir el mensaje con las características de la propiedad y el nombre del propietario
+                StringBuilder mensaje = new StringBuilder();
+                mensaje.append("<html>");
+                mensaje.append("<b>Propietario:</b> ").append(nombrePropietario).append("<br>");
+                mensaje.append("<b>Tipo de casa:</b> ").append(tipoCasa).append("<br>");
+                mensaje.append("<b>Número de baños:</b> ").append(numBanos).append("<br>");
+                mensaje.append("<b>Número de habitaciones:</b> ").append(numHabitaciones).append("<br>");
+                mensaje.append("<b>Terraza/Patio:</b> ").append(terrazaPatio).append("<br>");
+                mensaje.append("<b>Ubicación:</b> ").append(ubicacionPropiedad).append("<br>");
+                mensaje.append("<b>Garaje:</b> ").append(garaje).append("<br>");
+                mensaje.append("<b>Piscina:</b> ").append(piscina).append("<br>");
+                mensaje.append("<b>Número de ocupantes:</b> ").append(numOcupantes).append("<br>");
+                mensaje.append("<b>Disponible:</b> ").append(disponible ? "Sí" : "No").append("<br>");
+                mensaje.append("</html>");
+
+                // Mostrar las características en un cuadro de diálogo
+                JOptionPane.showMessageDialog(null, mensaje.toString(), "Características de la propiedad", JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                // La propiedad no fue encontrada
+                JOptionPane.showMessageDialog(null, "No se encontraron características para la propiedad con ID: " + idPropiedad, "Error", JOptionPane.ERROR_MESSAGE);
+            }
+
+            // Cerrar la conexión y liberar recursos
+            resultSet.close();
+            statement.close();
+            conexion.desconectar();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Error al obtener las características de la propiedad: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    
+    private void cancelarReserva(int idReserva) {
+        try {
+            ConexionMySQL conexion = ConexionMySQL.obtenerInstancia();
+            conexion.conectar();
+
+            // Obtener el ID de la propiedad asociada a la reserva
+            String queryIdPropiedad = "SELECT id_propiedad FROM Reservas WHERE id_reserva = ?";
+            PreparedStatement statementIdPropiedad = conexion.prepareStatement(queryIdPropiedad);
+            statementIdPropiedad.setInt(1, idReserva);
+            ResultSet resultSetIdPropiedad = statementIdPropiedad.executeQuery();
+
+            if (resultSetIdPropiedad.next()) {
+                int idPropiedad = resultSetIdPropiedad.getInt("id_propiedad");
+
+                // Actualizar la disponibilidad de la propiedad a true en la tabla Propiedades
+                String queryActualizarPropiedad = "UPDATE Propiedades SET disponible = true WHERE id_propiedad = ?";
+                PreparedStatement statementActualizarPropiedad = conexion.prepareStatement(queryActualizarPropiedad);
+                statementActualizarPropiedad.setInt(1, idPropiedad);
+                statementActualizarPropiedad.executeUpdate();
+
+                JOptionPane.showMessageDialog(null, "Reserva cancelada con éxito.");
+
+            } else {
+                JOptionPane.showMessageDialog(null, "No se encontró la reserva correspondiente con ID: " + idReserva, "Error", JOptionPane.ERROR_MESSAGE);
+            }
+
+            // Cerrar recursos
+            resultSetIdPropiedad.close();
+            statementIdPropiedad.close();
+            conexion.desconectar();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Error al cancelar la reserva: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    
+ // Método para eliminar visualmente una reserva de la interfaz gráfica
+ // Método para eliminar visualmente una reserva de la interfaz gráfica
+    private void eliminarReservaVisualmente(int idReserva, JPanel panel) {
+        // Itera sobre todos los componentes en el panel
+        Component[] components = panel.getComponents();
+        for (Component component : components) {
+            if (component instanceof JPanel) {
+                JPanel propertyPanel = (JPanel) component;
+                // Comprueba si el panel representa la reserva que se canceló
+                int reservaId = obtenerIdReservaDelPanel(propertyPanel);
+                if (reservaId == idReserva) {
+                    // Elimina el panel de la reserva
+                    panel.remove(propertyPanel);
+                    // Revalida y repinta el panel para que la interfaz refleje los cambios
+                    panel.revalidate();
+                    panel.repaint();
+                    break; // No es necesario seguir iterando
+                }
+            }
+        }
+    }
+
+
+ // Método para obtener el ID de la reserva desde el panel visual de la reserva
+    private int obtenerIdReservaDelPanel(JPanel propertyPanel) {
+        // Obtiene el nombre del panel
+        String panelName = propertyPanel.getName();
+        
+        // Verifica si el nombre del panel no es nulo y sigue un formato específico que incluye el ID de la reserva
+        if (panelName != null && panelName.startsWith("propertyPanel")) {
+            // Divide el nombre del panel usando "_" como delimitador
+            String[] parts = panelName.split("_");
+            
+            // Verifica si hay al menos dos partes en el nombre del panel y la segunda parte contiene el ID de la reserva
+            if (parts.length >= 2) {
+                // Intenta convertir la segunda parte a un entero que representa el ID de la reserva
                 try {
-                    GestionarPerfil frame = new GestionarPerfil();
-                    frame.setVisible(true);
-                } catch (Exception e) {
+                    int idReserva = Integer.parseInt(parts[1]);
+                    return idReserva; // Retorna el ID de la reserva
+                } catch (NumberFormatException e) {
+                    // Maneja la excepción si la segunda parte del nombre no es un número válido
                     e.printStackTrace();
                 }
             }
-        });
+        }
+        
+        // Retorna -1 si no se pudo extraer el ID de la reserva del nombre del panel
+        return -1;
     }
+
+
+
+
+
 
 }
