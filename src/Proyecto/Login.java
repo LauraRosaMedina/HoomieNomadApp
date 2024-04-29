@@ -22,49 +22,49 @@ import java.awt.Toolkit;
 
 public class Login extends JFrame {
 
-	private static final long serialVersionUID = 1L;
+private static final long serialVersionUID = 1L;
     private JPanel contentPane;
-	
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					Login frame = new Login();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
 
-	/**
-	 * Create the frame.
-	 */
-	public Login() {
-		setIconImage(Toolkit.getDefaultToolkit().getImage(Login.class.getResource("/Imagenes/Logo_marco.png.png")));
-		setTitle("Hoomie Nomad - Login");
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 584, 737);
-		//para centrar las cositas//
-		setLocationRelativeTo(null);
-		contentPane = new JPanel();
-		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-		contentPane.setBackground(Color.WHITE);
+/**
+* Launch the application.
+*/
+public static void main(String[] args) {
+EventQueue.invokeLater(new Runnable() {
+public void run() {
+try {
+Login frame = new Login();
+frame.setVisible(true);
+} catch (Exception e) {
+e.printStackTrace();
+}
+}
+});
+}
 
-		setContentPane(contentPane);
-		contentPane.setLayout(null);
-		
-		
-		
-		// Etiqueta para el nombre de usuario
+/**
+* Create the frame.
+*/
+public Login() {
+setIconImage(Toolkit.getDefaultToolkit().getImage(Login.class.getResource("/Imagenes/Logo_marco.png.png")));
+setTitle("Hoomie Nomad - Login");
+setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+setBounds(100, 100, 584, 737);
+//para centrar las cositas//
+setLocationRelativeTo(null);
+contentPane = new JPanel();
+contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+contentPane.setBackground(Color.WHITE);
+
+setContentPane(contentPane);
+contentPane.setLayout(null);
+
+
+
+// Etiqueta para el nombre de usuario
         JLabel usernameLabel = new JLabel("Nombre de usuario:");
         usernameLabel.setBounds(50, 50, 150, 30);
         contentPane.add(usernameLabel);        
-        
+       
         // Campo de texto para el nombre de usuario
         JTextField usernameField = new JTextField();
         usernameField.setBounds(200, 50, 250, 30);
@@ -89,20 +89,20 @@ public class Login extends JFrame {
         JButton signUpButton = new JButton("Registrarse");
         signUpButton.setBounds(300, 150, 150, 30);
         contentPane.add(signUpButton);
-        
+       
         JLabel forgotPasswordLabel = new JLabel("¿Olvidaste tu contraseña?");
         forgotPasswordLabel.setBounds(200, 206, 200, 30);
         contentPane.add(forgotPasswordLabel);
-        
+       
       //Vamos a poner el logo de fondo//
-      		String rutaImagen = "/Imagenes/Logo_login.png";
-      		JLabel backgroundLabel = new JLabel ();
-      		backgroundLabel.setBounds(123, 280, 337, 278);
-      		contentPane.add(backgroundLabel);
-      		
-      		ImageIcon backgroundImage = new ImageIcon(getClass().getResource(rutaImagen));
-      		backgroundLabel.setIcon(backgroundImage);;
-      		
+      String rutaImagen = "/Imagenes/Logo_login.png";
+      JLabel backgroundLabel = new JLabel ();
+      backgroundLabel.setBounds(123, 280, 337, 278);
+      contentPane.add(backgroundLabel);
+     
+      ImageIcon backgroundImage = new ImageIcon(getClass().getResource(rutaImagen));
+      backgroundLabel.setIcon(backgroundImage);;
+     
 
         // ActionListener para el enlace "He olvidado mi contraseña"
         forgotPasswordLabel.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -115,12 +115,7 @@ public class Login extends JFrame {
                 }
             }
         });
-
-      /*  // Botón de aceptar
-        JButton acceptButton = new JButton("Aceptar");
-        acceptButton.setBounds(370, 150, 150, 30);
-        contentPane.add(acceptButton);*/
-        
+       
         //ActionListener: al pulsar el botón de Registrarse, me lleva a esa página//
         signUpButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -128,13 +123,12 @@ public class Login extends JFrame {
                 Registrarse registro = new Registrarse();
                 registro.setVisible(true);
                 dispose();
-                
             }
         });
-        
+       
      // ActionListener para el botón "Iniciar sesión"
         loginButton.addActionListener(new ActionListener() {
-        	public void actionPerformed(ActionEvent e) {               
+        public void actionPerformed(ActionEvent e) {              
 
                 try {
                     // Crear una instancia de ConexionMySQL y conectar a la base de datos
@@ -143,7 +137,7 @@ public class Login extends JFrame {
 
                     String query = "SELECT * FROM Usuario WHERE nombreUsuario = '" + usernameField.getText() + "' AND contrasena = '" + new String(passwordField.getPassword()) + "'";
                     ResultSet resultSet = conexion.ejecutarSelect(query);
-                    
+                   
                     if (resultSet.next()) {
                         // Usuario autenticado correctamente
                        Usuario.setIdUsuario(resultSet.getInt("id_usuario"));
@@ -153,17 +147,17 @@ public class Login extends JFrame {
                         FeedPrincipal feedPrincipal = new FeedPrincipal();
                         feedPrincipal.setVisible(true);
                         dispose();
-                        
+                       
                     } else {
                         // Usuario no encontrado en la base de datos
                         JOptionPane.showMessageDialog(null, "Nombre de usuario o contraseña incorrectos.");
                     }
-                    
+                   
                 } catch (SQLException ex) {
                     ex.printStackTrace();
                     JOptionPane.showMessageDialog(null, "Error al conectarse a la base de datos: " + ex.getMessage());
                 }
             }
         });                    
-	}
+}
 }

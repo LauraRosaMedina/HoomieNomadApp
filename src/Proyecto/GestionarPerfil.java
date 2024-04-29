@@ -4,9 +4,9 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
 import ConexionBaseDatos.ConexionMySQL;
-
 import java.awt.*;
 import java.awt.event.*;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -116,10 +116,27 @@ public class GestionarPerfil extends JFrame {
         // Separador
         menuUsuario.addSeparator();
 
-        // Opción "Cerrar Sesión"
+     // Opción "Cerrar Sesión"
         JMenuItem cerrarSesionMenuItem = new JMenuItem("Cerrar Sesión");
-        cerrarSesionMenuItem.addActionListener(e -> {
-            // Cerrar sesión
+        cerrarSesionMenuItem.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    ConexionMySQL conexion = ConexionMySQL.obtenerInstancia();
+                    // Desconectar de la base de datos
+                    conexion.desconectar();
+
+                    // Cerrar la ventana actual
+                    dispose();
+
+                    // Abrir la ventana de inicio de sesión (login)
+                    Login login = new Login();
+                    login.setVisible(true);
+                } catch (SQLException ex) {
+                    // Manejar cualquier excepción que pueda ocurrir al cerrar la conexión
+                    ex.printStackTrace();
+                    JOptionPane.showMessageDialog(null, "Error al cerrar sesión. Por favor, inténtelo de nuevo.");
+                }
+            }
         });
         menuUsuario.add(cerrarSesionMenuItem);
 
@@ -223,6 +240,28 @@ public class GestionarPerfil extends JFrame {
                     JOptionPane.showMessageDialog(null, mensaje.toString(), "Características de la propiedad", JOptionPane.INFORMATION_MESSAGE);
                 });
                 propiedadPanel.add(verCaracteristicasButton, BorderLayout.CENTER);
+                
+             // Crear el botón "Eliminar Propiedad"
+                JButton eliminarPropiedadButton = new JButton("Eliminar Propiedad");
+                eliminarPropiedadButton.setBackground(new Color(0x769976)); // Color de fondo
+                eliminarPropiedadButton.setForeground(Color.WHITE); // Color del texto
+
+                // Agregar ActionListener para manejar la eliminación de la propiedad
+                eliminarPropiedadButton.addActionListener(new ActionListener() {
+                    public void actionPerformed(ActionEvent e) {
+                    		cargarPropiedades(propertyPanel);
+                            eliminarPropiedad(propertyTitle);
+                            actualizarPropiedades(propertyPanel);
+                            propertyPanelContainer.remove(propertyPanel);
+                            propertyPanelContainer.revalidate();
+                            propertyPanelContainer.repaint();
+                        }
+                    }
+
+                });
+
+                // Agregar el botón "Eliminar Propiedad" al panel de cada propiedad
+                propiedadPanel.add(eliminarPropiedadButton, BorderLayout.SOUTH);
 
                 propertyPanel.add(propiedadPanel, gbc); // Aquí utilizamos la instancia de GridBagConstraints (gbc)
                 contadorPropiedades++;
@@ -234,6 +273,106 @@ public class GestionarPerfil extends JFrame {
         } finally {
             propertyPanel.revalidate(); // Revalidar el panel después de hacer cambios
             propertyPanel.repaint();    // Repintar el panel después de hacer cambios
+        }
+        
+        
+    }
+    
+ // Método para cargar las propiedades del usuario en el panel
+    public void cargarPropiedades(JPanel propertyPanel) {
+        propertyPanel.removeAll(); // Limpiar el panel antes de agregar nuevas propiedades
+
+        try {
+            ConexionMySQL conexion = ConexionMySQL.obtenerInstancia();
+            conexion.conectar();
+            ResultSet resultSet = conexion.ejecutarSelect("SELECT id_propiedad FROM Propiedades WHERE id_usuario = " + Usuario.getIdUsuario());
+            int contadorPropiedades = 1;
+
+            while (resultSet.next()) {
+                int idPropiedad = resultSet.getInt("id_propiedad");
+
+                JPanel propiedadPanel = new JPanel(new BorderLayout());
+                propiedadPanel.setBorder(BorderFactory.createCompoundBorder(
+                        BorderFactory.createEmptyBorder(10, 10, 10, 10),
+                        BorderFactory.createLineBorder(Color.GRAY)
+                ));
+
+                JLabel titleLabel = new JLabel("<html><font color='#769976'><b><font size='+1'>Propiedad " + contadorPropiedades + "</font></b></font></html>");
+                propiedadPanel.add(titleLabel, BorderLayout.NORTH);
+
+                JButton eliminarPropiedadButton = new JButton("Eliminar Propiedad");
+                eliminarPropiedadButton.addActionListener(e -> {
+                    int confirmacion = JOptionPane.showConfirmDialog(null, "¿Estás seguro de que quieres eliminar la propiedad?", "Confirmación", JOptionPane.YES_NO_OPTION);
+                    if (confirmacion == JOptionPane.YES_OPTION) {
+                        eliminarPropiedad(idPropiedad); // Llamar al método para eliminar la propiedad
+                        cargarPropiedades(propertyPanel); // Recargar las propiedades después de la eliminación
+                    }
+                });
+                
+                // Configurar la propiedad personalizada para almacenar el id_propiedad
+                eliminarPropiedadButton.putClientProperty("id_propiedad", idPropiedad);
+
+                propiedadPanel.add(eliminarPropiedadButton, BorderLayout.CENTER);
+
+                propertyPanel.add(propiedadPanel, gbc); // Agregar el panel de propiedad al panel principal
+                contadorPropiedades++;
+                gbc.gridy++;
+            }
+
+            resultSet.close();
+            conexion.desconectar();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Error al cargar las propiedades del usuario: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        } finally {
+            propertyPanel.revalidate(); // Revalidar el panel después de hacer cambios
+            propertyPanel.repaint();    // Repintar el panel después de hacer cambios
+        }
+    }
+
+    // Método para eliminar la propiedad de la base de datos
+    private void eliminarPropiedad(int idPropiedad) {
+        try {
+            ConexionMySQL conexion = ConexionMySQL.obtenerInstancia();
+            conexion.conectar();
+
+            String query = "DELETE FROM Propiedades WHERE id_propiedad = ?"; 
+            PreparedStatement statement = conexion.prepareStatement(query);
+            statement.setInt(1, idPropiedad);
+            int filasAfectadas = statement.executeUpdate();
+
+            if (filasAfectadas > 0) {
+                JOptionPane.showMessageDialog(null, "La propiedad ha sido eliminada correctamente.");
+            } else {
+                JOptionPane.showMessageDialog(null, "No se encontró la propiedad con el ID: " + idPropiedad, "Error", JOptionPane.ERROR_MESSAGE);
+            }
+
+            statement.close();
+            conexion.desconectar();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Error al eliminar la propiedad: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    
+ // Método para eliminar visualmente una reserva de la interfaz gráfica
+    private void eliminarPropiedadVisualmente(int idPropiedad, JPanel panel) {
+        // Itera sobre todos los componentes en el panel
+        Component[] components = panel.getComponents();
+        for (Component component : components) {
+            if (component instanceof JPanel) {
+                JPanel propertyPanel = (JPanel) component;
+                // Comprueba si el panel representa la reserva que se canceló
+                int reservaId = obtenerIdReservaDelPanel(propertyPanel);
+                if (reservaId == idReserva) {
+                    // Elimina el panel de la reserva
+                    panel.remove(propertyPanel);
+                    // Revalida y repinta el panel para que la interfaz refleje los cambios
+                    panel.revalidate();
+                    panel.repaint();
+                    break; // No es necesario seguir iterando
+                }
+            }
         }
     }
 

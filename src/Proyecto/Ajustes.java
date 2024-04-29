@@ -10,6 +10,8 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.sql.ResultSet;
@@ -58,8 +60,6 @@ public class Ajustes extends JFrame {
         contentPane.setBackground(Color.WHITE);
         setContentPane(contentPane);
         contentPane.setLayout(new BorderLayout(0, 0));
-        
-        
 
         // Panel para el botón de "Atrás" y los ajustes
         JPanel topPanel = new JPanel(new BorderLayout());
@@ -163,23 +163,27 @@ public class Ajustes extends JFrame {
         // Separador
         menuUsuario.addSeparator();
 
-        // Opción "Cerrar Sesión"
+     // Opción "Cerrar Sesión"
         JMenuItem cerrarSesionMenuItem = new JMenuItem("Cerrar Sesión");
-        cerrarSesionMenuItem.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseEntered(MouseEvent e) {
-                // Cambiar el color de fondo cuando el ratón entra en la opción del menú
-                cerrarSesionMenuItem.setBackground(new Color(0x769976));
-            }
+        cerrarSesionMenuItem.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    ConexionMySQL conexion = ConexionMySQL.obtenerInstancia();
+                    // Desconectar de la base de datos
+                    conexion.desconectar();
 
-            @Override
-            public void mouseExited(MouseEvent e) {
-                // Restaurar el color de fondo cuando el ratón sale de la opción del menú
-                cerrarSesionMenuItem.setBackground(null);
+                    // Cerrar la ventana actual
+                    dispose();
+
+                    // Abrir la ventana de inicio de sesión (login)
+                    Login login = new Login();
+                    login.setVisible(true);
+                } catch (SQLException ex) {
+                    // Manejar cualquier excepción que pueda ocurrir al cerrar la conexión
+                    ex.printStackTrace();
+                    JOptionPane.showMessageDialog(null, "Error al cerrar sesión. Por favor, inténtelo de nuevo.");
+                }
             }
-        });
-        cerrarSesionMenuItem.addActionListener(e -> {
-            // Cerrar sesión
         });
         menuUsuario.add(cerrarSesionMenuItem);
 
