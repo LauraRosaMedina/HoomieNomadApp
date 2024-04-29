@@ -127,6 +127,8 @@ public class Login extends JFrame {
                 // Aquí abrimos la ventana de registro
                 Registrarse registro = new Registrarse();
                 registro.setVisible(true);
+                dispose();
+                
             }
         });
         
