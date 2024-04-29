@@ -12,8 +12,6 @@ import java.awt.event.MouseEvent;
 import java.sql.SQLException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.util.List; // Importación añadida
-import java.util.ArrayList;
 
 public class FeedPrincipal extends JFrame {
 
@@ -297,10 +295,8 @@ public class FeedPrincipal extends JFrame {
             conexion.conectar();
 
             // Obtener las propiedades del usuario de la base de datos
-            String propertiesQuery = "SELECT * FROM Propiedades WHERE id_usuario = ?";
-            PreparedStatement propertiesStatement = conexion.prepareStatement(propertiesQuery);
-            propertiesStatement.setInt(1, idUsuario);
-            ResultSet propertiesResultSet = propertiesStatement.executeQuery();
+            String propertiesQuery = "SELECT * FROM Propiedades WHERE id_usuario = ' " + Usuario.getIdUsuario() + "'";
+            ResultSet propertiesResultSet = conexion.ejecutarSelect(propertiesQuery);
 
             // Verificar si el usuario tiene propiedades registradas
             if (propertiesResultSet.next()) {
@@ -359,11 +355,12 @@ public class FeedPrincipal extends JFrame {
                         @Override
                         public void actionPerformed(ActionEvent e) {
                             try {
-                                // Cambiar el estado de disponibilidad de la propiedad a false en la base de datos
-                                cambiarEstadoDisponibilidadPropiedad(propiedadId, false);
-                                
-                             // Realizar la reserva en la base de datos
+                            	
+                            	// Realizar la reserva en la base de datos
                                 reservarPropiedad(Usuario.getIdUsuario(), propiedadId);
+                                
+                                // Cambiar el estado de disponibilidad de la propiedad a false en la base de datos
+                                cambiarEstadoDisponibilidadPropiedad(propiedadId, false);                            
                                 
                                 // Mostrar mensaje de reserva exitosa
                                 JOptionPane.showMessageDialog(null, "Propiedad reservada con éxito.");
@@ -401,11 +398,8 @@ public class FeedPrincipal extends JFrame {
         conexion.conectar();
 
         // Consulta para insertar la reserva en la tabla Reservas
-        String query = "INSERT INTO Reservas (id_usuario, id_propiedad) VALUES (?, ?)";
-        PreparedStatement statement = conexion.prepareStatement(query);
-        statement.setInt(1, Usuario.getIdUsuario());
-        statement.setInt(2, idPropiedad);
-        statement.executeUpdate();
+        String query = "INSERT INTO Reservas (id_usuario, id_propiedad) VALUES ("+ idUsuario + ", " + idPropiedad + ")";
+        conexion.ejecutarInsertDeleteUpdate(query);
 
         // Cerrar la conexión
         conexion.desconectar();
@@ -416,11 +410,8 @@ public class FeedPrincipal extends JFrame {
         conexion.conectar();
 
         // Consulta para actualizar el estado de disponibilidad de la propiedad
-        String query = "UPDATE Propiedades SET disponible = ? WHERE id_propiedad = ?";
-        PreparedStatement statement = conexion.prepareStatement(query);
-        statement.setBoolean(1, disponible);
-        statement.setInt(2, idPropiedad);
-        statement.executeUpdate();
+        String query = "UPDATE Propiedades SET disponible = " + disponible + " WHERE id_propiedad = " + idPropiedad;
+        conexion.ejecutarInsertDeleteUpdate(query);
 
         // Cerrar la conexión
         conexion.desconectar();
@@ -441,10 +432,8 @@ public class FeedPrincipal extends JFrame {
             conexion.conectar();
 
             // Obtener todos los usuarios excepto el usuario actual
-            String query = "SELECT DISTINCT Usuario.id_Usuario, Usuario.nombre FROM Usuario LEFT JOIN Propiedades ON Usuario.id_Usuario = Propiedades.id_Usuario WHERE Usuario.nombre != ?";
-            PreparedStatement statement = conexion.prepareStatement(query);
-            statement.setString(1, Usuario.getNombre()); // Aquí establecemos el nombre de usuario para excluirlo de la consulta
-            ResultSet resultSet = statement.executeQuery();
+            String query = "SELECT DISTINCT Usuario.id_Usuario, Usuario.nombre FROM Usuario LEFT JOIN Propiedades ON Usuario.id_Usuario = Propiedades.id_Usuario WHERE Usuario.nombre != ' " + Usuario.getNombre() + "'";
+            ResultSet resultSet = conexion.ejecutarSelect(query);
 
             while (resultSet.next()) {
                 // Obtener información del usuario
@@ -483,11 +472,8 @@ public class FeedPrincipal extends JFrame {
             conexion.conectar();
 
             // Consulta SQL para seleccionar las propiedades con la ubicación especificada
-            String query = "SELECT * FROM Propiedades WHERE LOWER(ubicacion) = LOWER(?) AND id_usuario NOT IN (SELECT id_usuario FROM Usuario WHERE nombre = ?)";
-            PreparedStatement statement = conexion.prepareStatement(query);
-            statement.setString(1, ubicacion);
-            statement.setString(2, Usuario.getNombre()); // Aquí se establece el valor del segundo parámetro
-            ResultSet resultSet = statement.executeQuery();
+            String query = "SELECT * FROM Propiedades WHERE LOWER(ubicacion) = LOWER( '" + ubicacion + "' ) AND id_usuario NOT IN (SELECT id_usuario FROM Usuario WHERE nombre = ' " + Usuario.getNombre() + "')";
+            ResultSet resultSet = conexion.ejecutarSelect(query);
 
             // Verificar si hay resultados en el ResultSet
             if (!resultSet.isBeforeFirst()) {
@@ -607,10 +593,8 @@ public class FeedPrincipal extends JFrame {
         conexion.conectar();
 
         // Consulta para obtener el nombre de usuario por ID
-        String query = "SELECT nombre FROM Usuario WHERE id_usuario = ?";
-        PreparedStatement statement = conexion.prepareStatement(query);
-        statement.setInt(1, idUsuario);
-        ResultSet resultSet = statement.executeQuery();
+        String query = "SELECT nombre FROM Usuario WHERE id_usuario = '" + idUsuario + "'";
+        ResultSet resultSet = conexion.ejecutarSelect(query);
 
         // Verificar si hay un resultado en el ResultSet
         if (resultSet.next()) {

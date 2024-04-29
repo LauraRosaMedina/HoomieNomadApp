@@ -115,11 +115,6 @@ public class Login extends JFrame {
                 }
             }
         });
-
-      /*  // Botón de aceptar
-        JButton acceptButton = new JButton("Aceptar");
-        acceptButton.setBounds(370, 150, 150, 30);
-        contentPane.add(acceptButton);*/
         
         //ActionListener: al pulsar el botón de Registrarse, me lleva a esa página//
         signUpButton.addActionListener(new ActionListener() {
@@ -127,6 +122,7 @@ public class Login extends JFrame {
                 // Aquí abrimos la ventana de registro
                 Registrarse registro = new Registrarse();
                 registro.setVisible(true);
+                dispose();
             }
         });
         

@@ -115,17 +115,35 @@ public class MisReservas extends JFrame {
         // Separador
         menuUsuario.addSeparator();
 
-        // Opción "Cerrar Sesión"
+     // Opción "Cerrar Sesión"
         JMenuItem cerrarSesionMenuItem = new JMenuItem("Cerrar Sesión");
-        cerrarSesionMenuItem.addActionListener(e -> {
-            // Cerrar sesión
+        cerrarSesionMenuItem.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    ConexionMySQL conexion = ConexionMySQL.obtenerInstancia();
+                    // Desconectar de la base de datos
+                    conexion.desconectar();
+
+                    // Cerrar la ventana actual
+                    dispose();
+
+                    // Abrir la ventana de inicio de sesión (login)
+                    Login login = new Login();
+                    login.setVisible(true);
+                } catch (SQLException ex) {
+                    // Manejar cualquier excepción que pueda ocurrir al cerrar la conexión
+                    ex.printStackTrace();
+                    JOptionPane.showMessageDialog(null, "Error al cerrar sesión. Por favor, inténtelo de nuevo.");
+                }
+            }
         });
         menuUsuario.add(cerrarSesionMenuItem);
+        
         // Agregar el menú en la esquina superior izquierda
         add(menuBar, BorderLayout.NORTH);
 
         // Botón de "Atrás"
-        JButton backButton = new JButton("← Atrás");
+        JButton backButton = new JButton("Inicio");
         backButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 // Crear una instancia de la clase FeedPrincipal
@@ -146,13 +164,9 @@ public class MisReservas extends JFrame {
         try {
             ConexionMySQL conexion = ConexionMySQL.obtenerInstancia();
             conexion.conectar();
-            String query = "SELECT Reservas.*, Propiedades.* FROM Reservas " +
-                           "INNER JOIN Propiedades ON Reservas.id_propiedad = Propiedades.id_propiedad " +
-                           "WHERE Reservas.id_usuario = ?"; 
-            PreparedStatement statement = conexion.prepareStatement(query);
-            statement.setInt(1, Usuario.getIdUsuario()); // 
-            ResultSet resultSet = statement.executeQuery();
-
+            String query = "SELECT Reservas.* FROM Reservas WHERE Reservas.id_usuario = " + Usuario.getIdUsuario() + " "; 
+            ResultSet resultSet = conexion.ejecutarSelect(query);
+         
          // Variable para llevar la cuenta del número de reserva
             int numeroReserva = 1;
 
@@ -210,7 +224,6 @@ public class MisReservas extends JFrame {
 
             // Cerrar la conexión
             resultSet.close();
-            statement.close();
             conexion.desconectar();
         } catch (SQLException ex) {
             ex.printStackTrace();
@@ -223,8 +236,7 @@ public class MisReservas extends JFrame {
     }
     
     
-    // Método para obtener el ID de la propiedad asociada al botón
- // Método para obtener el ID de la reserva asociada al botón
+    // Método para obtener el ID de la reserva asociada al botón
     private int obtenerIdReservaDelBoton(JButton button) {
         // Obtener el panel padre del botón
         Container container = button.getParent();
@@ -258,17 +270,15 @@ public class MisReservas extends JFrame {
             conexion.conectar();
 
             // Consulta para obtener las características de la propiedad
-            String query = "SELECT Propiedades.*, Usuario.nombre AS nombre_propietario " +
-                           "FROM Propiedades " +
-                           "INNER JOIN Usuario ON Propiedades.id_usuario = Usuario.id_usuario " +
-                           "WHERE Propiedades.id_propiedad = ?";
-            PreparedStatement statement = conexion.prepareStatement(query);
-            statement.setInt(1, idPropiedad);
-            ResultSet resultSet = statement.executeQuery();
+            String query = "SELECT Reservas.*, Propiedades.*, Usuario.nombre FROM Reservas " +
+                    "INNER JOIN Propiedades ON Reservas.id_propiedad = Propiedades.id_propiedad " +
+                    "INNER JOIN Usuario ON Propiedades.id_usuario = Usuario.id_usuario " +
+                    "WHERE Reservas.id_usuario = " + Usuario.getIdUsuario() + " "; 
+            ResultSet resultSet = conexion.ejecutarSelect(query);
 
             if (resultSet.next()) {
                 // Obtener las características de la propiedad junto con el nombre del propietario
-                String nombrePropietario = resultSet.getString("nombre_propietario");
+                String nombrePropietario = resultSet.getString("Usuario.nombre");
                 String tipoCasa = resultSet.getString("tipo_de_casa");
                 int numBanos = resultSet.getInt("num_banos");
                 int numHabitaciones = resultSet.getInt("num_habitaciones");
@@ -303,7 +313,6 @@ public class MisReservas extends JFrame {
 
             // Cerrar la conexión y liberar recursos
             resultSet.close();
-            statement.close();
             conexion.desconectar();
         } catch (SQLException ex) {
             ex.printStackTrace();
@@ -317,19 +326,20 @@ public class MisReservas extends JFrame {
             conexion.conectar();
 
             // Obtener el ID de la propiedad asociada a la reserva
-            String queryIdPropiedad = "SELECT id_propiedad FROM Reservas WHERE id_reserva = ?";
-            PreparedStatement statementIdPropiedad = conexion.prepareStatement(queryIdPropiedad);
-            statementIdPropiedad.setInt(1, idReserva);
-            ResultSet resultSetIdPropiedad = statementIdPropiedad.executeQuery();
+            String queryIdPropiedad = "SELECT id_propiedad FROM Reservas WHERE id_reserva =" + idReserva + "";
+            ResultSet resultSetIdPropiedad = conexion.ejecutarSelect(queryIdPropiedad);
 
             if (resultSetIdPropiedad.next()) {
                 int idPropiedad = resultSetIdPropiedad.getInt("id_propiedad");
 
                 // Actualizar la disponibilidad de la propiedad a true en la tabla Propiedades
-                String queryActualizarPropiedad = "UPDATE Propiedades SET disponible = true WHERE id_propiedad = ?";
-                PreparedStatement statementActualizarPropiedad = conexion.prepareStatement(queryActualizarPropiedad);
-                statementActualizarPropiedad.setInt(1, idPropiedad);
-                statementActualizarPropiedad.executeUpdate();
+                String queryActualizarPropiedad = "UPDATE Propiedades SET disponible = true WHERE id_propiedad = " + idPropiedad + "";
+                conexion.ejecutarInsertDeleteUpdate(queryActualizarPropiedad);
+
+                
+                // Borrar el registro de la tabla Reservas
+                String queryBorrarReserva = " DELETE FROM Reservas WHERE Reservas.id_reserva = ' " + idReserva + "'";
+                conexion.ejecutarInsertDeleteUpdate(queryBorrarReserva);
 
                 JOptionPane.showMessageDialog(null, "Reserva cancelada con éxito.");
 
@@ -339,7 +349,6 @@ public class MisReservas extends JFrame {
 
             // Cerrar recursos
             resultSetIdPropiedad.close();
-            statementIdPropiedad.close();
             conexion.desconectar();
         } catch (SQLException ex) {
             ex.printStackTrace();
@@ -347,7 +356,6 @@ public class MisReservas extends JFrame {
         }
     }
     
- // Método para eliminar visualmente una reserva de la interfaz gráfica
  // Método para eliminar visualmente una reserva de la interfaz gráfica
     private void eliminarReservaVisualmente(int idReserva, JPanel panel) {
         // Itera sobre todos los componentes en el panel
