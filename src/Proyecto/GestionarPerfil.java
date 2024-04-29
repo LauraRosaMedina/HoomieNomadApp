@@ -31,6 +31,7 @@ public class GestionarPerfil extends JFrame {
     }
 
     public GestionarPerfil() {
+    	setIconImage(Toolkit.getDefaultToolkit().getImage(Login.class.getResource("/Imagenes/Logo_marco.png.png")));
         setTitle("Gestionar Perfil");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setBounds(100, 100, 515, 702);

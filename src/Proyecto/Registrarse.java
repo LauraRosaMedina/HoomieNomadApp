@@ -1,5 +1,6 @@
 package Proyecto;
 
+import java.awt.Color;
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -7,6 +8,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -17,6 +19,9 @@ import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
 import ConexionBaseDatos.ConexionMySQL;
+import javax.swing.JTextArea;
+import java.awt.Font;
+import java.awt.Toolkit;
 
 public class Registrarse extends JFrame {
 
@@ -43,6 +48,7 @@ public class Registrarse extends JFrame {
 	 * Create the frame.
 	 */
 	public Registrarse() {
+		setIconImage(Toolkit.getDefaultToolkit().getImage(Registrarse.class.getResource("/Imagenes/Logo_marco.png.png")));
     	ConexionMySQL conexion = new ConexionMySQL("root", "test", "HoomieNomad");
 
 		setTitle("Hoomie Nomad - Sign up");
@@ -52,28 +58,29 @@ public class Registrarse extends JFrame {
 
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		contentPane.setBackground(Color.WHITE);
 
 		setContentPane(contentPane);
         contentPane.setLayout(null); // Usamos un layout nulo para posicionar los componentes manualmente
         
         // Etiqueta para el nombre
         JLabel nameLabel = new JLabel("Nombre y apellidos:");
-        nameLabel.setBounds(62, 94, 150, 30);
+        nameLabel.setBounds(93, 94, 150, 30);
         contentPane.add(nameLabel);
 
         // Campo de texto para insertar el nombre
         JTextField nameField = new JTextField();
-        nameField.setBounds(278, 95, 150, 30);
+        nameField.setBounds(308, 95, 150, 30);
         contentPane.add(nameField);
         
      // Etiqueta para el nombre de usuario
         JLabel usernameLabel = new JLabel("Nombre de usuario:");
-        usernameLabel.setBounds(62, 164, 150, 30);
+        usernameLabel.setBounds(93, 164, 150, 30);
         contentPane.add(usernameLabel);
 
         // Campo de texto para el nombre de usuario
         JTextField usernameField = new JTextField();
-        usernameField.setBounds(278, 165, 150, 30);
+        usernameField.setBounds(308, 165, 150, 30);
         contentPane.add(usernameField);
         
      // Etiqueta para el email
@@ -83,50 +90,63 @@ public class Registrarse extends JFrame {
 
         // Campo de texto para insertar el email
         JTextField emailField = new JTextField();
-        emailField.setBounds(278, 233, 150, 30);
+        emailField.setBounds(308, 233, 150, 30);
         contentPane.add(emailField);
 
         // Etiqueta para la dirección
         JLabel addressLabel = new JLabel("Dirección postal:");
-        addressLabel.setBounds(72, 296, 150, 30);
+        addressLabel.setBounds(93, 307, 150, 30);
         contentPane.add(addressLabel);
 
         // Campo de texto para insertar la dirección
         JTextField addressField = new JTextField();
-        addressField.setBounds(278, 297, 150, 30);
+        addressField.setBounds(308, 308, 150, 30);
         contentPane.add(addressField);
 
         // Etiqueta para el teléfono
         JLabel phoneLabel = new JLabel("Teléfono:");
-        phoneLabel.setBounds(83, 372, 150, 30);
+        phoneLabel.setBounds(93, 384, 150, 30);
         contentPane.add(phoneLabel);
 
         // Campo de texto para insertar el teléfono
         JTextField phoneField = new JTextField();
-        phoneField.setBounds(278, 372, 150, 30);
+        phoneField.setBounds(308, 385, 150, 30);
         contentPane.add(phoneField);
 
         // Etiqueta para la contraseña
         JLabel passwordLabel = new JLabel("Contraseña:");
-        passwordLabel.setBounds(83, 440, 150, 30);
+        passwordLabel.setBounds(93, 452, 150, 30);
         contentPane.add(passwordLabel);
 
         // Campo de texto para la contraseña
         JPasswordField passwordField = new JPasswordField();
-        passwordField.setBounds(278, 441, 150, 30);
+        passwordField.setBounds(308, 453, 150, 30);
         contentPane.add(passwordField);
         
         JLabel repeatPasswordLabel = new JLabel("Repita la contraseña:");
-        repeatPasswordLabel.setBounds(72, 503, 200, 30);
+        repeatPasswordLabel.setBounds(93, 515, 200, 30);
         contentPane.add(repeatPasswordLabel);
 
         JPasswordField repeatPasswordField = new JPasswordField();
-        repeatPasswordField.setBounds(278, 504, 150, 30);
+        repeatPasswordField.setBounds(308, 516, 150, 30);
         contentPane.add(repeatPasswordField);
+        
+        //Introducir imagen para esquina superior izquierda//
+        
+     // Cargar la imagen desde la carpeta del proyecto
+        String rutaImagen = "/Imagenes/Logo_pequeno_suave.png"; // Ruta relativa de la imagen
+        ImageIcon imageIcon = new ImageIcon(getClass().getResource(rutaImagen));
+
+        // Etiqueta para mostrar la imagen
+        JLabel imageLabel = new JLabel(imageIcon);
+        // Establecer la posición de la imagen en la esquina superior izquierda
+        imageLabel.setBounds(142, 204, 266, 236);
+        contentPane.add(imageLabel);
+
         
         // Botón para registrarse
         JButton signUpButton = new JButton("Registrarse");
-        signUpButton.setBounds(278, 572, 150, 30);
+        signUpButton.setBounds(308, 594, 150, 30);
         contentPane.add(signUpButton);
         
         
@@ -242,8 +262,15 @@ public class Registrarse extends JFrame {
         
      // Botón para volver atrás
         JButton backButton = new JButton("Volver atrás");
-        backButton.setBounds(51, 572, 150, 30);
+        backButton.setBounds(71, 594, 150, 30);
         contentPane.add(backButton);
+        
+        JTextArea txtrHoomieNomad = new JTextArea();
+        txtrHoomieNomad.setForeground(new Color(0, 0, 0));
+        txtrHoomieNomad.setFont(new Font("MS Gothic", Font.PLAIN, 26));
+        txtrHoomieNomad.setText("HOOMIE NOMAD");
+        txtrHoomieNomad.setBounds(187, 28, 200, 30);
+        contentPane.add(txtrHoomieNomad);
 
         // ActionListener para el botón "Volver atrás"
         backButton.addActionListener(new ActionListener() {
@@ -257,5 +284,4 @@ public class Registrarse extends JFrame {
         
         
 	}
-
 }

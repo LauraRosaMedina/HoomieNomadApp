@@ -4,10 +4,12 @@ import java.awt.EventQueue;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Container;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.Toolkit;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.sql.ResultSet;
@@ -45,6 +47,7 @@ public class Ajustes extends JFrame {
     }
 
     public Ajustes() {
+    	setIconImage(Toolkit.getDefaultToolkit().getImage(Login.class.getResource("/Imagenes/Logo_marco.png.png")));
         setTitle("Ajustes");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setBounds(100, 100, 515, 702);
@@ -52,12 +55,16 @@ public class Ajustes extends JFrame {
 
         contentPane = new JPanel();
         contentPane.setBorder(new EmptyBorder(10, 10, 10, 10));
+        contentPane.setBackground(Color.WHITE);
         setContentPane(contentPane);
         contentPane.setLayout(new BorderLayout(0, 0));
+        
+        
 
         // Panel para el botón de "Atrás" y los ajustes
         JPanel topPanel = new JPanel(new BorderLayout());
         contentPane.add(topPanel, BorderLayout.NORTH);
+        
 
         // Crear la barra de menú
         JMenuBar menuBar = new JMenuBar();
@@ -194,17 +201,21 @@ public class Ajustes extends JFrame {
         // Panel para los ajustes
         JPanel settingsPanel = new JPanel(new BorderLayout());
         contentPane.add(settingsPanel, BorderLayout.CENTER);
+        
 
         JPanel settingsPanel1 = new JPanel(new GridBagLayout());
         settingsPanel.add(settingsPanel1, BorderLayout.NORTH);
+        
 
         GridBagConstraints gbc1 = new GridBagConstraints();
         gbc1.gridx = 0;
         gbc1.gridy = 0;
         gbc1.insets = new Insets(20, 5, 5, 5); // Espaciado entre componentes
         gbc1.anchor = GridBagConstraints.WEST; // Alineación izquierda
+        
 
         // Título "Actualizar Contraseña"
+     // Título "Actualizar Contraseña"
         JLabel changePasswordTitleLabel = new JLabel("Actualizar Contraseña");
         changePasswordTitleLabel.setFont(new Font("Arial", Font.BOLD, 18)); // Fuente, negrita, tamaño
         changePasswordTitleLabel.setForeground(new Color(0x769976)); // Cambio de color del texto
@@ -317,6 +328,7 @@ public class Ajustes extends JFrame {
         deleteAccountButton.setForeground(Color.WHITE); // Cambio de color del texto
         deleteAccountButton.setBackground(new Color(0x769976)); // Cambio de color del fondo del botón
         deleteAccountPanel.add(deleteAccountButton, gbc2);
+
     }
     
     public static void borrarUsuario(String nombreUsuario) {

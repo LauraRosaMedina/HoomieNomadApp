@@ -36,15 +36,21 @@ public class FeedPrincipal extends JFrame {
     }
 
     public FeedPrincipal() {
+    	setIconImage(Toolkit.getDefaultToolkit().getImage(FeedPrincipal.class.getResource("/Imagenes/Logo_marco.png.png")));
         setTitle("Feed Principal");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setBounds(100, 100, 515, 702);
         setLocationRelativeTo(null);
+        
+        
 
         contentPane = new JPanel();
+        contentPane.setBackground(Color.WHITE);
         contentPane.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         setContentPane(contentPane);
         contentPane.setLayout(new BorderLayout(0, 0));
+        
+           
 
         profilesPanel = new JPanel(new GridBagLayout());
         contentPane.add(profilesPanel, BorderLayout.CENTER);
@@ -207,15 +213,37 @@ public class FeedPrincipal extends JFrame {
             }
         });
         menuUsuario.add(cerrarSesionMenuItem);
+        
+     /* Carga la imagen desde un recurso en el proyecto
+        ImageIcon icono = new ImageIcon(getClass().getResource("/Imagenes/Logo_muypequeno.png.png"));
+
+        // Crea un JLabel para mostrar la imagen
+        JLabel imagenLabel = new JLabel(icono);
+        imagenLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+
+        // Crea un panel para superponer la imagen sobre el contenido existente
+        JPanel overlayPanel = new JPanel();
+        overlayPanel.setLayout(new OverlayLayout(overlayPanel));
+
+        // Agrega la imagen al panel de superposición
+        overlayPanel.add(imagenLabel);
+        
+        overlayPanel.setPreferredSize(new Dimension(110, 130)); // Ajusta los valores según el tamaño deseado
+
+        // Agrega el panel de superposición al panel de contenido principal
+        contentPane.add(overlayPanel, BorderLayout.NORTH);*/
 
         // Panel para mostrar los perfiles de los usuarios
         JPanel profilesPanel = new JPanel(new GridBagLayout());
+        profilesPanel.setBackground(Color.WHITE);
         contentPane.add(profilesPanel, BorderLayout.CENTER);
 
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.insets = new Insets(10, 10, 10, 10);
+        
+     
 
         try {
             ConexionMySQL conexion = ConexionMySQL.obtenerInstancia();
@@ -469,7 +497,7 @@ public class FeedPrincipal extends JFrame {
 
             // Mostrar las propiedades encontradas en una ventana emergente
             JFrame searchFrame = new JFrame("Propiedades en " + ubicacion);
-            searchFrame.setLayout(new BoxLayout(searchFrame.getContentPane(), BoxLayout.Y_AXIS)); // Cambia el layout al eje Y
+            searchFrame.getContentPane().setLayout(new BoxLayout(searchFrame.getContentPane(), BoxLayout.Y_AXIS)); // Cambia el layout al eje Y
 
             // Crear un panel de desplazamiento para mostrar todas las propiedades
             JScrollPane scrollPane = new JScrollPane();
@@ -561,7 +589,7 @@ public class FeedPrincipal extends JFrame {
             scrollPane.setViewportView(propertiesPanel);
 
             // Agregar el panel de desplazamiento al marco de búsqueda
-            searchFrame.add(scrollPane);
+            searchFrame.getContentPane().add(scrollPane);
 
             // Mostrar el marco de búsqueda
             searchFrame.setSize(400, 300);

@@ -2,12 +2,14 @@ package Proyecto;
 
 import ConexionBaseDatos.ConexionMySQL;
 
+import java.awt.Color;
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -16,6 +18,7 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
+import java.awt.Toolkit;
 
 public class Login extends JFrame {
 
@@ -42,6 +45,7 @@ public class Login extends JFrame {
 	 * Create the frame.
 	 */
 	public Login() {
+		setIconImage(Toolkit.getDefaultToolkit().getImage(Login.class.getResource("/Imagenes/Logo_marco.png.png")));
 		setTitle("Hoomie Nomad - Login");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 584, 737);
@@ -49,9 +53,12 @@ public class Login extends JFrame {
 		setLocationRelativeTo(null);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		contentPane.setBackground(Color.WHITE);
 
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
+		
+		
 		
 		// Etiqueta para el nombre de usuario
         JLabel usernameLabel = new JLabel("Nombre de usuario:");
@@ -86,6 +93,16 @@ public class Login extends JFrame {
         JLabel forgotPasswordLabel = new JLabel("¿Olvidaste tu contraseña?");
         forgotPasswordLabel.setBounds(200, 206, 200, 30);
         contentPane.add(forgotPasswordLabel);
+        
+      //Vamos a poner el logo de fondo//
+      		String rutaImagen = "/Imagenes/Logo_login.png";
+      		JLabel backgroundLabel = new JLabel ();
+      		backgroundLabel.setBounds(123, 280, 337, 278);
+      		contentPane.add(backgroundLabel);
+      		
+      		ImageIcon backgroundImage = new ImageIcon(getClass().getResource(rutaImagen));
+      		backgroundLabel.setIcon(backgroundImage);;
+      		
 
         // ActionListener para el enlace "He olvidado mi contraseña"
         forgotPasswordLabel.addMouseListener(new java.awt.event.MouseAdapter() {

@@ -1,5 +1,6 @@
 package Proyecto;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.text.AttributeSet;
@@ -13,6 +14,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
+import java.io.File;
+import java.io.IOException;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
@@ -44,6 +47,22 @@ public class AnadirPropiedades extends JFrame {
 
     // Constructor
     public AnadirPropiedades() {
+    	contentPane = new JPanel();
+        contentPane.setBackground(new Color(255, 255, 255));
+        contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+        setContentPane(contentPane);
+        contentPane.setLayout(new BorderLayout(0, 0));
+    	 // Cargar la imagen de fondo desde el archivo
+        ImageIcon icono = new ImageIcon(getClass().getResource("/Imagenes/Logo_pequeño.png"));
+        
+        // Crear un JLabel para mostrar la imagen
+        JLabel imagenLabel = new JLabel(new ImageIcon(AnadirPropiedades.class.getResource("/Imagenes/Logo_pequeño.png")));
+        imagenLabel.setHorizontalAlignment(SwingConstants.LEFT);
+        imagenLabel.setVerticalAlignment(SwingConstants.TOP);
+        
+        // Agregar la imagen en la parte superior izquierda del contentPane
+        contentPane.add(imagenLabel, BorderLayout.NORTH);
+    	setIconImage(Toolkit.getDefaultToolkit().getImage(AnadirPropiedades.class.getResource("/Imagenes/Logo_marco.png.png")));
     	// Cambiar el color de los botones a 0x769976 y el texto de los botones a blanco
         UIManager.put("Button.background", new Color(0x769976));
         UIManager.put("Button.foreground", Color.WHITE);
@@ -56,167 +75,280 @@ public class AnadirPropiedades extends JFrame {
         setBounds(100, 100, 515, 702);
         setLocationRelativeTo(null);
 
-        contentPane = new JPanel();
-        contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-        setContentPane(contentPane);
-        contentPane.setLayout(new BorderLayout(0, 0));
+        
+     
+        
+        // Continuar con el resto del código del constructor...
+    
 
         JPanel propertyPanel = new JPanel();
+        propertyPanel.setBackground(Color.WHITE);
         contentPane.add(propertyPanel, BorderLayout.CENTER);
         propertyPanel.setLayout(new GridBagLayout());
+        
+     
 
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.insets = new Insets(5, 5, 5, 5); // Espaciado entre componentes
         gbc.anchor = GridBagConstraints.WEST; // Alineación izquierda
+        
+     
+        
+                        
+                             // Etiqueta y menú desplegable para el tipo de casa
+                             // Crear un nuevo objeto GridBagConstraints para la etiqueta del tipo de casa
+                                GridBagConstraints gbcTipoDeCasaLabel = new GridBagConstraints();
+                                gbcTipoDeCasaLabel.gridx = 0;
+                                gbcTipoDeCasaLabel.gridy = 0;
+                                gbcTipoDeCasaLabel.insets = new Insets(5, 5, 5, 5); // Espaciado entre componentes
+                                gbcTipoDeCasaLabel.anchor = GridBagConstraints.WEST; // Alineación izquierda
+                                
+                                        // Etiqueta para el tipo de casa
+                                        JLabel tipoDeCasaLabel = new JLabel("Tipo de casa:");
+                                        tipoDeCasaLabel.setHorizontalAlignment(SwingConstants.LEFT);
+                                        tipoDeCasaLabel.setForeground(new Color(0x769976)); // Cambiar el color del texto
+                                        tipoDeCasaLabel.setFont(new Font("Arial", Font.BOLD, 14)); // Cambiar el tamaño de la fuente
+                                        propertyPanel.add(tipoDeCasaLabel, gbcTipoDeCasaLabel);
+                        
+                                // Crear un nuevo objeto GridBagConstraints para el menú desplegable del tipo de casa
+                                GridBagConstraints gbcTipoDeCasaComboBox = new GridBagConstraints();
+                                gbcTipoDeCasaComboBox.insets = new Insets(0, 0, 5, 0);
+                                gbcTipoDeCasaComboBox.gridx = 1;
+                                gbcTipoDeCasaComboBox.gridy = 0;
+                                gbcTipoDeCasaComboBox.weightx = 1.0; // Estirar el componente horizontalmente
+                                
+                                        JComboBox<String> tipoDeCasaComboBox = new JComboBox<>(new String[]{"Casa", "Piso", "Chalet", "Ático"});
+                                        tipoDeCasaComboBox.setPreferredSize(new Dimension(35, tipoDeCasaComboBox.getPreferredSize().height));
+                                        tipoDeCasaComboBox.setPreferredSize(new Dimension(200, tipoDeCasaComboBox.getPreferredSize().width));
+                                        propertyPanel.add(tipoDeCasaComboBox, gbcTipoDeCasaComboBox);
+                                
+                                
+                                        // Etiqueta y campo de texto para el número de baños
+                                     // Crear un nuevo objeto GridBagConstraints para la etiqueta del número de baños
+                                        GridBagConstraints gbcBanosLabel = new GridBagConstraints();
+                                        gbcBanosLabel.gridx = 0;
+                                        gbcBanosLabel.gridy = 2;
+                                        gbcBanosLabel.insets = new Insets(5, 5, 5, 5); // Espaciado entre componentes
+                                        gbcBanosLabel.anchor = GridBagConstraints.WEST; // Alineación izquierda
+                                        
+                                                // Etiqueta para el número de baños
+                                                JLabel banosLabel = new JLabel("Número de baños:");
+                                                banosLabel.setHorizontalAlignment(SwingConstants.LEFT);
+                                                banosLabel.setForeground(new Color(0x769976)); // Cambiar el color del texto
+                                                banosLabel.setFont(new Font("Arial", Font.BOLD, 14)); // Cambiar el tamaño de la fuente
+                                                propertyPanel.add(banosLabel, gbcBanosLabel);
+                        
+                                // Crear un nuevo objeto GridBagConstraints para el campo de texto del número de baños
+                                GridBagConstraints gbcBanosField = new GridBagConstraints();
+                                gbcBanosField.insets = new Insets(0, 0, 5, 0);
+                                gbcBanosField.gridx = 1;
+                                gbcBanosField.gridy = 2;
+                                gbcBanosField.weightx = 1.0; // Estirar el componente horizontalmente
+                                
+                                        JTextField banosField = new JTextField();
+                                        banosField.setDocument(new NumberOnlyDocument("Número de baños"));
+                                        banosField.setPreferredSize(new Dimension(35, banosField.getPreferredSize().height));
+                                        banosField.setPreferredSize(new Dimension(200, banosField.getPreferredSize().width));
+                                        propertyPanel.add(banosField, gbcBanosField);
+                
+                
+                        // Etiqueta y campo de texto para el número de habitaciones
+                     // Crear un nuevo objeto GridBagConstraints para la etiqueta del número de habitaciones
+                        GridBagConstraints gbcHabitacionesLabel = new GridBagConstraints();
+                        gbcHabitacionesLabel.gridx = 0;
+                        gbcHabitacionesLabel.gridy = 4;
+                        gbcHabitacionesLabel.insets = new Insets(5, 5, 5, 5); // Espaciado entre componentes
+                        gbcHabitacionesLabel.anchor = GridBagConstraints.WEST; // Alineación izquierda
+                        
+                                // Etiqueta para el número de habitaciones
+                                JLabel habitacionesLabel = new JLabel("Número de habitaciones:");
+                                habitacionesLabel.setHorizontalAlignment(SwingConstants.LEFT);
+                                habitacionesLabel.setForeground(new Color(0x769976)); // Cambiar el color del texto
+                                habitacionesLabel.setFont(new Font("Arial", Font.BOLD, 14)); // Cambiar el tamaño de la fuente
+                                propertyPanel.add(habitacionesLabel, gbcHabitacionesLabel);
+                
+                        // Crear un nuevo objeto GridBagConstraints para el campo de texto del número de habitaciones
+                        GridBagConstraints gbcHabitacionesField = new GridBagConstraints();
+                        gbcHabitacionesField.insets = new Insets(0, 0, 5, 0);
+                        gbcHabitacionesField.gridx = 1;
+                        gbcHabitacionesField.gridy = 4;
+                        gbcHabitacionesField.weightx = 1.0; // Estirar el componente horizontalmente
+                        
+                                JTextField habitacionesField = new JTextField();
+                                habitacionesField.setDocument(new NumberOnlyDocument("Número de habitaciones"));
+                                habitacionesField.setPreferredSize(new Dimension(35, habitacionesField.getPreferredSize().height));
+                                habitacionesField.setPreferredSize(new Dimension(200, habitacionesField.getPreferredSize().width));
+                                propertyPanel.add(habitacionesField, gbcHabitacionesField);
+                
+                
+                        // Etiqueta y menú desplegable para terraza/patio
+                     // Crear un nuevo objeto GridBagConstraints para la etiqueta de terraza/patio
+                        GridBagConstraints gbcTerrazaLabel = new GridBagConstraints();
+                        gbcTerrazaLabel.gridx = 0;
+                        gbcTerrazaLabel.gridy = 6;
+                        gbcTerrazaLabel.insets = new Insets(5, 5, 5, 5); // Espaciado entre componentes
+                        gbcTerrazaLabel.anchor = GridBagConstraints.WEST; // Alineación izquierda
+                        
+                                // Etiqueta para terraza/patio
+                                JLabel terrazaLabel = new JLabel("Terraza/Patio:");
+                                terrazaLabel.setHorizontalAlignment(SwingConstants.LEFT);
+                                terrazaLabel.setForeground(new Color(0x769976)); // Cambiar el color del texto
+                                terrazaLabel.setFont(new Font("Arial", Font.BOLD, 14)); // Cambiar el tamaño de la fuente
+                                propertyPanel.add(terrazaLabel, gbcTerrazaLabel);
+        
+                // Crear un nuevo objeto GridBagConstraints para el menú desplegable de terraza/patio
+                GridBagConstraints gbcTerrazaComboBox = new GridBagConstraints();
+                gbcTerrazaComboBox.insets = new Insets(0, 0, 5, 0);
+                gbcTerrazaComboBox.gridx = 1;
+                gbcTerrazaComboBox.gridy = 6;
+                gbcTerrazaComboBox.weightx = 1.0; // Estirar el componente horizontalmente
+                
+                        JComboBox<String> terrazaComboBox = new JComboBox<>(new String[]{"Terraza", "Patio", "Ambas", "Ninguna"});
+                        terrazaComboBox.setPreferredSize(new Dimension(35, terrazaComboBox.getPreferredSize().height));
+                        terrazaComboBox.setPreferredSize(new Dimension(200, terrazaComboBox.getPreferredSize().width));
+                        propertyPanel.add(terrazaComboBox, gbcTerrazaComboBox);
+        
+        
+             // Etiqueta y campo de texto para la ubicación
+             // Crear un nuevo objeto GridBagConstraints para la etiqueta de ubicación
+                GridBagConstraints gbcUbicacionLabel = new GridBagConstraints();
+                gbcUbicacionLabel.gridx = 0;
+                gbcUbicacionLabel.gridy = 8;
+                gbcUbicacionLabel.insets = new Insets(5, 5, 5, 5); // Espaciado entre componentes
+                gbcUbicacionLabel.anchor = GridBagConstraints.WEST; // Alineación izquierda
+                
+                        // Etiqueta para la ubicación
+                        JLabel ubicacionLabel = new JLabel("Ubicación:");
+                        ubicacionLabel.setHorizontalAlignment(SwingConstants.LEFT);
+                        ubicacionLabel.setForeground(new Color(0x769976)); // Cambiar el color del texto
+                        ubicacionLabel.setFont(new Font("Arial", Font.BOLD, 14)); // Cambiar el tamaño de la fuente
+                        propertyPanel.add(ubicacionLabel, gbcUbicacionLabel);
+        
+                // Crear un nuevo objeto GridBagConstraints para el campo de texto de ubicación
+                GridBagConstraints gbcUbicacionField = new GridBagConstraints();
+                gbcUbicacionField.insets = new Insets(0, 0, 5, 0);
+                gbcUbicacionField.gridx = 1;
+                gbcUbicacionField.gridy = 8;
+                gbcUbicacionField.weightx = 1.0; // Estirar el componente horizontalmente
+                
+                        JTextField ubicacionField = new JTextField("Ciudad");
+                        ubicacionField.setPreferredSize(new Dimension(35, ubicacionField.getPreferredSize().height));
+                        ubicacionField.setPreferredSize(new Dimension(200, ubicacionField.getPreferredSize().width));
+                        ubicacionField.setForeground(Color.GRAY); // Color gris para el texto por defecto
+                        ubicacionField.addFocusListener(new FocusAdapter() {
+                            @Override
+                            public void focusGained(FocusEvent e) {
+                                if (ubicacionField.getText().equals("Ciudad")) {
+                                    ubicacionField.setText("");
+                                    ubicacionField.setForeground(Color.BLACK); // Cambiar el color del texto a negro cuando se empiece a escribir
+                                }
+                            }
 
-     // Etiqueta y menú desplegable para el tipo de casa
-        JLabel tipoDeCasaLabel = new JLabel("Tipo de casa:");
-        tipoDeCasaLabel.setHorizontalAlignment(SwingConstants.LEFT);
-        tipoDeCasaLabel.setForeground(new Color(0x769976)); // Cambiar el color del texto
-        tipoDeCasaLabel.setFont(new Font("Arial", Font.BOLD, 14)); // Cambiar el tamaño de la fuente
-        propertyPanel.add(tipoDeCasaLabel, gbc);
+                            @Override
+                            public void focusLost(FocusEvent e) {
+                                if (ubicacionField.getText().isEmpty()) {
+                                    ubicacionField.setText("Ciudad");
+                                    ubicacionField.setForeground(Color.GRAY); // Restaurar el color gris del texto si no se ha escrito nada
+                                }
+                            }
+                        });
+                        propertyPanel.add(ubicacionField, gbcUbicacionField);
+        
+        
+        
+                // Etiqueta y menú desplegable para garaje
+             // Crear un nuevo objeto GridBagConstraints para la etiqueta de garaje
+                GridBagConstraints gbcGarajeLabel = new GridBagConstraints();
+                gbcGarajeLabel.gridx = 0;
+                gbcGarajeLabel.gridy = 10;
+                gbcGarajeLabel.insets = new Insets(5, 5, 5, 5); // Espaciado entre componentes
+                gbcGarajeLabel.anchor = GridBagConstraints.WEST; // Alineación izquierda
+                
+                        // Etiqueta para el garaje
+                        JLabel garajeLabel = new JLabel("Garaje:");
+                        garajeLabel.setHorizontalAlignment(SwingConstants.LEFT);
+                        garajeLabel.setForeground(new Color(0x769976)); // Cambiar el color del texto
+                        garajeLabel.setFont(new Font("Arial", Font.BOLD, 14)); // Cambiar el tamaño de la fuente
+                        propertyPanel.add(garajeLabel, gbcGarajeLabel);
+        
+                // Crear un nuevo objeto GridBagConstraints para el menú desplegable de garaje
+                GridBagConstraints gbcGarajeComboBox = new GridBagConstraints();
+                gbcGarajeComboBox.insets = new Insets(0, 0, 5, 0);
+                gbcGarajeComboBox.gridx = 1;
+                gbcGarajeComboBox.gridy = 10;
+                
+                        JComboBox<String> garajeComboBox = new JComboBox<>(new String[]{"Sí", "No"});
+                        garajeComboBox.setPreferredSize(new Dimension(35, garajeComboBox.getPreferredSize().height));
+                        garajeComboBox.setPreferredSize(new Dimension(200, garajeComboBox.getPreferredSize().width));
+                        propertyPanel.add(garajeComboBox, gbcGarajeComboBox);
+        
+        
+                // Etiqueta y menú desplegable para piscina
+             // Crear un nuevo objeto GridBagConstraints para la etiqueta de piscina
+                GridBagConstraints gbcPiscinaLabel = new GridBagConstraints();
+                gbcPiscinaLabel.gridx = 0;
+                gbcPiscinaLabel.gridy = 12;
+                gbcPiscinaLabel.insets = new Insets(5, 5, 5, 5); // Espaciado entre componentes
+                gbcPiscinaLabel.anchor = GridBagConstraints.WEST; // Alineación izquierda
+                
+                        // Etiqueta para la piscina
+                        JLabel piscinaLabel = new JLabel("Piscina:");
+                        piscinaLabel.setHorizontalAlignment(SwingConstants.LEFT);
+                        piscinaLabel.setForeground(new Color(0x769976)); // Cambiar el color del texto
+                        piscinaLabel.setFont(new Font("Arial", Font.BOLD, 14)); // Cambiar el tamaño de la fuente
+                        propertyPanel.add(piscinaLabel, gbcPiscinaLabel);
+        
+                // Crear un nuevo objeto GridBagConstraints para el menú desplegable de piscina
+                GridBagConstraints gbcPiscinaComboBox = new GridBagConstraints();
+                gbcPiscinaComboBox.insets = new Insets(0, 0, 5, 0);
+                gbcPiscinaComboBox.gridx = 1;
+                gbcPiscinaComboBox.gridy = 12;
+                
+                        JComboBox<String> piscinaComboBox = new JComboBox<>(new String[]{"Sí", "No"});
+                        piscinaComboBox.setPreferredSize(new Dimension(35, piscinaComboBox.getPreferredSize().height));
+                        piscinaComboBox.setPreferredSize(new Dimension(200, piscinaComboBox.getPreferredSize().width));
+                        propertyPanel.add(piscinaComboBox, gbcPiscinaComboBox);
+        
+        
+                // Etiqueta y campo de texto para el número de ocupantes
+             // Crear un nuevo objeto GridBagConstraints para la etiqueta de ocupantes
+                GridBagConstraints gbcOcupantesLabel = new GridBagConstraints();
+                gbcOcupantesLabel.gridx = 0;
+                gbcOcupantesLabel.gridy = 14;
+                gbcOcupantesLabel.insets = new Insets(5, 5, 5, 5); // Espaciado entre componentes
+                gbcOcupantesLabel.anchor = GridBagConstraints.WEST; // Alineación izquierda
+                
+                        // Etiqueta para el número de ocupantes
+                        JLabel ocupantesLabel = new JLabel("Número de ocupantes:");
+                        ocupantesLabel.setHorizontalAlignment(SwingConstants.LEFT);
+                        ocupantesLabel.setForeground(new Color(0x769976)); // Cambiar el color del texto
+                        ocupantesLabel.setFont(new Font("Arial", Font.BOLD, 14)); // Cambiar el tamaño de la fuente
+                        propertyPanel.add(ocupantesLabel, gbcOcupantesLabel);
+        
+                // Crear un nuevo objeto GridBagConstraints para el campo de texto de ocupantes
+                GridBagConstraints gbcOcupantesField = new GridBagConstraints();
+                gbcOcupantesField.insets = new Insets(0, 0, 5, 0);
+                gbcOcupantesField.gridx = 1;
+                gbcOcupantesField.gridy = 14;
+                
+                        JTextField ocupantesField = new JTextField();
+                        ocupantesField.setDocument(new NumberOnlyDocument("Número de ocupantes"));
+                        ocupantesField.setPreferredSize(new Dimension(35, ocupantesField.getPreferredSize().height));
+                        ocupantesField.setPreferredSize(new Dimension(200, ocupantesField.getPreferredSize().width));
+                        propertyPanel.add(ocupantesField, gbcOcupantesField);
+                        
+                        
+                  
 
-        gbc.gridx = 1;
-        gbc.weightx = 1.0; // Estirar el componente horizontalmente
-        JComboBox<String> tipoDeCasaComboBox = new JComboBox<>(new String[]{"Casa", "Piso", "Chalet", "Ático"});
-        tipoDeCasaComboBox.setPreferredSize(new Dimension(35, tipoDeCasaComboBox.getPreferredSize().height));
-        tipoDeCasaComboBox.setPreferredSize(new Dimension(200, tipoDeCasaComboBox.getPreferredSize().width));
-        propertyPanel.add(tipoDeCasaComboBox, gbc);
-
-        // Etiqueta y campo de texto para el número de baños
-        gbc.gridx = 0;
-        gbc.gridy = 1;
-        JLabel banosLabel = new JLabel("Número de baños:");
-        banosLabel.setHorizontalAlignment(SwingConstants.LEFT);
-        banosLabel.setForeground(new Color(0x769976)); // Cambiar el color del texto
-        banosLabel.setFont(new Font("Arial", Font.BOLD, 14)); // Cambiar el tamaño de la fuente
-        propertyPanel.add(banosLabel, gbc);
-
-        gbc.gridx = 1;
-        JTextField banosField = new JTextField();
-        banosField.setDocument(new NumberOnlyDocument("Número de baños"));
-        banosField.setPreferredSize(new Dimension(35, banosField.getPreferredSize().height));
-        banosField.setPreferredSize(new Dimension(200, banosField.getPreferredSize().width));
-        propertyPanel.add(banosField, gbc);
-
-        // Etiqueta y campo de texto para el número de habitaciones
-        gbc.gridx = 0;
-        gbc.gridy = 2;
-        JLabel habitacionesLabel = new JLabel("Número de habitaciones:");
-        habitacionesLabel.setHorizontalAlignment(SwingConstants.LEFT);
-        habitacionesLabel.setForeground(new Color(0x769976)); // Cambiar el color del texto
-        habitacionesLabel.setFont(new Font("Arial", Font.BOLD, 14)); // Cambiar el tamaño de la fuente
-        propertyPanel.add(habitacionesLabel, gbc);
-
-        gbc.gridx = 1;
-        JTextField habitacionesField = new JTextField();
-        habitacionesField.setDocument(new NumberOnlyDocument("Número de habitaciones"));
-        habitacionesField.setPreferredSize(new Dimension(35, habitacionesField.getPreferredSize().height));
-        habitacionesField.setPreferredSize(new Dimension(200, habitacionesField.getPreferredSize().width));
-        propertyPanel.add(habitacionesField, gbc);
-
-        // Etiqueta y menú desplegable para terraza/patio
-        gbc.gridx = 0;
-        gbc.gridy = 3;
-        JLabel terrazaLabel = new JLabel("Terraza/Patio:");
-        terrazaLabel.setHorizontalAlignment(SwingConstants.LEFT);
-        terrazaLabel.setForeground(new Color(0x769976)); // Cambiar el color del texto
-        terrazaLabel.setFont(new Font("Arial", Font.BOLD, 14)); // Cambiar el tamaño de la fuente
-        propertyPanel.add(terrazaLabel, gbc);
-
-        gbc.gridx = 1;
-        JComboBox<String> terrazaComboBox = new JComboBox<>(new String[]{"Terraza", "Patio", "Ambas", "Ninguna"});
-        terrazaComboBox.setPreferredSize(new Dimension(35, terrazaComboBox.getPreferredSize().height));
-        terrazaComboBox.setPreferredSize(new Dimension(200, terrazaComboBox.getPreferredSize().width));
-        propertyPanel.add(terrazaComboBox, gbc);
-
-     // Etiqueta y campo de texto para la ubicación
-        gbc.gridx = 0;
-        gbc.gridy = 4;
-        JLabel ubicacionLabel = new JLabel("Ubicación:");
-        ubicacionLabel.setHorizontalAlignment(SwingConstants.LEFT);
-        ubicacionLabel.setForeground(new Color(0x769976)); // Cambiar el color del texto
-        ubicacionLabel.setFont(new Font("Arial", Font.BOLD, 14)); // Cambiar el tamaño de la fuente
-        propertyPanel.add(ubicacionLabel, gbc);
-
-        gbc.gridx = 1;
-        JTextField ubicacionField = new JTextField("Ciudad");
-        ubicacionField.setPreferredSize(new Dimension(35, ubicacionField.getPreferredSize().height));
-        ubicacionField.setPreferredSize(new Dimension(200, ubicacionField.getPreferredSize().width));
-        ubicacionField.setForeground(Color.GRAY); // Color gris para el texto por defecto
-        ubicacionField.addFocusListener(new FocusAdapter() {
-            @Override
-            public void focusGained(FocusEvent e) {
-                if (ubicacionField.getText().equals("Ciudad")) {
-                    ubicacionField.setText("");
-                    ubicacionField.setForeground(Color.BLACK); // Cambiar el color del texto a negro cuando se empiece a escribir
-                }
-            }
-
-            @Override
-            public void focusLost(FocusEvent e) {
-                if (ubicacionField.getText().isEmpty()) {
-                    ubicacionField.setText("Ciudad");
-                    ubicacionField.setForeground(Color.GRAY); // Restaurar el color gris del texto si no se ha escrito nada
-                }
-            }
-        });
-        propertyPanel.add(ubicacionField, gbc);
-
-
-        // Etiqueta y menú desplegable para garaje
-        gbc.gridx = 0;
-        gbc.gridy = 5;
-        JLabel garajeLabel = new JLabel("Garaje:");
-        garajeLabel.setHorizontalAlignment(SwingConstants.LEFT);
-        garajeLabel.setForeground(new Color(0x769976)); // Cambiar el color del texto
-        garajeLabel.setFont(new Font("Arial", Font.BOLD, 14)); // Cambiar el tamaño de la fuente
-        propertyPanel.add(garajeLabel, gbc);
-
-        gbc.gridx = 1;
-        JComboBox<String> garajeComboBox = new JComboBox<>(new String[]{"Sí", "No"});
-        garajeComboBox.setPreferredSize(new Dimension(35, garajeComboBox.getPreferredSize().height));
-        garajeComboBox.setPreferredSize(new Dimension(200, garajeComboBox.getPreferredSize().width));
-        propertyPanel.add(garajeComboBox, gbc);
-
-        // Etiqueta y menú desplegable para piscina
-        gbc.gridx = 0;
-        gbc.gridy = 6;
-        JLabel piscinaLabel = new JLabel("Piscina:");
-        piscinaLabel.setHorizontalAlignment(SwingConstants.LEFT);
-        piscinaLabel.setForeground(new Color(0x769976)); // Cambiar el color del texto
-        piscinaLabel.setFont(new Font("Arial", Font.BOLD, 14)); // Cambiar el tamaño de la fuente
-        propertyPanel.add(piscinaLabel, gbc);
-
-        gbc.gridx = 1;
-        JComboBox<String> piscinaComboBox = new JComboBox<>(new String[]{"Sí", "No"});
-        piscinaComboBox.setPreferredSize(new Dimension(35, piscinaComboBox.getPreferredSize().height));
-        piscinaComboBox.setPreferredSize(new Dimension(200, piscinaComboBox.getPreferredSize().width));
-        propertyPanel.add(piscinaComboBox, gbc);
-
-        // Etiqueta y campo de texto para el número de ocupantes
-        gbc.gridx = 0;
-        gbc.gridy = 7;
-        JLabel ocupantesLabel = new JLabel("Número de ocupantes:");
-        ocupantesLabel.setHorizontalAlignment(SwingConstants.LEFT);
-        ocupantesLabel.setForeground(new Color(0x769976)); // Cambiar el color del texto
-        ocupantesLabel.setFont(new Font("Arial", Font.BOLD, 14)); // Cambiar el tamaño de la fuente
-        propertyPanel.add(ocupantesLabel, gbc);
-
-        gbc.gridx = 1;
-        JTextField ocupantesField = new JTextField();
-        ocupantesField.setDocument(new NumberOnlyDocument("Número de ocupantes"));
-        ocupantesField.setPreferredSize(new Dimension(35, ocupantesField.getPreferredSize().height));
-        ocupantesField.setPreferredSize(new Dimension(200, ocupantesField.getPreferredSize().width));
-        propertyPanel.add(ocupantesField, gbc);
 
      
      // Botón de guardar
         gbc.gridx = 0;
         gbc.gridy = 9;
         JButton addButton = new JButton("Añadir");
+        addButton.setFont(new Font("Tahoma", Font.PLAIN, 14));
         addButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 // Verificar si todos los campos están completos

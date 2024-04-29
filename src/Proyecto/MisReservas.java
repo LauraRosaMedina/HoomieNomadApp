@@ -30,6 +30,7 @@ public class MisReservas extends JFrame {
     }
 
     public MisReservas() {
+    	setIconImage(Toolkit.getDefaultToolkit().getImage(Login.class.getResource("/Imagenes/Logo_marco.png.png")));
         setTitle("Mis reservas");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setBounds(100, 100, 515, 702);
@@ -163,7 +164,8 @@ public class MisReservas extends JFrame {
                 // Crear un panel para mostrar la información de la propiedad reservada
                 JPanel propertyPanel = new JPanel(new FlowLayout(FlowLayout.LEFT)); 
                 propertyPanel.setBorder(BorderFactory.createLineBorder(Color.GRAY));
-
+               //código nuevo sólo una línea
+                propertyPanel.setName("propertyPanel_" + idReserva);
                 // Mostrar la información de la propiedad
                 JLabel lblNumeroReserva = new JLabel("Reserva " + numeroReserva + ":");
                 propertyPanel.add(lblNumeroReserva);
@@ -213,25 +215,42 @@ public class MisReservas extends JFrame {
         } catch (SQLException ex) {
             ex.printStackTrace();
             JOptionPane.showMessageDialog(null, "Error al obtener las reservas: " + ex.getMessage());
+            
         }
+        
+        
+        
     }
     
+    
     // Método para obtener el ID de la propiedad asociada al botón
+ // Método para obtener el ID de la reserva asociada al botón
     private int obtenerIdReservaDelBoton(JButton button) {
-        // Recorrer los componentes principales del panel hasta encontrar el botón pasado como argumento
+        // Obtener el panel padre del botón
         Container container = button.getParent();
+        
+        // Iterar a través de los paneles padres hasta encontrar el panel que contiene el ID de la reserva
         while (container != null) {
-            if (container instanceof JPanel && ((JPanel) container).getName() != null && ((JPanel) container).getName().startsWith("propertyPanel")) {
-                // El nombre del panel contiene el ID de la reserva
-                String[] parts = ((JPanel) container).getName().split("_");
+            // Verificar si el panel es un JPanel y tiene un nombre que contiene el ID de la reserva
+            if (container instanceof JPanel && container.getName() != null && container.getName().startsWith("propertyPanel")) {
+                // Dividir el nombre del panel para extraer el ID de la reserva
+                String[] parts = container.getName().split("_");
                 if (parts.length == 2) {
-                    return Integer.parseInt(parts[1]);
+                    try {
+                        // Intentar convertir la segunda parte del nombre en un entero (ID de la reserva)
+                        int idReserva = Integer.parseInt(parts[1]);
+                        return idReserva; // Retornar el ID de la reserva
+                    } catch (NumberFormatException e) {
+                        e.printStackTrace(); // Manejar la excepción si la conversión falla
+                    }
                 }
             }
+            // Obtener el panel padre del panel actual
             container = container.getParent();
         }
-        return -1; // Retornar -1 si no se encontró el ID de la reserva
+        return -1; // Retornar -1 si no se pudo encontrar el ID de la reserva
     }
+
     
     private void mostrarCaracteristicasPropiedad(int idPropiedad) {
         try {
