@@ -4,7 +4,6 @@ import java.awt.Color;
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -23,31 +22,31 @@ import javax.swing.JTextArea;
 import java.awt.Font;
 import java.awt.Toolkit;
 
-public class Registrarse extends JFrame {
+	public class Registrarse extends JFrame {
 
-	private static final long serialVersionUID = 1L;
-	private JPanel contentPane;
+		private static final long serialVersionUID = 1L;
+		private JPanel contentPane;
 
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					Registrarse frame = new Registrarse();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
+		/**
+		 * Launch the application.
+		 */
+		public static void main(String[] args) {
+			EventQueue.invokeLater(new Runnable() {
+				public void run() {
+					try {
+						Registrarse frame = new Registrarse();
+						frame.setVisible(true);
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
 				}
-			}
-		});
-	}
+			});
+		}
 
-	/**
-	 * Create the frame.
-	 */
-	public Registrarse() {
+		/**
+		 * Create the frame.
+		 */
+		public Registrarse() {
 		setIconImage(Toolkit.getDefaultToolkit().getImage(Registrarse.class.getResource("/Imagenes/Logo_marco.png.png")));
     	ConexionMySQL conexion = new ConexionMySQL("root", "test", "HoomieNomad");
 
@@ -65,6 +64,7 @@ public class Registrarse extends JFrame {
         
         // Etiqueta para el nombre
         JLabel nameLabel = new JLabel("Nombre y apellidos:");
+        nameLabel.setForeground(new Color(118, 153, 118));
         nameLabel.setBounds(93, 94, 150, 30);
         contentPane.add(nameLabel);
 
@@ -75,6 +75,7 @@ public class Registrarse extends JFrame {
         
      // Etiqueta para el nombre de usuario
         JLabel usernameLabel = new JLabel("Nombre de usuario:");
+        usernameLabel.setForeground(new Color(118, 153, 118));
         usernameLabel.setBounds(93, 164, 150, 30);
         contentPane.add(usernameLabel);
 
@@ -85,6 +86,7 @@ public class Registrarse extends JFrame {
         
      // Etiqueta para el email
         JLabel emailLabel = new JLabel("Email:");
+        emailLabel.setForeground(new Color(118, 153, 118));
         emailLabel.setBounds(93, 232, 150, 30);
         contentPane.add(emailLabel);
 
@@ -95,6 +97,7 @@ public class Registrarse extends JFrame {
 
         // Etiqueta para la dirección
         JLabel addressLabel = new JLabel("Dirección postal:");
+        addressLabel.setForeground(new Color(118, 153, 118));
         addressLabel.setBounds(93, 307, 150, 30);
         contentPane.add(addressLabel);
 
@@ -105,6 +108,7 @@ public class Registrarse extends JFrame {
 
         // Etiqueta para el teléfono
         JLabel phoneLabel = new JLabel("Teléfono:");
+        phoneLabel.setForeground(new Color(118, 153, 118));
         phoneLabel.setBounds(93, 384, 150, 30);
         contentPane.add(phoneLabel);
 
@@ -115,6 +119,7 @@ public class Registrarse extends JFrame {
 
         // Etiqueta para la contraseña
         JLabel passwordLabel = new JLabel("Contraseña:");
+        passwordLabel.setForeground(new Color(118, 153, 118));
         passwordLabel.setBounds(93, 452, 150, 30);
         contentPane.add(passwordLabel);
 
@@ -124,6 +129,7 @@ public class Registrarse extends JFrame {
         contentPane.add(passwordField);
         
         JLabel repeatPasswordLabel = new JLabel("Repita la contraseña:");
+        repeatPasswordLabel.setForeground(new Color(118, 153, 118));
         repeatPasswordLabel.setBounds(93, 515, 200, 30);
         contentPane.add(repeatPasswordLabel);
 
@@ -133,7 +139,8 @@ public class Registrarse extends JFrame {
         
         //Introducir imagen para esquina superior izquierda//
         
-     // Cargar la imagen desde la carpeta del proyecto
+        // Cargar la imagen desde la carpeta del proyecto
+        
         String rutaImagen = "/Imagenes/Logo_pequeno_suave.png"; // Ruta relativa de la imagen
         ImageIcon imageIcon = new ImageIcon(getClass().getResource(rutaImagen));
 
@@ -146,58 +153,17 @@ public class Registrarse extends JFrame {
         
         // Botón para registrarse
         JButton signUpButton = new JButton("Registrarse");
+        signUpButton.setForeground(Color.WHITE);
+        signUpButton.setBackground(new Color(118, 153, 118));
         signUpButton.setBounds(308, 594, 150, 30);
-        contentPane.add(signUpButton);
-        
-        
-        
-
-        // ActionListener para el botón "Registrarse"
-       /* signUpButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                String usuario = usernameField.getText();
-                String contraseña = new String(passwordField.getPassword());
-
-                // Verificar que los campos no estén vacíos
-                if (usuario.isEmpty() || contraseña.isEmpty()) {
-                    JOptionPane.showMessageDialog(null, "Por favor, complete todos los campos.");
-                    return;
-                }
-
-                try {
-                    // Conectar a la base de datos
-                    conexion.conectar();
-
-                    // Verificar si el usuario ya existe en la base de datos
-                    ResultSet resultado = conexion.ejecutarSelect("SELECT * FROM Usuario WHERE nombreUsuario='" + usuario + "'");
-                    if (resultado.next()) {
-                        JOptionPane.showMessageDialog(null, "¡El nombre de usuario ya está en uso!");
-                    } else {
-                        // Insertar el nuevo usuario en la base de datos
-                        String consulta = "INSERT INTO Usuario (nombreUsuario, contrasena) VALUES ('" + usuario + "', '" + contraseña + "')";
-                        int filasAfectadas = conexion.ejecutarInsertDeleteUpdate(consulta);
-
-                        if (filasAfectadas > 0) {
-                            JOptionPane.showMessageDialog(null, "¡Registro exitoso!");
-                            // Cerrar la ventana de registro después del registro exitoso
-                            dispose();
-                        } else {
-                            JOptionPane.showMessageDialog(null, "Error al registrar el usuario.");
-                        }
-                    }
-
-                    // Desconectar de la base de datos
-                    conexion.desconectar();
-                } catch (SQLException ex) {
-                    ex.printStackTrace();
-                    JOptionPane.showMessageDialog(null, "Error al conectar con la base de datos: " + ex.getMessage());
-                }
-            }
-        }); */
+        contentPane.add(signUpButton);                
+       
         
         signUpButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+            	
                 // Obtener los valores de todos los campos
+            	
                 String nombreUsuario = usernameField.getText();
                 String contraseña = new String(passwordField.getPassword());
                 String repetirContraseña = new String(repeatPasswordField.getPassword());
@@ -207,6 +173,7 @@ public class Registrarse extends JFrame {
                 String telefono = phoneField.getText();
 
                 // Verificar que todos los campos estén completos
+                
                 if (nombreUsuario.isEmpty() || contraseña.isEmpty() || nombre.isEmpty() || email.isEmpty() || direccion.isEmpty() || telefono.isEmpty()) {
                     JOptionPane.showMessageDialog(null, "Por favor, complete todos los campos.");
                     return;
@@ -217,27 +184,26 @@ public class Registrarse extends JFrame {
                 }
                 try {
                     // Conectar a la base de datos
+                	
                     conexion.conectar();
 
                     // Verificar si el usuario ya existe en la base de datos
+                    
                     ResultSet resultado = conexion.ejecutarSelect("SELECT * FROM Usuario WHERE nombreUsuario='" + nombreUsuario + "'");
                     if (resultado.next()) {
                         JOptionPane.showMessageDialog(null, "¡El nombre de usuario ya está en uso!");
                     } else {
+                    	
                         // Insertar el nuevo usuario en la base de datos
-                        String consulta = "INSERT INTO Usuario (nombre, nombreUsuario, email, direccion, telefono, contrasena) VALUES (?, ?, ?, ?, ?, ?)";
-                        PreparedStatement statement = conexion.prepareStatement(consulta);
-                        statement.setString(1, nombre);
-                        statement.setString(2, nombreUsuario);
-                        statement.setString(3, email);
-                        statement.setString(4, direccion);
-                        statement.setString(5, telefono);
-                        statement.setString(6, contraseña);
-                        int filasAfectadas = statement.executeUpdate();
+                    	
+                        String consulta = "INSERT INTO Usuario (nombre, nombreUsuario, email, direccion, telefono, contrasena) VALUES ('" + nombre + "' ,'" + nombreUsuario +  "' ,'" + email + "' ,'" + direccion + "' ,'" + telefono + "' ,'" + contraseña +"')";
+                        
+                        int filasAfectadas = conexion.ejecutarInsertDeleteUpdate(consulta);
 
                         if (filasAfectadas > 0) {
-                            JOptionPane.showMessageDialog(null, "¡Registro exitoso!");
+                            JOptionPane.showMessageDialog(null, "¡Registro exitoso!");                            
                             // Cerrar la ventana de registro después del registro exitoso
+                            
                             dispose();
                             
                             // Abrir la ventana de "Completar Perfil"
@@ -250,6 +216,7 @@ public class Registrarse extends JFrame {
                     }
 
                     // Desconectar de la base de datos
+                    
                     conexion.desconectar();
                 } catch (SQLException ex) {
                     ex.printStackTrace();
@@ -262,14 +229,16 @@ public class Registrarse extends JFrame {
         
      // Botón para volver atrás
         JButton backButton = new JButton("Volver atrás");
+        backButton.setForeground(Color.WHITE);
+        backButton.setBackground(new Color(118, 153, 118));
         backButton.setBounds(71, 594, 150, 30);
         contentPane.add(backButton);
         
         JTextArea txtrHoomieNomad = new JTextArea();
-        txtrHoomieNomad.setForeground(new Color(0, 0, 0));
+        txtrHoomieNomad.setForeground(new Color(118, 153, 118));
         txtrHoomieNomad.setFont(new Font("MS Gothic", Font.PLAIN, 26));
-        txtrHoomieNomad.setText("HOOMIE NOMAD");
-        txtrHoomieNomad.setBounds(187, 28, 200, 30);
+        txtrHoomieNomad.setText("Únete a Hoomie Nomad");
+        txtrHoomieNomad.setBounds(142, 29, 288, 30);
         contentPane.add(txtrHoomieNomad);
 
         // ActionListener para el botón "Volver atrás"

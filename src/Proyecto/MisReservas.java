@@ -8,7 +8,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -144,6 +143,9 @@ public class MisReservas extends JFrame {
 
         // Botón de "Atrás"
         JButton backButton = new JButton("Inicio");
+        backButton.setForeground(Color.WHITE);
+        backButton.setBackground(new Color(118, 153, 118));
+        backButton.setBounds(100, 150, 150, 30);
         backButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 // Crear una instancia de la clase FeedPrincipal
@@ -213,28 +215,21 @@ public class MisReservas extends JFrame {
                 });
                 propertyPanel.add(cancelButton);
 
-
-
                 // Agregar el panel de la propiedad al panel principal
                 panel.add(propertyPanel);
                 
                 // Incrementar el número de reserva para la siguiente iteración
                 numeroReserva++;
             }
-
             // Cerrar la conexión
             resultSet.close();
             conexion.desconectar();
         } catch (SQLException ex) {
             ex.printStackTrace();
-            JOptionPane.showMessageDialog(null, "Error al obtener las reservas: " + ex.getMessage());
-            
+            JOptionPane.showMessageDialog(null, "Error al obtener las reservas: " + ex.getMessage());           
         }
-        
-        
-        
+
     }
-    
     
     // Método para obtener el ID de la reserva asociada al botón
     private int obtenerIdReservaDelBoton(JButton button) {
@@ -262,7 +257,6 @@ public class MisReservas extends JFrame {
         }
         return -1; // Retornar -1 si no se pudo encontrar el ID de la reserva
     }
-
     
     private void mostrarCaracteristicasPropiedad(int idPropiedad) {
         try {

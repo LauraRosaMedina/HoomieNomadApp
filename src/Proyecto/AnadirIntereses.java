@@ -31,10 +31,6 @@ public class AnadirIntereses extends JFrame {
     private JTextField textFieldInteres4;
     private JTextField textFieldInteres5;
 
-
-    /**
-     * Launch the application.
-     */
     public static void main(String[] args) {
         EventQueue.invokeLater(new Runnable() {
             public void run() {

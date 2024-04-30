@@ -13,12 +13,12 @@ import java.sql.SQLException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
-public class FeedPrincipal extends JFrame {
+	public class FeedPrincipal extends JFrame {
 
-    private JPanel contentPane;
-    private JPanel profilesPanel;
-    private JTextField searchBar;
-    private JButton searchButton;
+		private JPanel contentPane;
+		private JPanel profilesPanel;
+		private JTextField searchBar;
+		private JButton searchButton;
 
     public static void main(String[] args) {
         EventQueue.invokeLater(new Runnable() {
@@ -38,45 +38,34 @@ public class FeedPrincipal extends JFrame {
         setTitle("Feed Principal");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setBounds(100, 100, 515, 702);
-        setLocationRelativeTo(null);
+        setLocationRelativeTo(null);        
         
-        
-
         contentPane = new JPanel();
         contentPane.setBackground(Color.WHITE);
         contentPane.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         setContentPane(contentPane);
-        contentPane.setLayout(new BorderLayout(0, 0));
+        contentPane.setLayout(new BorderLayout(0, 0));      
         
-           
-
         profilesPanel = new JPanel(new GridBagLayout());
         contentPane.add(profilesPanel, BorderLayout.CENTER);
 
         // Panel para los botones
+        
         JPanel topPanel = new JPanel(new BorderLayout());
         contentPane.add(topPanel, BorderLayout.NORTH);
 
-        // Crear el botón de "Actualizar"
-        JButton actualizarButton = new JButton("Actualizar");
-        actualizarButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                actualizarPerfiles();
-            }
-        });
-        // Agregar el botón de "Actualizar" encima de la barra de búsqueda
-        topPanel.add(actualizarButton, BorderLayout.NORTH);
-
         // Agregar un espacio vertical entre el botón de actualizar y la barra de búsqueda
+        
         topPanel.add(Box.createVerticalStrut(10)); // Cambiar el valor 10 según sea necesario
 
         // Crear la barra de búsqueda con texto de sugerencia
+        
         searchBar = new JTextField("Filtrar propiedades por ubicación");
         searchBar.setPreferredSize(new Dimension(300, 30));
         searchBar.setMaximumSize(new Dimension(Short.MAX_VALUE, 30));
 
         // Agregar un FocusListener para limpiar el texto de sugerencia al hacer clic en la barra de búsqueda
+        
         searchBar.addFocusListener(new FocusListener() {
             @Override
             public void focusGained(FocusEvent e) {
@@ -96,6 +85,7 @@ public class FeedPrincipal extends JFrame {
         topPanel.add(searchBar, BorderLayout.CENTER);
 
         // Botón de búsqueda
+        
         searchButton = new JButton("Buscar");
         searchButton.setPreferredSize(new Dimension(80, 30)); // Establecer el tamaño preferido
         searchButton.addActionListener(new ActionListener() {
@@ -121,6 +111,7 @@ public class FeedPrincipal extends JFrame {
         menuBar.add(menuUsuario);
 
         // Añadir un MouseListener al menú de usuario para resaltar cuando se pasa el ratón sobre él
+        
         menuUsuario.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent e) {
@@ -135,15 +126,18 @@ public class FeedPrincipal extends JFrame {
         });
 
         // Aumentar el tamaño de la fuente y ponerla en negrita
+        
         Font font = menuUsuario.getFont();
         Font boldFont = new Font(font.getFontName(), Font.BOLD, font.getSize() + 4); // Crear una fuente en negrita con el tamaño aumentado
         menuUsuario.setFont(boldFont); // Aplicar la fuente en negrita con el tamaño aumentado al texto
 
         // Opción "Gestionar Perfil"
+        
         JMenuItem gestionarPerfilMenuItem = new JMenuItem("Gestionar Perfil");
         gestionarPerfilMenuItem.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 // Abrir la ventana de gestionar perfil
+            	
                 dispose();
                 GestionarPerfil gestionarPerfil = new GestionarPerfil();
                 gestionarPerfil.setVisible(true);
@@ -152,6 +146,7 @@ public class FeedPrincipal extends JFrame {
         menuUsuario.add(gestionarPerfilMenuItem);
         
      // Opción "Mis reservas"
+        
         JMenuItem misReservasMenuItem = new JMenuItem("Mis Reservas");
         misReservasMenuItem.addMouseListener(new MouseAdapter() {
             @Override
@@ -175,6 +170,7 @@ public class FeedPrincipal extends JFrame {
         menuUsuario.add(misReservasMenuItem);
 
         // Opción "Ajustes"
+        
         JMenuItem ajustesMenuItem = new JMenuItem("Ajustes");
         ajustesMenuItem.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -189,6 +185,7 @@ public class FeedPrincipal extends JFrame {
         menuUsuario.addSeparator();
 
         // Opción "Cerrar Sesión"
+        
         JMenuItem cerrarSesionMenuItem = new JMenuItem("Cerrar Sesión");
         cerrarSesionMenuItem.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -212,81 +209,78 @@ public class FeedPrincipal extends JFrame {
         });
         menuUsuario.add(cerrarSesionMenuItem);
         
-     /* Carga la imagen desde un recurso en el proyecto
-        ImageIcon icono = new ImageIcon(getClass().getResource("/Imagenes/Logo_muypequeno.png.png"));
-
-        // Crea un JLabel para mostrar la imagen
-        JLabel imagenLabel = new JLabel(icono);
-        imagenLabel.setHorizontalAlignment(SwingConstants.RIGHT);
-
-        // Crea un panel para superponer la imagen sobre el contenido existente
-        JPanel overlayPanel = new JPanel();
-        overlayPanel.setLayout(new OverlayLayout(overlayPanel));
-
-        // Agrega la imagen al panel de superposición
-        overlayPanel.add(imagenLabel);
+                // Crear el botón de "Actualizar"
         
-        overlayPanel.setPreferredSize(new Dimension(110, 130)); // Ajusta los valores según el tamaño deseado
-
-        // Agrega el panel de superposición al panel de contenido principal
-        contentPane.add(overlayPanel, BorderLayout.NORTH);*/
-
-        // Panel para mostrar los perfiles de los usuarios
-        JPanel profilesPanel = new JPanel(new GridBagLayout());
-        profilesPanel.setBackground(Color.WHITE);
-        contentPane.add(profilesPanel, BorderLayout.CENTER);
-
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.gridx = 0;
-        gbc.gridy = 0;
-        gbc.insets = new Insets(10, 10, 10, 10);
-        
-     
-
-        try {
-            ConexionMySQL conexion = ConexionMySQL.obtenerInstancia();
-            conexion.conectar();
-
-            // Obtener todos los usuarios excepto el usuario actual
-            String query = "SELECT DISTINCT Usuario.id_Usuario, Usuario.nombre FROM Usuario LEFT JOIN Propiedades ON Usuario.id_Usuario = Propiedades.id_Usuario WHERE Usuario.nombre != ?";
-            PreparedStatement statement = conexion.prepareStatement(query);
-            statement.setString(1, nombreUsuario); // Aquí establecemos el nombre de usuario para excluirlo de la consulta
-            ResultSet resultSet = statement.executeQuery();
-
-
-            while (resultSet.next()) {
-                // Obtener información del usuario
-                int idUsuario = resultSet.getInt("id_usuario");
-                String nombreUsuarioDB = resultSet.getString("nombre");
-
-                // Crear panel para mostrar el perfil del usuario
-                JPanel profilePanel = new JPanel(new BorderLayout());
-                profilePanel.setBorder(BorderFactory.createLineBorder(Color.GRAY));
-
-                // Mostrar el nombre del usuario
-                JLabel nameLabel = new JLabel(nombreUsuarioDB);
-                profilePanel.add(nameLabel, BorderLayout.NORTH);
-
-                // Botón para ver el perfil completo
-                JButton viewProfileButton = new JButton("Ver perfil");
-                viewProfileButton.addActionListener(new ActionListener() {
+                JButton actualizarButton = new JButton("Actualizar");
+                actualizarButton.setForeground(Color.WHITE);
+                actualizarButton.setBackground(new Color(118, 153, 118));
+                menuBar.add(actualizarButton);
+                actualizarButton.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        mostrarPerfil(idUsuario, nombreUsuarioDB);
+                        actualizarPerfiles();
                     }
-                });
-                profilePanel.add(viewProfileButton, BorderLayout.CENTER);
-                profilesPanel.add(profilePanel, gbc);
-                gbc.gridy++;
-            }
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-            JOptionPane.showMessageDialog(null, "Error al obtener los perfiles de los usuarios: " + ex.getMessage());
-        }
+                });        
+     
 
-        Color customButtonColor = new Color(0x769976); // Color personalizado para los botones
-        Color customTextColor = Color.WHITE; // Color personalizado para el texto de los botones
-        cambiarColorBotones(this.getContentPane(), customButtonColor, customTextColor);
+        // Panel para mostrar los perfiles de los usuarios
+                
+             // Panel para mostrar los perfiles de los usuarios
+                JPanel profilesPanel = new JPanel(new GridBagLayout());
+                profilesPanel.setBackground(Color.WHITE);
+                contentPane.add(profilesPanel, BorderLayout.CENTER);
+
+                GridBagConstraints gbc = new GridBagConstraints();
+                gbc.gridx = 0;
+                gbc.gridy = 0;
+                gbc.insets = new Insets(10, 10, 10, 10);
+
+                try {
+                    ConexionMySQL conexion = ConexionMySQL.obtenerInstancia();
+                    conexion.conectar();
+
+                    // Obtener todos los usuarios excepto el usuario actual
+                    String query = "SELECT DISTINCT Usuario.id_Usuario, Usuario.nombre FROM Usuario WHERE Usuario.id_Usuario !=?" ; 
+                    PreparedStatement statement = conexion.prepareStatement(query);
+                    statement.setInt(1, Usuario.getIdUsuario()); // Aquí establecemos el nombre de usuario para excluirlo de la consulta
+                    ResultSet resultSet = statement.executeQuery();
+
+                    while (resultSet.next()) {
+                        // Obtener información del usuario
+                        int idUsuario = resultSet.getInt("id_Usuario");
+                        String nombreUsuarioDB = resultSet.getString("nombre");
+
+                        // Crear panel para mostrar el perfil del usuario
+                        JPanel profilePanel = new JPanel(new BorderLayout());
+                        profilePanel.setBorder(BorderFactory.createLineBorder(Color.GRAY));
+
+                        // Mostrar el nombre del usuario
+                        JLabel nameLabel = new JLabel(nombreUsuarioDB);
+                        profilePanel.add(nameLabel, BorderLayout.NORTH);
+
+                        // Botón para ver el perfil completo
+                        JButton viewProfileButton = new JButton("Ver perfil");
+                        viewProfileButton.addActionListener(new ActionListener() {
+                            @Override
+                            public void actionPerformed(ActionEvent e) {
+                                mostrarPerfil(idUsuario, nombreUsuarioDB);
+                            }
+                        });
+                        profilePanel.add(viewProfileButton, BorderLayout.CENTER);
+                        profilesPanel.add(profilePanel, gbc);
+                        gbc.gridy++;
+                    }
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                    JOptionPane.showMessageDialog(null, "Error al obtener los perfiles de los usuarios: " + ex.getMessage());
+                }
+
+                Color customButtonColor = new Color(0x769976); // Color personalizado para los botones
+                Color customTextColor = Color.WHITE; // Color personalizado para el texto de los botones
+                cambiarColorBotones(this.getContentPane(), customButtonColor, customTextColor);
+
+
+        
     }
 
     private void mostrarPerfil(int idUsuario, String nombreUsuario) {
@@ -295,8 +289,10 @@ public class FeedPrincipal extends JFrame {
             conexion.conectar();
 
             // Obtener las propiedades del usuario de la base de datos
-            String propertiesQuery = "SELECT * FROM Propiedades WHERE id_usuario = ' " + Usuario.getIdUsuario() + "'";
-            ResultSet propertiesResultSet = conexion.ejecutarSelect(propertiesQuery);
+            String propertiesQuery = "SELECT * FROM Propiedades WHERE id_usuario = ?";
+            PreparedStatement propertiesStatement = conexion.prepareStatement(propertiesQuery);
+            propertiesStatement.setInt(1, idUsuario);
+            ResultSet propertiesResultSet = propertiesStatement.executeQuery();
 
             // Verificar si el usuario tiene propiedades registradas
             if (propertiesResultSet.next()) {
@@ -317,7 +313,7 @@ public class FeedPrincipal extends JFrame {
                 int contadorPropiedad = 1; // Inicializamos el contador en 1
 
                 do {
-                    int propiedadId = propertiesResultSet.getInt("id_propiedad"); // Mover esta línea dentro del bucle
+                    int propiedadId = propertiesResultSet.getInt("id_propiedad");
 
                     // Mostrar las propiedades del usuario
                     JPanel propertySubPanel = new JPanel(new BorderLayout());
@@ -349,113 +345,91 @@ public class FeedPrincipal extends JFrame {
                     });
                     propertySubPanel.add(verCaracteristicasButton, BorderLayout.CENTER);
 
-                    // Botón para reservar la propiedad
-                    JButton reservarButton = new JButton("Reservar");
-                    reservarButton.addActionListener(new ActionListener() {
-                        @Override
-                        public void actionPerformed(ActionEvent e) {
-                            try {
-                            	
-                            	// Realizar la reserva en la base de datos
-                                reservarPropiedad(Usuario.getIdUsuario(), propiedadId);
-                                
-                                // Cambiar el estado de disponibilidad de la propiedad a false en la base de datos
-                                cambiarEstadoDisponibilidadPropiedad(propiedadId, false);                            
-                                
-                                // Mostrar mensaje de reserva exitosa
-                                JOptionPane.showMessageDialog(null, "Propiedad reservada con éxito.");
-                                // Cerrar la ventana de características de la propiedad
-                                profileFrame.dispose();
-                            } catch (SQLException ex) {
-                                ex.printStackTrace();
-                                JOptionPane.showMessageDialog(null, "Error al reservar la propiedad: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-                            }
-                        }
-                    });
-                    propertySubPanel.add(reservarButton, BorderLayout.WEST);
-
+                    // Agregar el panel de propiedades al panel principal
                     propertyPanel.add(propertySubPanel, gbc1);
                     gbc1.gridy++;
-
-                    contadorPropiedad++; // Incrementamos el contador
+                    contadorPropiedad++;
                 } while (propertiesResultSet.next());
 
-                // Agregar el panel de propiedades al contenido del perfil
-                profileFrame.setContentPane(propertyPanel);
+                // Agregar el panel de propiedades al marco de perfil
+                profileFrame.add(new JScrollPane(propertyPanel));
                 profileFrame.setVisible(true);
             } else {
-                // El usuario no tiene propiedades registradas, mostrar un mensaje
-                JOptionPane.showMessageDialog(null, "El usuario no tiene propiedades registradas.", "Perfil de " + nombreUsuario, JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(null, "El usuario no tiene propiedades registradas", "Perfil de " + nombreUsuario, JOptionPane.INFORMATION_MESSAGE);
             }
         } catch (SQLException ex) {
             ex.printStackTrace();
             JOptionPane.showMessageDialog(null, "Error al obtener las propiedades del usuario: " + ex.getMessage());
         }
     }
+
     
-    private void reservarPropiedad(int idUsuario, int idPropiedad) throws SQLException {
-        ConexionMySQL conexion = ConexionMySQL.obtenerInstancia();
-        conexion.conectar();
+    		private void reservarPropiedad(int idUsuario, int idPropiedad) throws SQLException {
+    			ConexionMySQL conexion = ConexionMySQL.obtenerInstancia();
+    			conexion.conectar();
 
-        // Consulta para insertar la reserva en la tabla Reservas
-        String query = "INSERT INTO Reservas (id_usuario, id_propiedad) VALUES ("+ idUsuario + ", " + idPropiedad + ")";
-        conexion.ejecutarInsertDeleteUpdate(query);
+    			// Consulta para insertar la reserva en la tabla Reservas
+    			String query = "INSERT INTO Reservas (id_usuario, id_propiedad) VALUES ("+ idUsuario + ", " + idPropiedad + ")";
+    			conexion.ejecutarInsertDeleteUpdate(query);
 
-        // Cerrar la conexión
-        conexion.desconectar();
-    }
+    			// Cerrar la conexión
+    			conexion.desconectar();
+    		}
     
-    public static void cambiarEstadoDisponibilidadPropiedad(int idPropiedad, boolean disponible) throws SQLException {
-        ConexionMySQL conexion = ConexionMySQL.obtenerInstancia();
-        conexion.conectar();
+    		
+    
+    		public static void cambiarEstadoDisponibilidadPropiedad(int idPropiedad, boolean disponible) throws SQLException {
+    			ConexionMySQL conexion = ConexionMySQL.obtenerInstancia();
+    			conexion.conectar();
 
-        // Consulta para actualizar el estado de disponibilidad de la propiedad
-        String query = "UPDATE Propiedades SET disponible = " + disponible + " WHERE id_propiedad = " + idPropiedad;
-        conexion.ejecutarInsertDeleteUpdate(query);
+    			// Consulta para actualizar el estado de disponibilidad de la propiedad
+    			String query = "UPDATE Propiedades SET disponible = " + disponible + " WHERE id_propiedad = " + idPropiedad;
+    			conexion.ejecutarInsertDeleteUpdate(query);
 
-        // Cerrar la conexión
-        conexion.desconectar();
-    }
+    			// Cerrar la conexión
+    			conexion.desconectar();
+    		}
 
-    private void actualizarPerfiles() {
-        profilesPanel.removeAll(); // Elimina todos los perfiles mostrados actualmente
-        profilesPanel.revalidate(); // Vuelve a validar el panel para actualizar la interfaz
-        profilesPanel.repaint(); // Vuelve a pintar el panel para actualizar la interfaz
+    		private void actualizarPerfiles() {
+    			profilesPanel.removeAll(); // Elimina todos los perfiles mostrados actualmente
+    			profilesPanel.revalidate(); // Vuelve a validar el panel para actualizar la interfaz
+    			profilesPanel.repaint(); // Vuelve a pintar el panel para actualizar la interfaz
 
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.gridx = 0;
-        gbc.gridy = 0;
-        gbc.insets = new Insets(10, 10, 10, 10);
+    			GridBagConstraints gbc = new GridBagConstraints();
+    			gbc.gridx = 0;
+    			gbc.gridy = 0;
+    			gbc.insets = new Insets(10, 10, 10, 10);
 
-        try {
-            ConexionMySQL conexion = ConexionMySQL.obtenerInstancia();
-            conexion.conectar();
+    				try {
+    					ConexionMySQL conexion = ConexionMySQL.obtenerInstancia();
+    					conexion.conectar();
 
-            // Obtener todos los usuarios excepto el usuario actual
-            String query = "SELECT DISTINCT Usuario.id_Usuario, Usuario.nombre FROM Usuario LEFT JOIN Propiedades ON Usuario.id_Usuario = Propiedades.id_Usuario WHERE Usuario.nombre != ' " + Usuario.getNombre() + "'";
-            ResultSet resultSet = conexion.ejecutarSelect(query);
+    					// Obtener todos los usuarios excepto el usuario actual
+    					String query = "SELECT DISTINCT Usuario.id_Usuario, Usuario.nombre FROM Usuario LEFT JOIN Propiedades ON Usuario.id_Usuario = Propiedades.id_Usuario WHERE Usuario.nombre != ' " + Usuario.getNombre() + "'";
+    					ResultSet resultSet = conexion.ejecutarSelect(query);
 
-            while (resultSet.next()) {
-                // Obtener información del usuario
-                int idUsuario = resultSet.getInt("id_Usuario");
-                String nombreUsuarioDB = resultSet.getString("nombre");
+    					while (resultSet.next()) {
+    						// Obtener información del usuario
+    						int idUsuario = resultSet.getInt("id_Usuario");
+    						String nombreUsuarioDB = resultSet.getString("nombre");
 
-                // Crear panel para mostrar el perfil del usuario
-                JPanel profilePanel = new JPanel(new BorderLayout());
-                profilePanel.setBorder(BorderFactory.createLineBorder(Color.GRAY));
+    						// Crear panel para mostrar el perfil del usuario
+    						JPanel profilePanel = new JPanel(new BorderLayout());
+    						profilePanel.setBorder(BorderFactory.createLineBorder(Color.GRAY));
 
-                // Mostrar el nombre del usuario
-                JLabel nameLabel = new JLabel(nombreUsuarioDB);
-                profilePanel.add(nameLabel, BorderLayout.NORTH);
+    						// Mostrar el nombre del usuario
+    						JLabel nameLabel = new JLabel(nombreUsuarioDB);
+    						profilePanel.add(nameLabel, BorderLayout.NORTH);
 
-                // Botón para ver el perfil completo
-                JButton viewProfileButton = new JButton("Ver perfil");
-                viewProfileButton.addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        mostrarPerfil(idUsuario, nombreUsuarioDB);
+    						// Botón para ver el perfil completo
+    						JButton viewProfileButton = new JButton("Ver perfil");
+    						viewProfileButton.addActionListener(new ActionListener() {
+    							@Override
+                  public void actionPerformed(ActionEvent e) {
+                       mostrarPerfil(idUsuario, nombreUsuarioDB);
                     }
-                });
+               });
+    						
                 profilePanel.add(viewProfileButton, BorderLayout.CENTER);
                 profilesPanel.add(profilePanel, gbc);
                 gbc.gridy++;
@@ -466,10 +440,10 @@ public class FeedPrincipal extends JFrame {
         }
     }
 
-    private void buscarYMostrarPorUbicacion(String ubicacion) {
-        try {
-            ConexionMySQL conexion = ConexionMySQL.obtenerInstancia();
-            conexion.conectar();
+    		private void buscarYMostrarPorUbicacion(String ubicacion) {
+    			try {
+    				ConexionMySQL conexion = ConexionMySQL.obtenerInstancia();
+    				conexion.conectar();
 
             // Consulta SQL para seleccionar las propiedades con la ubicación especificada
             String query = "SELECT * FROM Propiedades WHERE LOWER(ubicacion) = LOWER( '" + ubicacion + "' ) AND id_usuario NOT IN (SELECT id_usuario FROM Usuario WHERE nombre = ' " + Usuario.getNombre() + "')";

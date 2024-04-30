@@ -47,6 +47,7 @@ public class AnadirPropiedades extends JFrame {
 
     // Constructor
     public AnadirPropiedades() {
+    	setResizable(false);
     	contentPane = new JPanel();
         contentPane.setBackground(new Color(255, 255, 255));
         contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -348,6 +349,8 @@ public class AnadirPropiedades extends JFrame {
         gbc.gridx = 0;
         gbc.gridy = 9;
         JButton addButton = new JButton("Añadir");
+        addButton.setBackground(new Color(118, 153, 118));
+        addButton.setForeground(Color.WHITE);
         addButton.setFont(new Font("Tahoma", Font.PLAIN, 14));
         addButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
