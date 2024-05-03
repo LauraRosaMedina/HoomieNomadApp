@@ -202,11 +202,9 @@ import java.awt.Toolkit;
 
                         if (filasAfectadas > 0) {
                             JOptionPane.showMessageDialog(null, "¡Registro exitoso!");                            
-                            // Cerrar la ventana de registro después del registro exitoso
+                            // Cerrar la ventana de registro después del registro exitoso                            
+                            dispose();                            
                             
-                            dispose();
-                            
-                            // Abrir la ventana de "Completar Perfil"
                             Login perfilFrame = new Login();
                             perfilFrame.setVisible(true);
                             

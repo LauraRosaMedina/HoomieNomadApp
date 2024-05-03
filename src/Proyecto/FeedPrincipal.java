@@ -14,8 +14,11 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
 	public class FeedPrincipal extends JFrame {
-
-		private JPanel contentPane;
+		
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
 		private JPanel profilesPanel;
 		private JTextField searchBar;
 		private JButton searchButton;
@@ -34,20 +37,32 @@ import java.sql.ResultSet;
     }
 
     public FeedPrincipal() {
+    	setBackground(new Color(255, 255, 255));
     	setIconImage(Toolkit.getDefaultToolkit().getImage(FeedPrincipal.class.getResource("/Imagenes/Logo_marco.png.png")));
         setTitle("Feed Principal");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setBounds(100, 100, 515, 702);
-        setLocationRelativeTo(null);        
+        setLocationRelativeTo(null);     
+                      
         
-        contentPane = new JPanel();
-        contentPane.setBackground(Color.WHITE);
+     // Panel principal
+        JPanel contentPane = new JPanel(new BorderLayout());
+        contentPane.setBackground(new Color(255, 255, 255));
         contentPane.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+
+        // Panel para los perfiles de usuario
+        JPanel profilesPanel = new JPanel(new GridBagLayout());
+        contentPane.add(profilesPanel, BorderLayout.WEST);
+
+        // Panel para la imagen
+        JPanel centerPanel = new JPanel(new BorderLayout());
+        centerPanel.setBackground(new Color(255, 255, 255));
+        JLabel centerImageLabel = new JLabel(new ImageIcon(GestionarPerfil.class.getResource("/Imagenes/Logo_pequeno_suave.png")));
+        centerImageLabel.setBackground(new Color(255, 255, 255));
+        centerPanel.add(centerImageLabel, BorderLayout.CENTER);
+        contentPane.add(centerPanel, BorderLayout.CENTER);
+
         setContentPane(contentPane);
-        contentPane.setLayout(new BorderLayout(0, 0));      
-        
-        profilesPanel = new JPanel(new GridBagLayout());
-        contentPane.add(profilesPanel, BorderLayout.CENTER);
 
         // Panel para los botones
         
@@ -191,7 +206,6 @@ import java.sql.ResultSet;
             public void actionPerformed(ActionEvent e) {
                 try {
                     ConexionMySQL conexion = ConexionMySQL.obtenerInstancia();
-                    // Desconectar de la base de datos
                     conexion.desconectar();
 
                     // Cerrar la ventana actual
@@ -225,15 +239,15 @@ import java.sql.ResultSet;
 
         // Panel para mostrar los perfiles de los usuarios
                 
-             // Panel para mostrar los perfiles de los usuarios
-                JPanel profilesPanel = new JPanel(new GridBagLayout());
-                profilesPanel.setBackground(Color.WHITE);
-                contentPane.add(profilesPanel, BorderLayout.CENTER);
+                // Panel para mostrar los perfiles de los usuarios
+                JPanel profilesPanel1 = new JPanel(new GridBagLayout());
+                profilesPanel1.setBackground(Color.WHITE);
+                contentPane.add(profilesPanel1, BorderLayout.WEST);
 
                 GridBagConstraints gbc = new GridBagConstraints();
                 gbc.gridx = 0;
                 gbc.gridy = 0;
-                gbc.insets = new Insets(10, 10, 10, 10);
+                gbc.insets = new Insets(20, 20, 20, 20);
 
                 try {
                     ConexionMySQL conexion = ConexionMySQL.obtenerInstancia();
@@ -267,7 +281,7 @@ import java.sql.ResultSet;
                             }
                         });
                         profilePanel.add(viewProfileButton, BorderLayout.CENTER);
-                        profilesPanel.add(profilePanel, gbc);
+                        profilesPanel1.add(profilePanel, gbc);
                         gbc.gridy++;
                     }
                 } catch (SQLException ex) {
@@ -278,8 +292,6 @@ import java.sql.ResultSet;
                 Color customButtonColor = new Color(0x769976); // Color personalizado para los botones
                 Color customTextColor = Color.WHITE; // Color personalizado para el texto de los botones
                 cambiarColorBotones(this.getContentPane(), customButtonColor, customTextColor);
-
-
         
     }
 
@@ -344,7 +356,25 @@ import java.sql.ResultSet;
                         JOptionPane.showMessageDialog(null, mensaje.toString(), "Características de la propiedad", JOptionPane.INFORMATION_MESSAGE);
                     });
                     propertySubPanel.add(verCaracteristicasButton, BorderLayout.CENTER);
-
+                    
+                    
+                 // Botón "Reservar"
+                    JButton reservarButton = new JButton("Reservar");
+                    reservarButton.setBackground(new Color(0x769976)); // Color de fondo
+                    reservarButton.setForeground(Color.WHITE); // Color del texto
+                    reservarButton.addActionListener(e -> {
+                    	try {
+                            // Realizar la reserva en la base de datos con el ID del usuario logueado
+                            reservarPropiedad(Usuario.getIdUsuario(), propiedadId);
+                            JOptionPane.showMessageDialog(null, "Propiedad reservada exitosamente", "Reserva exitosa", JOptionPane.INFORMATION_MESSAGE);
+                        } catch (SQLException ex) {
+                            ex.printStackTrace();
+                            JOptionPane.showMessageDialog(null, "Error al reservar la propiedad: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                        }
+                    });
+                    propertySubPanel.add(reservarButton, BorderLayout.SOUTH);
+                    
+                    
                     // Agregar el panel de propiedades al panel principal
                     propertyPanel.add(propertySubPanel, gbc1);
                     gbc1.gridy++;
@@ -352,7 +382,7 @@ import java.sql.ResultSet;
                 } while (propertiesResultSet.next());
 
                 // Agregar el panel de propiedades al marco de perfil
-                profileFrame.add(new JScrollPane(propertyPanel));
+                profileFrame.getContentPane().add(new JScrollPane(propertyPanel));
                 profileFrame.setVisible(true);
             } else {
                 JOptionPane.showMessageDialog(null, "El usuario no tiene propiedades registradas", "Perfil de " + nombreUsuario, JOptionPane.INFORMATION_MESSAGE);
@@ -495,7 +525,8 @@ import java.sql.ResultSet;
                 boolean disponible = resultSet.getBoolean("disponible");
 
                 int propiedadId = resultSet.getInt("id_propiedad"); // Obtener el ID de la propiedad desde el ResultSet
-             // Agregar el botón para reservar la propiedad
+             
+                // Agregar el botón para reservar la propiedad
                 JButton reservarButton = new JButton("Reservar");
                 reservarButton.addActionListener(new ActionListener() {
                     @Override
@@ -509,6 +540,8 @@ import java.sql.ResultSet;
                             
                             // Mostrar mensaje de reserva exitosa
                             JOptionPane.showMessageDialog(null, "Propiedad reservada con éxito.");
+                            
+                            
                             // Cerrar la ventana de búsqueda de propiedades
                             searchFrame.dispose(); // Asumiendo que searchFrame es la referencia al JFrame donde se muestran las propiedades
                         } catch (SQLException ex) {

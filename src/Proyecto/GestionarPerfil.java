@@ -1,11 +1,13 @@
 package Proyecto;
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
 import ConexionBaseDatos.ConexionMySQL;
 import java.awt.*;
 import java.awt.event.*;
-import java.sql.PreparedStatement;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -194,7 +196,27 @@ public class GestionarPerfil extends JFrame {
         });
         buttonsPanel.add(addInterestsButton);
 
-        propertyPanel = new JPanel();
+        /*propertyPanel = new JPanel();*/
+        propertyPanel = new JPanel() {
+            /**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
+
+			// Sobreescribe el método paintComponent para dibujar la imagen de fondo
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                try {
+                    BufferedImage image = ImageIO.read(getClass().getResource("/Imagenes/Playa_difuminada.png")); // Ruta de la imagen
+                    g.drawImage(image, 0, 0, getWidth(), getHeight(), this);
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+            }
+        };
+        
+        
         contentPane.add(propertyPanel, BorderLayout.CENTER);
         propertyPanel.setLayout(new GridBagLayout());
 
@@ -263,7 +285,6 @@ public class GestionarPerfil extends JFrame {
                             try {
                                 ConexionMySQL conexion = ConexionMySQL.obtenerInstancia();
                                 conexion.conectar();
-
 
                                 // Obtener el ID de la propiedad que queremos eliminar, asociada a la propiedad que muestra
                                 // Ejecutar la consulta para obtener la ubicación y el tipo de casa de la propiedad a eliminar

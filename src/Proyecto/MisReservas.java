@@ -13,7 +13,11 @@ import java.sql.SQLException;
 
 public class MisReservas extends JFrame {
 
-    private JPanel contentPane;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	private JPanel contentPane;
 
     public static void main(String[] args) {
         EventQueue.invokeLater(new Runnable() {
@@ -161,12 +165,16 @@ public class MisReservas extends JFrame {
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         buttonPanel.add(backButton);
         add(buttonPanel, BorderLayout.NORTH);
+        
+        panel.removeAll();
+        panel.revalidate();
+        panel.repaint();
 
         // Obtener las reservas del usuario actual desde la base de datos
         try {
             ConexionMySQL conexion = ConexionMySQL.obtenerInstancia();
             conexion.conectar();
-            String query = "SELECT Reservas.* FROM Reservas WHERE Reservas.id_usuario = " + Usuario.getIdUsuario() + " "; 
+            String query = "SELECT * FROM Reservas WHERE Reservas.id_usuario = " + Usuario.getIdUsuario() + " "; 
             ResultSet resultSet = conexion.ejecutarSelect(query);
          
          // Variable para llevar la cuenta del número de reserva
@@ -175,13 +183,15 @@ public class MisReservas extends JFrame {
             while (resultSet.next()) {
                 // Obtener los detalles de la propiedad reservada
                 int idReserva = resultSet.getInt("id_reserva");
-                // Obtener más detalles según sea necesario
+               
 
                 // Crear un panel para mostrar la información de la propiedad reservada
                 JPanel propertyPanel = new JPanel(new FlowLayout(FlowLayout.LEFT)); 
                 propertyPanel.setBorder(BorderFactory.createLineBorder(Color.GRAY));
-               //código nuevo sólo una línea
+                
+               
                 propertyPanel.setName("propertyPanel_" + idReserva);
+                
                 // Mostrar la información de la propiedad
                 JLabel lblNumeroReserva = new JLabel("Reserva " + numeroReserva + ":");
                 propertyPanel.add(lblNumeroReserva);
@@ -340,8 +350,7 @@ public class MisReservas extends JFrame {
             } else {
                 JOptionPane.showMessageDialog(null, "No se encontró la reserva correspondiente con ID: " + idReserva, "Error", JOptionPane.ERROR_MESSAGE);
             }
-
-            // Cerrar recursos
+            
             resultSetIdPropiedad.close();
             conexion.desconectar();
         } catch (SQLException ex) {

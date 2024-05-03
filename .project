@@ -50,5 +50,15 @@
 			<type>1</type>
 			<locationURI>PARENT-2-PROJECT_LOC/OneDrive/Escritorio/Logo_peque%C3%B1o.png</locationURI>
 		</link>
+		<link>
+			<name>src/Imagenes/Playa_difuminada.png</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/OneDrive/Escritorio/Playa_difuminada.png</locationURI>
+		</link>
+		<link>
+			<name>src/Imagenes/coche_difuminado2.png</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/OneDrive/Escritorio/coche_difuminado2.png</locationURI>
+		</link>
 	</linkedResources>
 </projectDescription>

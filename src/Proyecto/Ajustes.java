@@ -4,8 +4,8 @@ import java.awt.EventQueue;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Container;
 import java.awt.Font;
+import java.awt.Graphics;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -14,9 +14,12 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import javax.imageio.ImageIO;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -206,51 +209,68 @@ public class Ajustes extends JFrame {
         JPanel settingsPanel = new JPanel(new BorderLayout());
         contentPane.add(settingsPanel, BorderLayout.CENTER);
         
+     // Panel para los campos de contraseña y el botón de cerrar cuenta
+        JPanel settingsPanel2 = new JPanel(new GridBagLayout()) {
+            /**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
 
-        JPanel settingsPanel1 = new JPanel(new GridBagLayout());
-        settingsPanel.add(settingsPanel1, BorderLayout.NORTH);
+			// Sobreescribe el método paintComponent para dibujar la imagen de fondo
+        	 @Override
+        	    protected void paintComponent(Graphics g) {
+        	        super.paintComponent(g);
+        	        try {
+        	            // Carga la imagen desde el archivo de recursos del proyecto
+        	            BufferedImage image = ImageIO.read(getClass().getResource("/Imagenes/coche_difuminado2.png"));
+        	            // Dibuja la imagen estirándola para que ocupe todo el espacio del panel
+        	            g.drawImage(image, 0, 0, getWidth(), getHeight(), this);
+        	        } catch (IOException ex) {
+        	            ex.printStackTrace();
+        	        }
+        	    }
+        	};
+        	settingsPanel.add(settingsPanel2, BorderLayout.CENTER);       
+
+        GridBagConstraints gbc2 = new GridBagConstraints();
+        gbc2.gridx = 0;
+        gbc2.gridy = 0;
+        gbc2.insets = new Insets(20, 5, 5, 5); // Espaciado entre componentes
+        gbc2.anchor = GridBagConstraints.WEST; // Alineación izquierda
         
-
-        GridBagConstraints gbc1 = new GridBagConstraints();
-        gbc1.gridx = 0;
-        gbc1.gridy = 0;
-        gbc1.insets = new Insets(20, 5, 5, 5); // Espaciado entre componentes
-        gbc1.anchor = GridBagConstraints.WEST; // Alineación izquierda
         
-
         // Título "Actualizar Contraseña"
-     // Título "Actualizar Contraseña"
         JLabel changePasswordTitleLabel = new JLabel("Actualizar Contraseña");
         changePasswordTitleLabel.setFont(new Font("Arial", Font.BOLD, 18)); // Fuente, negrita, tamaño
         changePasswordTitleLabel.setForeground(new Color(0x769976)); // Cambio de color del texto
-        settingsPanel1.add(changePasswordTitleLabel, gbc1);
+        settingsPanel2.add(changePasswordTitleLabel, gbc2);
 
-        gbc1.gridx = 0;
-        gbc1.gridy++;
+        gbc2.gridx = 0;
+        gbc2.gridy++;
 
         // Campo de texto para contraseña actual
         JLabel currentPasswordLabel = new JLabel("Contraseña actual:");
         currentPasswordLabel.setForeground(new Color(0x769976)); // Cambio de color del texto
-        settingsPanel1.add(currentPasswordLabel, gbc1);
+        settingsPanel2.add(currentPasswordLabel, gbc2);
 
-        gbc1.gridx++;
+        gbc2.gridx++;
         JPasswordField currentPasswordField = new JPasswordField(20);
-        settingsPanel1.add(currentPasswordField, gbc1);
+        settingsPanel2.add(currentPasswordField, gbc2);
 
-        gbc1.gridx = 0;
-        gbc1.gridy++;
+        gbc2.gridx = 0;
+        gbc2.gridy++;
 
         // Campo de texto para nueva contraseña
         JLabel newPasswordLabel = new JLabel("Nueva contraseña:");
         newPasswordLabel.setForeground(new Color(0x769976)); // Cambio de color del texto
-        settingsPanel1.add(newPasswordLabel, gbc1);
+        settingsPanel2.add(newPasswordLabel, gbc2);
 
-        gbc1.gridx++;
+        gbc2.gridx++;
         JPasswordField newPasswordField = new JPasswordField(20);
-        settingsPanel1.add(newPasswordField, gbc1);
+        settingsPanel2.add(newPasswordField, gbc2);
 
-        gbc1.gridx = 0;
-        gbc1.gridy++;
+        gbc2.gridx = 0;
+        gbc2.gridy++;
 
         // Botón para cambiar contraseña
         JButton changePasswordButton = new JButton("Cambiar Contraseña");
@@ -286,26 +306,27 @@ public class Ajustes extends JFrame {
         });
         changePasswordButton.setForeground(Color.WHITE); // Cambio de color del texto
         changePasswordButton.setBackground(new Color(0x769976)); // Cambio de color del fondo del botón
-        settingsPanel1.add(changePasswordButton, gbc1);
+        settingsPanel2.add(changePasswordButton, gbc2);
 
         // Panel para el botón de "Cerrar Cuenta"
         JPanel deleteAccountPanel = new JPanel(new GridBagLayout());
+        deleteAccountPanel.setBackground(Color.WHITE); // Establecer el color de fondo del panel como blanco
         settingsPanel.add(deleteAccountPanel, BorderLayout.SOUTH);
 
-        GridBagConstraints gbc2 = new GridBagConstraints();
-        gbc2.gridx = 0;
-        gbc2.gridy = 0;
-        gbc2.insets = new Insets(5, 5, 30, 5); // Espaciado entre componentes
-        gbc2.anchor = GridBagConstraints.WEST; // Alineación izquierda
+        GridBagConstraints gbc21 = new GridBagConstraints();
+        gbc21.gridx = 0;
+        gbc21.gridy = 0;
+        gbc21.insets = new Insets(5, 5, 30, 5); // Espaciado entre componentes
+        gbc21.anchor = GridBagConstraints.WEST; // Alineación izquierda
 
         // Título "Cerrar Cuenta"
         JLabel deleteAccountTitleLabel = new JLabel("Cerrar Cuenta");
         deleteAccountTitleLabel.setFont(new Font("Arial", Font.BOLD, 18)); // Fuente, negrita, tamaño
         deleteAccountTitleLabel.setForeground(new Color(0x769976)); // Cambio de color del texto
-        deleteAccountPanel.add(deleteAccountTitleLabel, gbc2);
+        deleteAccountPanel.add(deleteAccountTitleLabel, gbc21);
         
-        gbc2.gridx = 0;
-        gbc2.gridy++;
+        gbc21.gridx = 0;
+        gbc21.gridy++;
         // Botón para borrar cuenta
         JButton deleteAccountButton = new JButton("Cerrar Cuenta");
         deleteAccountButton.addActionListener(e -> {
@@ -331,7 +352,7 @@ public class Ajustes extends JFrame {
         });
         deleteAccountButton.setForeground(Color.WHITE); // Cambio de color del texto
         deleteAccountButton.setBackground(new Color(0x769976)); // Cambio de color del fondo del botón
-        deleteAccountPanel.add(deleteAccountButton, gbc2);
+        deleteAccountPanel.add(deleteAccountButton, gbc21);
 
     }
     

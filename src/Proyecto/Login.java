@@ -11,6 +11,7 @@ import java.sql.SQLException;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -58,8 +59,6 @@ import java.awt.Toolkit;
 				setContentPane(contentPane);
 				contentPane.setLayout(null);
 
-
-
 				// Etiqueta para el nombre de usuario
 				JLabel usernameLabel = new JLabel("Nombre de usuario:");
 				usernameLabel.setForeground(new Color(118, 153, 118));
@@ -81,24 +80,50 @@ import java.awt.Toolkit;
 				JPasswordField passwordField = new JPasswordField();
 				passwordField.setBounds(200, 100, 250, 30);
 				contentPane.add(passwordField);
+				
+				// Crear un JCheckBox para permitir al usuario alternar entre mostrar y ocultar la contraseña
+				JCheckBox showPasswordCheckBox = new JCheckBox("Mostrar contraseña");
+				showPasswordCheckBox.setBounds(200, 144, 150, 20);
+				contentPane.add(showPasswordCheckBox);
+
+				// ActionListener para el JCheckBox
+				showPasswordCheckBox.addActionListener(new ActionListener() {
+				    public void actionPerformed(ActionEvent e) {
+				        // Cambiar dinámicamente el tipo de campo de contraseña
+				        if (showPasswordCheckBox.isSelected()) {
+				            // Mostrar la contraseña
+				            contentPane.remove(passwordField); // Eliminar el campo de contraseña actual
+				            @SuppressWarnings("deprecation")
+							JTextField visiblePasswordField = new JTextField(passwordField.getText(), 20);
+				            visiblePasswordField.setBounds(passwordField.getBounds());
+				            contentPane.add(visiblePasswordField); // Agregar el campo de texto visible
+				            contentPane.repaint(); // Repintar el contenido del panel
+				        } else {
+				            // Ocultar la contraseña
+				            contentPane.remove(3); // Eliminar el campo de texto visible
+				            contentPane.add(passwordField); // Agregar de nuevo el campo de contraseña
+				            contentPane.repaint(); // Repintar el contenido del panel
+				        }
+				    }
+				});
 
 				// Botón para iniciar sesión
 				JButton loginButton = new JButton("Iniciar sesión");
 				loginButton.setForeground(Color.WHITE);
 				loginButton.setBackground(new Color(118, 153, 118));
-				loginButton.setBounds(100, 150, 150, 30);
+				loginButton.setBounds(103, 205, 150, 30);
 				contentPane.add(loginButton);
 
 				// Botón para registrarse
 				JButton signUpButton = new JButton("Registrarse");
 				signUpButton.setBackground(new Color(118, 153, 118));
 				signUpButton.setForeground(Color.WHITE);
-				signUpButton.setBounds(300, 150, 150, 30);
+				signUpButton.setBounds(300, 205, 150, 30);
 				contentPane.add(signUpButton);
        
 				JLabel forgotPasswordLabel = new JLabel("¿Olvidaste tu contraseña?");
 				forgotPasswordLabel.setForeground(new Color(118, 153, 118));
-				forgotPasswordLabel.setBounds(200, 206, 200, 30);
+				forgotPasswordLabel.setBounds(200, 598, 200, 30);
 				contentPane.add(forgotPasswordLabel);
        
 				//Vamos a poner el logo de fondo//
@@ -113,11 +138,8 @@ import java.awt.Toolkit;
 
 				// ActionListener para el enlace "He olvidado mi contraseña"
 				forgotPasswordLabel.addMouseListener(new java.awt.event.MouseAdapter() {
-					public void mouseClicked(java.awt.event.MouseEvent evt) {
-						
-                // Aquí abrirías un cuadro de diálogo para introducir el correo electrónico
-                // y luego un botón de aceptar.
-            	
+					public void mouseClicked(java.awt.event.MouseEvent evt) {					
+                          	
                 String username = JOptionPane.showInputDialog(null, "Introduce tu nombre de usuario:");
                 if (username != null) {
                 	try {
@@ -145,10 +167,10 @@ import java.awt.Toolkit;
 				signUpButton.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						
-						// Aquí abrimos la ventana de registro
-						Registrarse registro = new Registrarse();
-						registro.setVisible(true);
-						dispose();
+				// Aquí abrimos la ventana de registro
+					Registrarse registro = new Registrarse();
+					registro.setVisible(true);
+					dispose();
 				}
 		});
        
