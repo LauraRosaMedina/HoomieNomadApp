@@ -11,7 +11,6 @@ import java.sql.SQLException;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -81,44 +80,19 @@ import java.awt.Toolkit;
 				passwordField.setBounds(200, 100, 250, 30);
 				contentPane.add(passwordField);
 				
-				// Crear un JCheckBox para permitir al usuario alternar entre mostrar y ocultar la contraseña
-				JCheckBox showPasswordCheckBox = new JCheckBox("Mostrar contraseña");
-				showPasswordCheckBox.setBounds(200, 144, 150, 20);
-				contentPane.add(showPasswordCheckBox);
-
-				// ActionListener para el JCheckBox
-				showPasswordCheckBox.addActionListener(new ActionListener() {
-				    public void actionPerformed(ActionEvent e) {
-				        // Cambiar dinámicamente el tipo de campo de contraseña
-				        if (showPasswordCheckBox.isSelected()) {
-				            // Mostrar la contraseña
-				            contentPane.remove(passwordField); // Eliminar el campo de contraseña actual
-				            @SuppressWarnings("deprecation")
-							JTextField visiblePasswordField = new JTextField(passwordField.getText(), 20);
-				            visiblePasswordField.setBounds(passwordField.getBounds());
-				            contentPane.add(visiblePasswordField); // Agregar el campo de texto visible
-				            contentPane.repaint(); // Repintar el contenido del panel
-				        } else {
-				            // Ocultar la contraseña
-				            contentPane.remove(3); // Eliminar el campo de texto visible
-				            contentPane.add(passwordField); // Agregar de nuevo el campo de contraseña
-				            contentPane.repaint(); // Repintar el contenido del panel
-				        }
-				    }
-				});
 
 				// Botón para iniciar sesión
 				JButton loginButton = new JButton("Iniciar sesión");
 				loginButton.setForeground(Color.WHITE);
 				loginButton.setBackground(new Color(118, 153, 118));
-				loginButton.setBounds(103, 205, 150, 30);
+				loginButton.setBounds(104, 177, 150, 30);
 				contentPane.add(loginButton);
 
 				// Botón para registrarse
 				JButton signUpButton = new JButton("Registrarse");
 				signUpButton.setBackground(new Color(118, 153, 118));
 				signUpButton.setForeground(Color.WHITE);
-				signUpButton.setBounds(300, 205, 150, 30);
+				signUpButton.setBounds(300, 177, 150, 30);
 				contentPane.add(signUpButton);
        
 				JLabel forgotPasswordLabel = new JLabel("¿Olvidaste tu contraseña?");
