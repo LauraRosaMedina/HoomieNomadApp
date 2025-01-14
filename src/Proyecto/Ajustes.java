@@ -67,7 +67,8 @@ public class Ajustes extends JFrame {
         // Panel para el botón de "Atrás" y los ajustes
         JPanel topPanel = new JPanel(new BorderLayout());
         contentPane.add(topPanel, BorderLayout.NORTH);
-        
+
+        //Prueba desde ordenador como laura
 
         // Crear la barra de menú
         JMenuBar menuBar = new JMenuBar();
