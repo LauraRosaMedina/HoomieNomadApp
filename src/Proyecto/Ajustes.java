@@ -68,7 +68,7 @@ public class Ajustes extends JFrame {
         JPanel topPanel = new JPanel(new BorderLayout());
         contentPane.add(topPanel, BorderLayout.NORTH);
 
-        //Prueba desde ordenador como laura
+        //Prueba desde ordenador como laura rosa
 
         // Crear la barra de menú
         JMenuBar menuBar = new JMenuBar();
